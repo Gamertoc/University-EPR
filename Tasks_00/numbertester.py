@@ -18,8 +18,14 @@ while testing:
 
 # Separate thousands
 thousands = number // 1000
+digits = number % 1000
+if digits < 10:
+    digits = "00" + digits 
+elif digits < 100:
+    digits = "0" + digits
+    
 if thousands > 0:
-    print(thousands, ",", number % 1000, sep = "")
+    print(thousands, ",", digits, sep = "")
 else:
     print(number)
 
