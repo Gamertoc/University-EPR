@@ -14,6 +14,11 @@ value = False
 while not value or not degree:
     degree = True
     value = True
+    
+    # I decided to use a try-except structure to test if the input value can be converted into an integer.
+    # If this is the case, it continues to check wether it has a valid value (above absolute zero)
+    # If it can't be converted (e.g. because it's a random string), it will throw an error that I catch in except
+    # to keep the program running
     try:
         temp_f = eval(temp_f)
         if temp_f < -459.67:
