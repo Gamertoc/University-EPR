@@ -47,4 +47,15 @@ print("The temperature ", temp_f, "°F equals ", temp_c, "°C.", sep = "")
 # Test values I used are:
 # 1) random strings to test if it catches them and forces me to enter a number
 # 2) values below the lowest possible temperature (like -1.000) to test the value catch
-# 3) realistic values (32; 0; 100; 96) to test if the conversion works and to test the round function
+# 3) realistic values (32; 0; 100; 96) to test if the calculation itself.
+
+# Input: Output
+# 100 : 37.78
+# 32 : 0
+# -500 : Value too low
+# fweriaosgjn : Wrong input type
+# #420 : Wrong input type
+# 69 : 20.56
+# -1000000 : Value too low
+# 86 : 30
+# -40 : -40
