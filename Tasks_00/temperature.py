@@ -1,5 +1,9 @@
 __author__ = "Oliver Theobald, 7146127"
-# We need to calculate the temperature in Fahrenheit based on a user input in Celsius
+# We need to calculate the temperature in Fahrenheit based on a user input in 
+# For this we need to a) get the user input, b) check if it's a number, c) check if it has a valid value,
+# d) convert the value from Fahrenheit in Celsius, e) round it to a usable value and f) print the new value
+
+# We start with the user input
 temp_f = input(
     'Please enter the temperature in degree Fahrenheit (°F): ')
 
@@ -17,7 +21,7 @@ while not value or not degree:
                                 ' Please enter a valid temperature in degree Fahrenheit (°F): ')
             value = False
 
-    # Getting a wrong input results in an error which we catch here
+    # Getting a wrong input results in an error which we catch here and force the user to enter a valid value 
     except (ValueError, NameError, SyntaxError) as e:
         print('Who the hell uses', temp_f, 'as temperature. What would that look like?\nHow cold is it today? '
                                                "-Oh, it's", temp_f, 'degree today.')
@@ -35,6 +39,7 @@ if temp_c == int(temp_c):
 
 print("The temperature ", temp_f, "°F equals ", temp_c, "°C.", sep = "")
 
-# As test values I used valid integers and floats to verify the calculation itself,
-# numbers that are too low to verify that it intercepts them as well as
-# random strings to verify that it only accepts valid values.
+# Test values I used are:
+# 1) random strings to test if it catches them and forces me to enter a number
+# 2) values below the lowest possible temperature (like -1.000) to test the value catch
+# 3) realistic values (32; 0; 100; 96) to test if the conversion works and to test the round function
