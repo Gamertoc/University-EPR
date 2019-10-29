@@ -1,6 +1,6 @@
 __author__ = "Oliver Theobald, 7146127"
 
-# This program accepts an integer and determines wether it is dividable by 3, 5 and 7
+# This program accepts an integer and determines whether it is dividable by 3, 5 and 7
 n = int(input("Please enter an integer: "))
 
 if n % 3 == 0 and n % 5 == 0 and n % 7 == 0:

@@ -25,7 +25,7 @@ elif digits < 100:
     digits = "0" + digits
     
 if thousands > 0:
-    print(thousands, ",", digits, sep = "")
+    print(thousands, ",", digits, sep="")
 else:
     print(number)
 
