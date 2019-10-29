@@ -24,7 +24,7 @@ grades = {
     0: "6"
 }
 
-print("The grade ", n, " equals ", grades.get(n), ". ", sep="", end="")
+print("The grade ", n, " equals ", grades.get(n), ". ",  sep = "", end = "")
 if n >= 5:
     print("The user passed the test.")
 else:
