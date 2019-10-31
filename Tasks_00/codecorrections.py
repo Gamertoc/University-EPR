@@ -6,7 +6,7 @@ __author__ = "Oliver Theobald, 7146127"
 # all other instances of this variable are changed accordingly, and therefore won't write them up as errors. 
 # PART A
 # current_time_str = input(,"What is the current time (in hours 0-23)?")
-# Error 1: the datatype doesn't belong in the name 
+# Error 1: the data type doesn't belong in the name
 # Error 2: the comma doesn't belong in the input brackets when you only have one part in there
 current_time = input("What is the current time (in hours 0-23)? ")
 

@@ -1,7 +1,7 @@
 __author__ = "Oliver Theobald, 7146127"
 
 # This program converts grade points (0-15) in grades (1+, 1, 1-, etc.)
-
+# We assume that the input is an integer within the range of 0-15
 n = int(input("Please enter a grade in points (0-15): "))
 
 # I use this array to simply determine the according grade

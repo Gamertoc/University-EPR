@@ -1,6 +1,8 @@
 __author__ = "Oliver Theobald, 7146127"
 
 # This program receives a sentential formula and calculates the value of it
+# We assume that the input has the format BOOL connection BOOL
+# with BOOL being either True or False and connection being "and" or "or"
 formula = input("Please enter a sentential formula (BOOL and/or BOOL): ")
 
 # We split the input in parts so we can analyze it
