@@ -1,7 +1,12 @@
 __author__ = "Oliver Theobald, 7146127"
 # We need to calculate the temperature in Fahrenheit based on a user input in 
-# For this we need to a) get the user input, b) check if it's a number, c) check if it has a valid value,
-# d) convert the value from Fahrenheit in Celsius, e) round it to a usable value and f) print the new value
+# For this we need to
+# a) get the user input,
+# b) check if it's a number,
+# c) check if it has a valid value,
+# d) convert the value from Fahrenheit in Celsius,
+# e) round it to a usable value and
+# f) print the new value
 
 # We start with the user input
 temp_f = input(
@@ -15,10 +20,10 @@ while not value or not degree:
     degree = True
     value = True
 
-    # I decided to use a try-except structure to test if the input value can be converted into an integer.
-    # If this is the case, it continues to check whether it has a valid value (above absolute zero)
-    # If it can't be converted (e.g. because it's a random string), it will throw an error that I catch in except
-    # to keep the program running
+    # I decided to use a try-except structure to test if the input value can be converted into
+    # an integer. If this is the case, it continues to check whether it has a valid value (above
+    # absolute zero) If it can't be converted (e.g. because it's a random string), it will throw
+    # an error that I catch in except to keep the program running
     try:
         temp_f = eval(temp_f)
         if temp_f < -459.67:
@@ -27,12 +32,14 @@ while not value or not degree:
                            ' Please enter a valid temperature in degree Fahrenheit (°F): ')
             value = False
 
-    # Getting a wrong input results in an error which we catch here and force the user to enter a valid value 
+    # Getting a wrong input results in an error which we catch here and force the user to enter
+    # a valid value
     except (ValueError, NameError, SyntaxError) as e:
-        print('Who the hell uses', temp_f, 'as temperature. What would that look like?\nHow cold is it today? '
-                                           "-Oh, it's", temp_f, 'degree today.')
+        print('Who the hell uses', temp_f, 'as temperature. What would that look like?\nHow cold '
+                                           "is it today? -Oh, it's", temp_f, 'degree today.')
         temp_f = input(
-            'Just enter the temperature in degree Fahrenheit (°F) as an integer or a float, okay? Here you go: ')
+            'Just enter the temperature in degree Fahrenheit (°F) as an integer or a float, '
+            'okay? Here you go: ')
         degree = False
 
 # Now that we have a correct form and value, the calculation can be done

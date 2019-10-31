@@ -2,8 +2,11 @@ __author__ = "Oliver Theobald, 7146127"
 # General rules:
 # 1) The code has to be accepted by python
 # 2) The code has to follow our conventions
-# 3) In every instance where a variable is named the wrong way, I assume that by changing the original name
-# all other instances of this variable are changed accordingly, and therefore won't write them up as errors. 
+
+# 3) In every instance where a variable is named the wrong way, I assume that by changing the
+# original name all other instances of this variable are changed accordingly, and therefore
+# won't write them up as errors.
+
 # PART A
 # current_time_str = input(,"What is the current time (in hours 0-23)?")
 # Error 1: the data type doesn't belong in the name
@@ -29,7 +32,8 @@ wait_time = int(wait_time)
 final_time = current_time + wait_time
 
 # print(final_time_int)
-# Error 5: Without modulo 24 the function wouldn't make much sense since there can't be a time like 30 o' clock
+# Error 5: Without modulo 24 the function wouldn't make much sense
+# since there can't be a time like 30 o' clock
 print("The time is now", final_time % 24)
 
 
@@ -52,5 +56,6 @@ m = int(m)
 
 # prunt("The time is now", m % 12)
 # Error 6
-# Error 7: m % 12 doesn't make very much sense since it doesn't add the current time. It has to be (n+m) % 12
+# Error 7: m % 12 doesn't make very much sense since it doesn't add the current time.
+# It has to be (n+m) % 12
 print("The time is now", (n+m) % 12)
