@@ -31,7 +31,7 @@ else:
 
 # Check if it's an uneven number
 if number % 2 == 1:
-    print("The number is uneven.")
+    print("The number is odd.")
 else:
     print("The number is even.")
 
