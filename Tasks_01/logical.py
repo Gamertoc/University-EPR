@@ -11,21 +11,29 @@ a = parts[0]
 b = parts[2]
 connection = parts[1]
 
-if a == "False" or a == "false":
-    a = 0
+if a == "True":
+    a = True
 else:
-    a = 1
+    a = False
 
-if b == "False" or b == "false":
-    b = 0
+if b == "True":
+    b = True
 else:
-    b = 1
+    b = False
 
-result = a + b
-
-if (connection == "and" and result == 2) or (connection == "or" and result > 0):
-    result = True
+if connection == "and":
+    result = a & b
 else:
-    result = False
+    result = a | b
 
 print(result)
+
+# Test cases incoming with the type: Input : Output
+# True and True : True
+# True and False : False
+# False and True: False
+# False and False : False
+# True or True : True
+# True or False : True
+# False or True : True
+# False or False : False
