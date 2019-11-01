@@ -11,16 +11,19 @@ a = parts[0]
 b = parts[2]
 connection = parts[1]
 
+# Determine whether the first statement is true or false
 if a == "True":
     a = True
 else:
     a = False
 
+# Same goes for the second
 if b == "True":
     b = True
 else:
     b = False
 
+# Check whether the connection is an "and" or an "or" and act accordingly
 if connection == "and":
     result = a & b
 else:
