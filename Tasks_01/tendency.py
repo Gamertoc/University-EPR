@@ -37,3 +37,5 @@ else:
 # 15 : 15 points equals 1+. The user passed the test.
 # 10 : 10 points equals 2-. The user passed the test.
 # 4 : 4 points equals 4-. The user failed the test.
+# With these we have the highest and lowest value as well as some values between them,
+# so we cover the whole spectrum of values

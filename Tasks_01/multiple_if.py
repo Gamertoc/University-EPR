@@ -10,3 +10,13 @@ elif n % 2 == 1:
     print("The number", n, "is odd.")
 else:
     print("The number", n, "is even.")
+
+# Time for test cases:
+# 187 : The number 187 is odd.
+# 420 : The number 420 is dividable by 3, 5 and 7.
+# 69 : The number 69 is odd.
+# 42 : The number 42 is even.
+# -420 : The number -420 is dividable by 3, 5 and 7.
+# -13374206942 : The number -13374206942 is even.
+# With these we covered all 3 possible solutions (dividable, even and odd) as well as negative
+# and large numbers.

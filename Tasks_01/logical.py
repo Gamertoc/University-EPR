@@ -37,3 +37,4 @@ print(result)
 # True or False : True
 # False or True : True
 # False or False : False
+# With these all possible value combinations are covered and verified
