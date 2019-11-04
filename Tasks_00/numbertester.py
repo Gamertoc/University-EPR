@@ -1,4 +1,4 @@
-__author__ = "Oliver Theobald, 7146127"
+__author__ = "7146127, Theobald"
 
 number = input("Please enter an integer (maximum 5 digits): ")
 testing = True
@@ -20,9 +20,9 @@ while testing:
 thousands = number // 1000
 digits = number % 1000
 if digits < 10:
-    digits = "00" + digits 
+    digits = "00" + str(digits)
 elif digits < 100:
-    digits = "0" + digits
+    digits = "0" + str(digits)
     
 if thousands > 0:
     print(thousands, ",", digits, sep="")

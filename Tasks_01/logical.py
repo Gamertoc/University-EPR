@@ -1,4 +1,4 @@
-__author__ = "Oliver Theobald, 7146127"
+__author__ = "7146127, Theobald"
 
 # This program receives a sentential formula and calculates the value of it
 # We assume that the input has the format BOOL connection BOOL

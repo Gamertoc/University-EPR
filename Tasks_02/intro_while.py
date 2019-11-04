@@ -1,4 +1,4 @@
-__author__ = "Oliver Theobald, 7146127"
+__author__ = "7146127, Theobald"
 
 # This program tosses random one-digit integers until a 3 or a -9 is tossed
 import random as dice

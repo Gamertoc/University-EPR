@@ -1,3 +1,4 @@
+__author__ = "7146127, Theobald"
 description_help = """Description of "help":
 
 With help() you can get help to literally everything: modules, functions, classes, methods, 

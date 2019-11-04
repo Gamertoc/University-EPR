@@ -1,4 +1,4 @@
-__author__ = "Oliver Theobald, 7146127"
+__author__ = "7146127, Theobald"
 
 # This program adds all odd integers between 2 and 20 and prints that value at every iteration
 # of the loop

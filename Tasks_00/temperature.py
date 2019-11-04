@@ -1,4 +1,4 @@
-__author__ = "Oliver Theobald, 7146127"
+__author__ = "7146127, Theobald"
 # We need to calculate the temperature in Fahrenheit based on a user input in 
 # For this we need to
 # a) get the user input,

@@ -1,4 +1,4 @@
-__author__ = "Oliver Theobald, 7146127"
+__author__ = "7146127, Theobald"
 # General rules:
 # 1) The code has to be accepted by python
 # 2) The code has to follow our conventions

@@ -1,4 +1,4 @@
-__author__ = "Oliver Theobald, 7146127"
+__author__ = "7146127, Theobald"
 
 # This program converts grade points (0-15) in grades (1+, 1, 1-, etc.)
 # We assume that the input is an integer within the range of 0-15

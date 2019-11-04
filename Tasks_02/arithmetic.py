@@ -1,4 +1,4 @@
-__author__ = "Oliver Theobald, 7146127"
+__author__ = "7146127, Theobald"
 
 # This program takes a natural number as input and returns the arithmetic mean for 1 to the
 # natural number

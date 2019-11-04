@@ -1,4 +1,4 @@
-__author__ = "Oliver Theobald, 7146127"
+__author__ = "7146127, Theobald"
 
 # This program accepts an integer and determines whether it is dividable by 3, 5 and 7
 # We assume that the value is an integer

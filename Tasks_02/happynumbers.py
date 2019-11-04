@@ -1,4 +1,4 @@
-__author__ = "Oliver Theobald, 7146127"
+__author__ = "7146127, Theobald"
 
 # This program checks whether an integer is happy or not. For this it squares every digit of the
 # given integer and adds them to one vale. Rinse and repeat until a) the 1 is reached - the
