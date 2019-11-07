@@ -4,11 +4,11 @@ __author__ = "7146127, Theobald"
 # We assume that the value is an integer
 n = int(input("Please enter an integer: "))
 
-if n % 3 == 0 and n % 5 == 0 and n % 7 == 0: # Check if it's dividable
+if n % 3 == 0 and n % 5 == 0 and n % 7 == 0:  # Check if it's dividable
     print("The number", n, "is dividable by 3, 5 and 7.")
-elif n % 2 == 1: # Check if the number is odd
+elif n % 2 == 1:  # Check if the number is odd
     print("The number", n, "is odd.")
-else: # Since the number isn't odd, it must be even
+else:  # Since the number isn't odd, it must be even
     print("The number", n, "is even.")
 
 # Time for test cases:
