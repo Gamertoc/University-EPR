@@ -6,8 +6,6 @@ __author__ = "7146127, Theobald"
 def increment(loops, step):
     """
 
-    :param loops:
-    :param step:
     """
     x = 7
     string = ""

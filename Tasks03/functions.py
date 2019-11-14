@@ -1,62 +1,91 @@
-"""The functions get two integers and do different things with them.
-
-The first function returns the average of the two numbers,
-the second function
-
-"""
+"""Getting two integers and doing a bunch of things with them."""
 
 __author__ = "7146127, Theobald"
 
 
-def average(x, y):
+def average(first_number, second_number):
     """Returning the average of two integers and printing the average and the
     type of the average.
-
+    :param first_number: int
+    :param second_number: int
+    :return: int or float
     """
-    d = (int(x) + int(y)) / 2
-    if (x + y) % 2 == 0:
-        d = int(d)
-    print(d, type(d))
-    return d
+    avg = (int(first_number) + int(second_number)) / 2
+
+    # If the average is an integer, we can convert it to one
+    if avg // 1 == avg / 1:
+        avg = int(avg)
+    print(avg, type(avg))
+    return avg
 
 
-def firstLastDigit(d):
+def first_last_digit(avg):
     """Printing the first and last digit of the average and returning its
     length.
-
+    :param avg: int or float
+    :return: int
     """
-    if d < 0:
-        d = str(d)
-        print(d[1], d[-1], sep="")
+
+    # If the average is negative (starting with a minus), we have to skip that to get the first
+    # digit
+    if avg < 0:
+        avg = str(avg)
+        print(avg[1], avg[-1], sep="")
     else:
-        d = str(d)
-        print(d[0], d[-1], sep="")
-    return len(d)
+        avg = str(avg)
+        print(avg[0], avg[-1], sep="")
+    return len(avg)
 
 
-def backwards(d):
+def reverse(avg):
+    """Reversing the average.
+    :param avg: int or float
+    :return: string
     """
+    avg = str(avg)
+    avg_reversed = ""
 
-    :param d:
-    :return:
-    """
-    d = str(d)
-    d_backwards = ""
-    for i in range(len(d)):
-        d_backwards += d[-i - 1]
-    return d_backwards
+    # We iterate through all of the string and reverse it by attaching the [-i-1] element to
+    # the new string
+    for i in range(len(avg)):
+        avg_reversed += avg[-i - 1]
+    return avg_reversed
 
 
 def main():
-    """
+    """Starting the program"""
+    # We need to make sure that we get valid inputs
+    while True:
+        first = input("Please enter the first integer: ")
+        try:
+            first = int(first)
+        except ValueError:
+            continue
+        break
 
-    """
-    x = int(input("Please enter the first integer: "))
-    y = int(input("Please enter the second integer: "))
-    d = average(x, y)
-    firstLastDigit(d)
-    print(backwards(d))
+    # The same goes for the second integer
+    while True:
+        second = input("Please enter the second integer: ")
+        try:
+            second = int(second)
+            break
+        except ValueError:
+            continue
+
+    # Now we can start working with that stuff
+    avg = average(first, second)
+    # noinspection PyTypeChecker
+    first_last_digit(avg)
+    print(avg, "is reversed", reverse(avg))
 
 
 if __name__ == '__main__':
     main()
+
+# Test cases:
+# 10, 5 : "7.5 <class 'float'>", "75", "7.5 is reversed 5.7"
+# -1234, -765 : "-999.5 <class 'float'>", "95", "-999.5 is reversed 5.999-"
+# lol : "Please enter the first integer: "
+# 870965437895424892631548654526437, 26954786387265987436278564873265876432 :
+# "13477828676351940767776228213878947840 <class 'int'>", "10",
+# "13477828676351940767776228213878947840 is reversed 04874987831282267776704915367682877431"
