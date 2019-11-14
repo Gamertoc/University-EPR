@@ -7,8 +7,10 @@ n = int(input("Please enter an integer: "))
 if n % 3 == 0 and n % 5 == 0 and n % 7 == 0: # Check if it's dividable
     print("The number", n, "is dividable by 3, 5 and 7.")
 elif n % 2 == 1: # Check if the number is odd
+    print("The number", n, "is not dividable by 3, 5 and 7.")
     print("The number", n, "is odd.")
 else: # Since the number isn't odd, it must be even
+    print("The number", n, "is not dividable by 3, 5 and 7.")
     print("The number", n, "is even.")
 
 # Time for test cases:
