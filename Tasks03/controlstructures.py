@@ -26,8 +26,8 @@ def increment(loops, step, start):
         current += step
 
         # Printing them is the last step.
-        print("Now, current is ", current)
-        print("All previous numbers: ", prev_numbers)
+        print("Now, current is", current)
+        print("All previous numbers:", prev_numbers, sep="")
 
 
 def main():
@@ -42,11 +42,13 @@ def main():
         except ValueError:
             continue
 
-    # Same for the loop value
+    # Same for the loop value, where we also have to make sure that it is above 0
     while True:
         loops = input("Please enter the number of repetitions (int): ")
         try:
             loops = int(loops)
+            if loops <= 0:
+                continue
             break
         except ValueError:
             continue
@@ -69,3 +71,54 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# It's time for test cases again:
+# 5, 3, n :
+# Now, current is 12.0
+# All previous numbers: 7
+# Now, current is 17.0
+# All previous numbers: 7 12
+# Now, current is 22.0
+# All previous numbers: 7 12 17
+
+# -2, 8, Y, 10 :
+# Now, current is 8.0
+# All previous numbers: 10
+# Now, current is 6.0
+# All previous numbers: 10 8
+# Now, current is 4.0
+# All previous numbers: 10 8 6
+# Now, current is 2.0
+# All previous numbers: 10 8 6 4
+# Now, current is 0.0
+# All previous numbers: 10 8 6 4 2
+# Now, current is -2.0
+# All previous numbers: 10 8 6 4 2 0
+# Now, current is -4.0
+# All previous numbers: 10 8 6 4 2 0 -2
+# Now, current is -6.0
+# All previous numbers: 10 8 6 4 2 0 -2 -4
+
+# Lol : Please enter the step value (can be int or float):
+
+# 2.25, 10, Y, -5 :
+# Now, current is -2.75
+# All previous numbers: -5
+# Now, current is -0.5
+# All previous numbers: -5 -2.75
+# Now, current is 1.75
+# All previous numbers: -5 -2.75 -0.5
+# Now, current is 4.0
+# All previous numbers: -5 -2.75 -0.5 1.75
+# Now, current is 6.25
+# All previous numbers: -5 -2.75 -0.5 1.75 4
+# Now, current is 8.5
+# All previous numbers: -5 -2.75 -0.5 1.75 4 6.25
+# Now, current is 10.75
+# All previous numbers: -5 -2.75 -0.5 1.75 4 6.25 8.5
+# Now, current is 13.0
+# All previous numbers: -5 -2.75 -0.5 1.75 4 6.25 8.5 10.75
+# Now, current is 15.25
+# All previous numbers: -5 -2.75 -0.5 1.75 4 6.25 8.5 10.75 13
+# Now, current is 17.5
+# All previous numbers: -5 -2.75 -0.5 1.75 4 6.25 8.5 10.75 13 15.25

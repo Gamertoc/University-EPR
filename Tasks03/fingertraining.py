@@ -55,3 +55,8 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# TfTC (Time for test cases):
+# neun,five,eight,seven,zero,null : 958700
+# eins,AcHt,SIEbEn : 187
+# neun,NOOOOOOOB1054656043,x,zero : 90
