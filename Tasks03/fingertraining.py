@@ -60,3 +60,4 @@ if __name__ == '__main__':
 # neun,five,eight,seven,zero,null : 958700
 # eins,AcHt,SIEbEn : 187
 # neun,NOOOOOOOB1054656043,x,zero : 90
+#  neun,eins, acht,seven : 917  (This occurs because you are not allowed to use whitespaces
