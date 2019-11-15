@@ -3,22 +3,30 @@
 __author__ = "7146127, Theobald"
 
 
-def increment(loops, step, x_start = 7):
-    """
-
+def increment(loops, step, start):
+    """This program lets you define a starting point, the number of repetitions and the step
+    length. From there it runs through the loop and prints every current and all previous numbers.
     :param loops: int
     :param step: int or float
-    :param x_start: int or float
+    :param start: int or float
     :return: None
     """
-    x = x_start
+    current = start
     prev_numbers = ""
+
+    # Running the given amount of loops
     for i in range(loops):
-        if x == int(x):
-            x = int(x)
-        prev_numbers += " " + str(x)
-        x += step
-        print("Now, x is ", x)
+
+        # If current (being a float) is an integer, we use it as an integer (increases readability)
+        if current == int(current):
+            current = int(current)
+
+        # Here we create the string of all previous numbers and increase current.
+        prev_numbers += " " + str(current)
+        current += step
+
+        # Printing them is the last step.
+        print("Now, current is ", current)
         print("All previous numbers: ", prev_numbers)
 
 
@@ -44,18 +52,20 @@ def main():
             continue
 
     # You can decide if you want to set a new start value (standard is 7)
+    start = 7
     if input("Do you want a different start value than 7? (Y/n) ") == "Y":
         # If you want, we have to make sure that the value is valid
         while True:
-            x_start = input("Please enter the new starting value (int or float): ")
+            start = input("Please enter the new starting value (int or float): ")
             try:
-                x_start = float(x_start)
+                start = float(start)
                 break
             except ValueError:
                 continue
-        increment(loops, step, x_start)
+        increment(loops, step, start)
     else:
-        increment(loops, step)
+        increment(loops, step, 7)
+
 
 if __name__ == '__main__':
     main()

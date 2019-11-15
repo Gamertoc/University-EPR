@@ -34,3 +34,9 @@ else:  # If n is odd the median is the number with the same value as the mean
 # And at the end both values get printed
 print("The arithmetic mean is", mean)
 print("The median is", median)
+
+# Test cases:
+# 187 : mean = 94.0, median = 94
+# 420 : mean = 210.5, median = 210.5
+# lol : Please don't enter any strings or stuff like that, only integers > 0
+# 76176487216 :

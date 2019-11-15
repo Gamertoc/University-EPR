@@ -6,7 +6,6 @@ __author__ = "7146127, Theobald"
 # 4... - the number is unhappy.
 
 n = input("Please enter a natural number: ")
-save = n  # We save the original number so we can use it in the output
 
 # We use this conception to check whether the input is really a number and to check if it is
 # above 0
@@ -17,10 +16,9 @@ while True:
     if n <= 0:
         n = input("Please enter a value above 0: ")
     else:
-        n = str(n)
         break
-
-
+n = str(n)
+save = n  # We save the original number so we can use it in the output
 count = 0  # This counts our iterations
 while True:
     count += 1  # We increase the count by one for every iteration
@@ -30,24 +28,30 @@ while True:
     # add those
     for i in range(len(n)):
         square += eval(n[i]) ** 2
-
     # If the squared value reaches 1, the number is happy and we can stop the program
     if square == 1:
-        print(save, "is a happy number.")
+        print(save, "is a happy number.", count, "iterations needed.")
         exit()
 
     # If the number reaches anything in the set below, it will be stuck there forever (since you
     # always repeat that cycle), and we can say that the number is unhappy
     elif square in {4, 16, 37, 58, 89, 145, 42, 20}:
-        print(save, "is an unhappy number.")
+        print(save, "is an unhappy number.", count, "iterations needed.")
         exit()
 
     # Another option is when we are exceeding 100 iterations without reaching any of the above,
     # then the program terminates to avoid running in eternity
     elif count >= 100:
-        print("Stopped after 100 iterations.")
+        print("Stopped after 100 iterations.", count, "iterations needed.")
         exit()
 
     # We set the squared number as our new n and make it a string since that's what we are
     # working with
     n = str(square)
+
+# Test cases:
+# 187 : unhappy
+# 100 : happy
+# -20 : Please don't enter any strings or stuff like that, only natural numbers
+# lol : Please don't enter any strings or stuff like that, only natural numbers
+# 6416846210016846816184928419091947493279291473793219325 : unhappy
