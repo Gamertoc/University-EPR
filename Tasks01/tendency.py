@@ -26,6 +26,8 @@ grades = {
 
 # In my school you pass the test when you have at least 5 points. Since the same goes for the
 # Abitur, I'm gonna use this
+while not 0 <= n <= 15:
+    n = int(input("Value out of range! Please enter a valid value (0-15): "))
 print(n, " points equals ", grades.get(n), ". ",  sep="", end="")
 if n >= 5:
     print("The user passed the test.")
@@ -37,5 +39,7 @@ else:
 # 15 : 15 points equals 1+. The user passed the test.
 # 10 : 10 points equals 2-. The user passed the test.
 # 4 : 4 points equals 4-. The user failed the test.
+# lol : ValueError
+# 320 : 320 points equals None. The user passed the test.
 # With these we have the highest and lowest value as well as some values between them,
 # so we cover the whole spectrum of values
