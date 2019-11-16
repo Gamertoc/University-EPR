@@ -245,10 +245,7 @@ def find_best_machine(revisions):
     # will always be the winner in this contests.
 
 
-def main():
-    """Starting the program."""
-    if input("Do you want to let the bots play against each other? (Y/n) ") == "Y":
-        find_best_machine(1000000)
+def play_user():
     antihuman_last_pick = "None"
     antihuman_last_result = "None"
     user_count = 0
@@ -267,7 +264,7 @@ def main():
 
         # If the input is neither q nor a valid game input, you just
         # have to enter something valid
-        elif not user == "Scissors" and not user == "Rock" and not user == "Paper":
+        elif user not in playable():
             continue
 
         # Same as in the bot vs bot version: Adjusting the win counter
@@ -285,8 +282,15 @@ def main():
             else:
                 print("Draw! You both threw", user)
                 antihuman_last_result = "loss"
-        antihuman_last_pick = antihuman
-        antihuman_last_enemy = user
+            antihuman_last_pick = antihuman
+            antihuman_last_enemy = user
+
+
+def main():
+    """Starting the program."""
+    if input("Do you want to let the bots play against each other? (Y/n) ") == "Y":
+        find_best_machine(1000000)
+    play_user()
 
 
 if __name__ == '__main__':
