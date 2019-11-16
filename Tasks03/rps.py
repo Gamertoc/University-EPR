@@ -32,7 +32,7 @@ def play_human(last_game_pick, last_game_result):
 
     # For the first game there is no strategy, so it just plays random
     if last_game_pick == "None":
-        play_random()
+        return play_random(playable())
 
     # If we won the last game we will stick with the decision.
     if last_game_result == "win":
@@ -41,7 +41,7 @@ def play_human(last_game_pick, last_game_result):
     # class to determine our strategy as long as it's different from the
     # last one.
     while True:
-        rps = play_random()
+        rps = play_random(playable())
         if rps != last_game_pick:
             return rps
 
@@ -136,7 +136,7 @@ def find_best_machine(revisions):
     while i < revisions:
         # We let both algorithms play and let the function check who won
         human = play_human(human_last_pick, human_last_result)
-        random = play_random()
+        random = play_random(playable())
         result = check_win(random, human, system())
 
         # Depending on who won we adjust the counter and the feedback
@@ -172,7 +172,7 @@ def find_best_machine(revisions):
     while i < revisions:
         antihuman = play_antihuman(antihuman_last_pick, antihuman_last_enemy,
                                    antihuman_last_result)
-        random = play_random()
+        random = play_random(playable())
         result = check_win(random, antihuman, system())
         if result == "First won":
             antihuman_random += 1

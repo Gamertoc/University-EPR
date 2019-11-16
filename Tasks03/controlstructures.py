@@ -54,7 +54,6 @@ def main():
             continue
 
     # You can decide if you want to set a new start value (standard is 7)
-    start = 7
     if input("Do you want a different start value than 7? (Y/n) ") == "Y":
         # If you want, we have to make sure that the value is valid
         while True:

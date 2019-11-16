@@ -1,4 +1,7 @@
-"""This program lets you play rock, paper, scissors, lizard, spock against a bot."""
+"""This program lets you play rock, paper, scissors, lizard, spock
+against a bot. It is based on my Rock-Paper-Scissors module and uses
+some of the functions.
+"""
 
 __author__ = "7146127, Theobald"
 
@@ -37,8 +40,11 @@ def play_antihuman(last_game_pick, last_game_enemy, last_game_result):
     # For the first game there is no strategy, so it just plays random
     if last_game_pick == "None":
         return rps.play_random(playable())
+
     # If we won the last game, we will play whatever would beat that
-    # what we just played.
+    # what we just played. This works by selecting a random object of
+    # the list and checking whether the mentioned condition (winning
+    # against our last pick) is fulfilled or not.
     win_lose = system()
     if last_game_result == "win":
         while True:
@@ -47,7 +53,7 @@ def play_antihuman(last_game_pick, last_game_enemy, last_game_result):
                 return temp
 
     # If we lost, we will play whatever beats the thing our opponent
-    # just played.
+    # just played. It works the same way as the one above.
     else:
         while True:
             temp = rps.play_random(playable())
@@ -56,13 +62,14 @@ def play_antihuman(last_game_pick, last_game_enemy, last_game_result):
 
 
 def main():
+    """Running the program when run as main."""
     antihuman_last_pick = "None"
     antihuman_last_result = "None"
     user_count = 0
     antihuman_count = 0
     antihuman_last_enemy = "None"
     while True:
-        user = input("Do you want to throw Rock, Paper or Scissors? ")
+        user = input("Do you want to throw Rock, Paper, Scissors, Lizard or Spock? ")
         antihuman = play_antihuman(antihuman_last_pick, antihuman_last_enemy,
                                    antihuman_last_result)
 
