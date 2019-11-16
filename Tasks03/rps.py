@@ -9,35 +9,12 @@ __author__ = "7146127, Theobald"
 import random as dice
 
 
-def rock(throw):
-    """Just returning Rock, nothing else to see here"""
-    if throw == 1:
-        return "Rock"
-    else:
-        return paper(throw)
-
-
-def paper(throw):
-    """Just returning Paper"""
-    if throw == 2:
-        return "Paper"
-    else:
-        return scissors(throw)
-
-
-def scissors(throw):
-    """Just returning Scissors"""
-    if throw == 3:
-        return "Scissors"
-
-
 def play_random():
     """This function just randomly decides what it wants to play and
     doesn't take anything into account.
     """
-
-    rps = dice.randint(1, 3)
-    return rock(rps)
+    throwable = playable()
+    return throwable[dice.randint(1, len(throwable))-1]
 
 
 def play_human(last_game_pick, last_game_result):
@@ -56,8 +33,7 @@ def play_human(last_game_pick, last_game_result):
 
     # For the first game there is no strategy, so it just plays random
     if last_game_pick == "None":
-        rps = dice.randint(1, 3)
-        return rock(rps)
+        play_random()
 
     # If we won the last game we will stick with the decision.
     if last_game_result == "win":
@@ -66,12 +42,12 @@ def play_human(last_game_pick, last_game_result):
     # class to determine our strategy as long as it's different from the
     # last one.
     while True:
-        rps = rock(dice.randint(1, 3))
+        rps = play_random()
         if rps != last_game_pick:
             return rps
 
 
-def play_antihuman(last_game_pick, last_game_result):
+def play_antihuman(last_game_pick, last_game_enemy, last_game_result):
     """This strategy is a strategy devised from the human behavior
     mentioned above. An article on the website arstechnica
     (https://arstechnica.com/science/2014/05/win-at-rock-paper-scissors
@@ -80,33 +56,42 @@ def play_antihuman(last_game_pick, last_game_result):
     If you win, don't keep playing the same thing, but instead switch to
     the thing that would beat the thing that you just played.
     :param last_game_pick: String
+    :param last_game_enemy: String
     :param last_game_result: String
     :return: String
     """
 
     # For the first game there is no strategy, so it just plays random
     if last_game_pick == "None":
-        rps = dice.randint(1, 3)
-        return rock(rps)
-
+        return play_random()
     # If we won the last game, we will play whatever would beat that
     # what we just played.
+    win_lose = system()
     if last_game_result == "win":
-        if last_game_pick == "Rock":
-            return paper(2)
-        elif last_game_pick == "Paper":
-            return scissors(3)
-        else:
-            return rock(1)
+        while True:
+            rps = play_random()
+            if (rps, last_game_pick) in win_lose:
+                return rps
 
     # If we lost, we will play whatever beats the thing our opponent
     # just played.
-    if last_game_pick == "Rock":
-        return scissors(3)
-    elif last_game_pick == "Paper":
-        return rock(1)
     else:
-        return paper(2)
+        while True:
+            rps = play_random()
+            if (rps, last_game_enemy) in win_lose:
+                return rps
+
+
+def playable():
+    """Stores the playable objects"""
+    throwable = ["Rock", "Paper", "Scissors"]
+    return throwable
+
+
+def system():
+    """Stores the system of the game"""
+    win_lose = {("Rock", "Scissors"), ("Paper", "Rock"), ("Scissors", "Paper")}
+    return win_lose
 
 
 def check_win(pick_one, pick_two):
@@ -117,22 +102,13 @@ def check_win(pick_one, pick_two):
     :return: String
     """
     # We just check which thing won and return it accordingly
-    if pick_one == "Rock":
-        if pick_two == "Paper":
-            return "Second won"
-        elif pick_two == "Scissors":
-            return "First won"
-    elif pick_one == "Paper":
-        if pick_two == "Scissors":
-            return "Second won"
-        elif pick_two == "Rock":
-            return "First won"
-    elif pick_one == "Scissors":
-        if pick_two == "Rock":
-            return "Second won"
-        elif pick_two == "Paper":
-            return "First won"
-    return "Draw"
+    win_lose = system()
+    if pick_one == pick_two:
+        return "Draw"
+    elif (pick_one, pick_two) in win_lose:
+        return "First won"
+    elif (pick_two, pick_one) in win_lose:
+        return "Second won"
 
 
 def find_best_machine(revisions):
@@ -190,10 +166,12 @@ def find_best_machine(revisions):
     # antihuman
     antihuman_last_pick = "None"
     antihuman_last_result = "None"
+    antihuman_last_enemy = "None"
     i = 0
     # Draws don't count to the counter
     while i < revisions:
-        antihuman = play_antihuman(antihuman_last_pick, antihuman_last_result)
+        antihuman = play_antihuman(antihuman_last_pick, antihuman_last_enemy,
+                                   antihuman_last_result)
         random = play_random()
         result = check_win(random, antihuman)
         if result == "First won":
@@ -207,6 +185,7 @@ def find_best_machine(revisions):
         else:
             antihuman_last_result = "loss"
         antihuman_last_pick = antihuman
+        antihuman_last_enemy = random
 
     if antihuman_random > random_antihuman:
         print("Antihuman won vs random in", revisions, "rounds with", antihuman_random, "-",
@@ -220,11 +199,13 @@ def find_best_machine(revisions):
     human_last_result = "None"
     antihuman_last_pick = "None"
     antihuman_last_result = "None"
+    antihuman_last_enemy = "None"
     i = 0
     # Draws don't count to the counter
     while i < revisions:
         human = play_human(human_last_pick, human_last_result)
-        antihuman = play_antihuman(antihuman_last_pick, antihuman_last_result)
+        antihuman = play_antihuman(antihuman_last_pick, antihuman_last_enemy,
+                                   antihuman_last_result)
         result = check_win(human, antihuman)
         if result == "First won":
             human_antihuman += 1
@@ -241,6 +222,7 @@ def find_best_machine(revisions):
             antihuman_last_result = "loss"
         human_last_pick = human
         antihuman_last_pick = antihuman
+        antihuman_last_enemy = human
 
     if human_antihuman > antihuman_human:
         print("Human won vs antihuman in", revisions, "rounds with", human_antihuman, "-",
@@ -250,7 +232,7 @@ def find_best_machine(revisions):
               human_antihuman)
 
     # Now we add all the games together and get a total for which
-    # funcion won how many games
+    # function won how many games
     antihuman_won_games = antihuman_human + antihuman_random
     human_won_games = human_antihuman + human_random
     random_won_games = random_human + random_antihuman
@@ -271,9 +253,11 @@ def main():
     antihuman_last_result = "None"
     user_count = 0
     antihuman_count = 0
+    antihuman_last_enemy = "None"
     while True:
         user = input("Do you want to throw Rock, Paper or Scissors? ")
-        antihuman = play_antihuman(antihuman_last_pick, antihuman_last_result)
+        antihuman = play_antihuman(antihuman_last_pick, antihuman_last_enemy,
+                                   antihuman_last_result)
 
         # You can quit by entering q. It will show you the score you
         # achieved
@@ -302,6 +286,7 @@ def main():
                 print("Draw! You both threw", user)
                 antihuman_last_result = "loss"
         antihuman_last_pick = antihuman
+        antihuman_last_enemy = user
 
 
 if __name__ == '__main__':
