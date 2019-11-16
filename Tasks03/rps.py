@@ -9,19 +9,26 @@ __author__ = "7146127, Theobald"
 import random as dice
 
 
-def rock():
+def rock(throw):
     """Just returning Rock, nothing else to see here"""
-    return "Rock"
+    if throw == 1:
+        return "Rock"
+    else:
+        return paper(throw)
 
 
-def paper():
+def paper(throw):
     """Just returning Paper"""
-    return "Paper"
+    if throw == 2:
+        return "Paper"
+    else:
+        return scissors(throw)
 
 
-def scissors():
+def scissors(throw):
     """Just returning Scissors"""
-    return "Scissors"
+    if throw == 3:
+        return "Scissors"
 
 
 def play_random():
@@ -30,12 +37,7 @@ def play_random():
     """
 
     rps = dice.randint(1, 3)
-    if rps == 1:
-        return rock()
-    elif rps == 2:
-        return paper()
-    else:
-        return scissors()
+    return rock(rps)
 
 
 def play_human(last_game_pick, last_game_result):
@@ -54,7 +56,8 @@ def play_human(last_game_pick, last_game_result):
 
     # For the first game there is no strategy, so it just plays random
     if last_game_pick == "None":
-        return play_random()
+        rps = dice.randint(1, 3)
+        return rock(rps)
 
     # If we won the last game we will stick with the decision.
     if last_game_result == "win":
@@ -63,7 +66,7 @@ def play_human(last_game_pick, last_game_result):
     # class to determine our strategy as long as it's different from the
     # last one.
     while True:
-        rps = play_random()
+        rps = rock(dice.randint(1, 3))
         if rps != last_game_pick:
             return rps
 
@@ -83,26 +86,27 @@ def play_antihuman(last_game_pick, last_game_result):
 
     # For the first game there is no strategy, so it just plays random
     if last_game_pick == "None":
-        return play_random()
+        rps = dice.randint(1, 3)
+        return rock(rps)
 
     # If we won the last game, we will play whatever would beat that
     # what we just played.
     if last_game_result == "win":
         if last_game_pick == "Rock":
-            return paper()
+            return paper(2)
         elif last_game_pick == "Paper":
-            return scissors()
+            return scissors(3)
         else:
-            return rock()
+            return rock(1)
 
     # If we lost, we will play whatever beats the thing our opponent
     # just played.
     if last_game_pick == "Rock":
-        return scissors()
+        return scissors(3)
     elif last_game_pick == "Paper":
-        return rock()
+        return rock(1)
     else:
-        return paper()
+        return paper(2)
 
 
 def check_win(pick_one, pick_two):
@@ -302,18 +306,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-# TfTC:
-# Y, q:
-# Random won vs human in 1000000 rounds with 500414 - 499586
-# Antihuman won vs random in 1000000 rounds with 500442 - 499558
-# Antihuman won vs human in 1000000 rounds with 1000000 - 0
-# Human won a total of 499586 games.
-# Antihuman won a total of 1500442 games.
-# Random won a total of 999972 games.
-# Antihuman won with 1500442 out of 2000000 games.
-# Do you want to throw Rock, Paper or Scissors? q
-# You played 0 - 0
-
-# Now some actual games.
-#
