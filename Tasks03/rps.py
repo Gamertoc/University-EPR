@@ -9,11 +9,10 @@ __author__ = "7146127, Theobald"
 import random as dice
 
 
-def play_random():
+def play_random(throwable):
     """This function just randomly decides what it wants to play and
     doesn't take anything into account.
     """
-    throwable = playable()
     return throwable[dice.randint(1, len(throwable))-1]
 
 
@@ -63,13 +62,13 @@ def play_antihuman(last_game_pick, last_game_enemy, last_game_result):
 
     # For the first game there is no strategy, so it just plays random
     if last_game_pick == "None":
-        return play_random()
+        return play_random(playable())
     # If we won the last game, we will play whatever would beat that
     # what we just played.
     win_lose = system()
     if last_game_result == "win":
         while True:
-            rps = play_random()
+            rps = play_random(playable())
             if (rps, last_game_pick) in win_lose:
                 return rps
 
@@ -77,7 +76,7 @@ def play_antihuman(last_game_pick, last_game_enemy, last_game_result):
     # just played.
     else:
         while True:
-            rps = play_random()
+            rps = play_random(playable())
             if (rps, last_game_enemy) in win_lose:
                 return rps
 
@@ -94,15 +93,16 @@ def system():
     return win_lose
 
 
-def check_win(pick_one, pick_two):
+def check_win(pick_one, pick_two, game_system):
     """This function checks which of the picks won. A draw counts as
     loss for both, since nobody gets points in a draw.
     :param pick_one: String
     :param pick_two: String
+    :param game_system: set
     :return: String
     """
     # We just check which thing won and return it accordingly
-    win_lose = system()
+    win_lose = game_system
     if pick_one == pick_two:
         return "Draw"
     elif (pick_one, pick_two) in win_lose:
@@ -137,7 +137,7 @@ def find_best_machine(revisions):
         # We let both algorithms play and let the function check who won
         human = play_human(human_last_pick, human_last_result)
         random = play_random()
-        result = check_win(random, human)
+        result = check_win(random, human, system())
 
         # Depending on who won we adjust the counter and the feedback
         # for the last result
@@ -173,7 +173,7 @@ def find_best_machine(revisions):
         antihuman = play_antihuman(antihuman_last_pick, antihuman_last_enemy,
                                    antihuman_last_result)
         random = play_random()
-        result = check_win(random, antihuman)
+        result = check_win(random, antihuman, system())
         if result == "First won":
             antihuman_random += 1
             antihuman_last_result = "loss"
@@ -206,7 +206,7 @@ def find_best_machine(revisions):
         human = play_human(human_last_pick, human_last_result)
         antihuman = play_antihuman(antihuman_last_pick, antihuman_last_enemy,
                                    antihuman_last_result)
-        result = check_win(human, antihuman)
+        result = check_win(human, antihuman, system())
         if result == "First won":
             human_antihuman += 1
             human_last_result = "win"
@@ -270,7 +270,7 @@ def play_user():
         # Same as in the bot vs bot version: Adjusting the win counter
         # and the last_pick/last_result for the machine
         else:
-            result = check_win(user, antihuman)
+            result = check_win(user, antihuman, system())
             if result == "First won":
                 print("You won with", user, "against", antihuman)
                 user_count += 1
