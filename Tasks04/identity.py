@@ -221,6 +221,7 @@ def statistical_test(sample_size):
     female = (((female / sample_size) * 10000) // 1) / 100
     unclear = (((unclear / sample_size) * 10000) // 1) / 100
 
+    # At the end we print each probability
     print(doctor, "% are doctors.", sep="")
     print(double_first, "% have a double first name.", sep="")
     print(double_last, "% have a double last name.", sep="")
@@ -228,6 +229,83 @@ def statistical_test(sample_size):
     print(female, "% are female.", sep="")
     print(unclear, "% have an unclear gender due to some names being suitable for both "
                    "genders.", sep="")
+
+
+def address():
+    """Generating a random street name and house number.
+    :return: String
+    """
+    # We start with generating the street name. For this we choose
+    # between the most common prefixes and our own prefixes
+    prefix = dice.randint(1, 100)
+    if prefix <= 10:  # 10%
+        prefix = "Haupt"
+    elif prefix <= 18:  # 8%
+        prefix = "Schul"
+    elif prefix <= 25:  # 7%
+        prefix = "Garten"
+    elif prefix <= 32:  # 7%
+        prefix = "Dorf"
+    elif prefix <= 39:  # 7%
+        prefix = "Bahnhof"
+    elif prefix <= 46:  # 7%
+        prefix = "Wiesen"
+    elif prefix <= 52:  # 6%
+        prefix = "Berg"
+    elif prefix <= 56:  # 4%
+        prefix = "Kirch"
+    elif prefix <= 60:  # 4%
+        prefix = "Wald"
+    elif prefix <= 64:  # 4%
+        prefix = "Ring"
+    else:
+        prefix = dice.choice(names.prefix)
+
+    # Now we can add the suffix
+    suffix = dice.randint(1, 100)
+    if suffix <= 78:
+        suffix = "straße"
+    elif suffix <= 96:
+        suffix = "weg"
+    elif suffix <= 98:
+        suffix = "allee"
+    elif suffix == 99:
+        suffix = "ring"
+    elif suffix == 100:
+        suffix = "platz"
+
+    # When we have a city name as prefix, we need to capitalize the
+    # suffix since it will be two words
+    if prefix[-1] == " ":
+        suffix = suffix.capitalize()
+
+    # Now we can add them together
+    street = prefix + suffix
+
+    # We need a house number as well. In Germany most numbers have
+    # between one and four digits, so we will use this as base. Lower
+    # numbers are more common, so we'll give it a 10% probability of
+    # using 3 digits and 1% of using 4 digits
+    digits = dice.randint(1, 100)
+    if digits == 100:
+        house_number = str(dice.randint(1000, 9999))
+    elif digits >= 90:
+        house_number = str(dice.randint(100, 999))
+    else:
+        house_number = str(dice.randint(1, 99))
+    address_full = street + " " + house_number
+    return address_full
+
+
+def identity():
+    """Generating a full identity with both name and address.
+    :return: String
+    """
+    # We generate a name, an address, add them together and return that
+    name = full_name()
+    place_of_residence = address()
+    new_identity = name + ", " + place_of_residence
+    return new_identity
 
 
 # main function to test part 1 (implementation of basic name generation)
@@ -247,9 +325,15 @@ def statistical_test(sample_size):
 #        print(full_name())
 
 # main function to test part 3 (statistical test)
+# def main():
+#    """Running the program if run as main"""
+#    statistical_test(1000)
+
+# main function to test part 4 (full identity generation)
 def main():
     """Running the program if run as main"""
-    statistical_test(1000)
+    for i in range(100):
+        print(identity())
 
 
 if __name__ == '__main__':
