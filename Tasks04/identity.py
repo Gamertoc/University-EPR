@@ -105,15 +105,43 @@ def double_name_last():
             return new_name
 
 
+def full_name():
+    """Generating a full name (including Dr.).
+    :return: String
+    """
+    gender = dice.randint(1, 100)  # Over 50 is male, under 50 is female
+    double_first = dice.randint(1, 100)  # Over 10 no
+    double_last = dice.randint(1, 100)  # Over 15 no
+    doctor = dice.randint(1, 100)  # Only if 100
+    # Gender distribution is 50/50 (with only 2 genders),
+    # 10% have a double first name,
+    # 15 % have a double last name and
+    # 1% are doctors.
+    name = ""
+    if gender > 50 and double_first <= 10:
+        name = double_name("male")
+    elif gender > 50:
+        name = male_name()
+    elif gender <= 50 and double_first <= 10:
+        name = double_name("female")
+    else:
+        name = female_name()
+
+    if double_last <= 15:
+        name += " " + double_name("family")
+    else:
+        name += " " + last_name()
+
+    if doctor == 100:
+        name = "Dr. " + name
+
+    return name
+
+
 def main():
     """Running the program if run as main"""
-    for i in range(20):
-        print(male_name())
-        print(female_name())
-        print(last_name())
-        print(double_name("male"))
-        print(double_name("female"))
-        print(double_name("family"))
+    for i in range(200):
+        print(full_name())
 
 
 if __name__ == '__main__':
