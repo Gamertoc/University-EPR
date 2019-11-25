@@ -2,11 +2,11 @@
 address.
 """
 
-__author__ = "7146127, Theobald"
+__author__ = "7146127, Theobald, 6956404, Stadler"
 __email__ = "s7223152@cs.uni-frankfurt.de"
 
 import random as dice
-from Tasks04 import names
+import names
 
 
 def male_name():
