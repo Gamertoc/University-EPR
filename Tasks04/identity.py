@@ -247,9 +247,10 @@ def statistical_test(sample_size):
 #        print(full_name())
 
 # main function to test part 3 (statistical test)
-# def main():
-#    """Running the program if run as main"""
-#    statistical_test(100000)
+def main():
+    """Running the program if run as main"""
+    statistical_test(1000)
+
 
 if __name__ == '__main__':
     main()
