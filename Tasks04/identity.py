@@ -127,7 +127,7 @@ def full_name():
     else:
         name = female_name()
 
-    if 40 <= double_last <= 55:
+    if 40 <= double_last < 55:
         name += " " + double_name("family")
     else:
         name += " " + last_name()
@@ -230,11 +230,26 @@ def statistical_test(sample_size):
                    "genders.", sep="")
 
 
-def main():
-    """Running the program if run as main"""
-    statistical_test(1000)
-    double = 0
+# main function to test part 1 (implementation of basic name generation)
+# def main():
+#    """Running the program if run as main"""
+#    for i in range (50):
+#       print(male_name()
+#    for i in range (50):
+#       print(female_name()
+#    for i in range (50):
+#       print(last_name())
 
+# main function to test part 2 (generating full names)
+# def main():
+#    """Running the program if run as main"""
+#    for i in range(100):
+#        print(full_name())
+
+# main function to test part 3 (statistical test)
+# def main():
+#    """Running the program if run as main"""
+#    statistical_test(100000)
 
 if __name__ == '__main__':
     main()
