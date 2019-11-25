@@ -1,4 +1,8 @@
-man = {"Aaron",
+"""These file contains lists (yes we changed them to lists) of the names
+we use to generate the random identities.
+"""
+
+man = ["Aaron",
        "Adalbert",
        "Adam",
        "Adrian",
@@ -398,9 +402,9 @@ man = {"Aaron",
         "Zacharias",
         "Zenon",
         "Zoticus",
-       }
+       ]
 
-woman = {
+woman = [
         "Abigail",
         "Ada",
         "Adela",
@@ -712,9 +716,9 @@ woman = {
         "Yvonne",
         "Zita",
         "Zoe",
-      }
+]
 
-lastname = {
+lastname = [
         "Abendroth",
         "Abraham",
         "Abt",
@@ -903,4 +907,4 @@ lastname = {
         "Wurm",
         "Zacharias",
         "Zahn"
-  }
+]

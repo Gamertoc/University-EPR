@@ -107,7 +107,13 @@ def double_name_last():
 
 def main():
     """Running the program if run as main"""
-    pass
+    for i in range(20):
+        print(male_name())
+        print(female_name())
+        print(last_name())
+        print(double_name("male"))
+        print(double_name("female"))
+        print(double_name("family"))
 
 
 if __name__ == '__main__':
