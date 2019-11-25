@@ -181,7 +181,7 @@ def test_name(name):
     return result
 
 
-def statistical_test(sample_size):
+def statistical_test_name(sample_size):
     """We can run a statistical test to test whether our implemented
     random functions get us good values or not.
     :param sample_size: int
@@ -308,6 +308,196 @@ def identity():
     return new_identity
 
 
+def generate_sorted(sample_size):
+    """Generating a sorted list.
+    :param sample_size: int
+    :return: list
+    """
+    sample = []
+    for i in range(sample_size):
+        sample.append(identity())
+
+    # We sort our sample. To do this we sort by the first name first.
+    # When we then sort by the last name, the first sorting won't
+    # be entirely destroyed
+    sample = sorted(sample, key=lambda x: x.split()[0])
+    sample = sorted(sample, key=lambda x: x.split()[1])
+    # Then we print our sample
+    for i in sample:
+        print(i)
+
+    return sample
+
+
+def statistical_test(sample_size):
+    """Checking the statistics of the final program.
+    :param sample_size: int
+    :return: None
+    """
+    # We create our sample by the sample size
+    sample = []
+    for i in range(sample_size):
+        sample.append(identity())
+
+    # Now we test if our implementations fit the requirements. Starting
+    # with the names.
+    doctor, double_first, double_last, male, female, unclear = (0,) * 6
+    for i in sample:
+        result = test_name(i)
+        doctor += result[0]
+        double_first += result[1]
+        double_last += result[2]
+        if result[3] == "male":
+            male += 1
+        elif result[3] == "female":
+            female += 1
+        elif result[3] == "unclear":
+            unclear += 1
+
+    # And then comes the address
+    haupt, schul, garten, dorf, bahnhof, wiesen, berg, kirch, wald, ring_prefix, custom, \
+    straße, weg, allee, ring_suffix, platz, number_four_digits, number_three_digits, \
+    number_less_digits \
+        = \
+        (0,) * 19
+    for i in sample:
+        result = test_address(i)
+        # Now we add the result to the respective variables
+        haupt += result[0]
+        schul += result[1]
+        garten += result[2]
+        dorf += result[3]
+        bahnhof += result[4]
+        wiesen += result[5]
+        berg += result[6]
+        kirch += result[7]
+        wald += result[8]
+        ring_prefix += result[9]
+        custom += result[10]
+        straße += result[11]
+        weg += result[12]
+        allee += result[13]
+        ring_suffix += result[14]
+        platz += result[15]
+        number_four_digits += result[16]
+        number_three_digits += result[17]
+        number_less_digits += result[18]
+
+    # And now we form every result into a percentage value and print it.
+    doctor = '{:.2%}'.format(doctor / sample_size)
+    double_first = '{:.2%}'.format(double_first / sample_size)
+    double_last = '{:.2%}'.format(double_last / sample_size)
+    male = '{:.2%}'.format(male / sample_size)
+    female = '{:.2%}'.format(female / sample_size)
+    unclear = '{:.2%}'.format(unclear / sample_size)
+    haupt = '{:.2%}'.format(haupt / sample_size)
+    schul = '{:.2%}'.format(schul / sample_size)
+    garten = '{:.2%}'.format(garten / sample_size)
+    dorf = '{:.2%}'.format(dorf / sample_size)
+    bahnhof = '{:.2%}'.format(bahnhof / sample_size)
+    wiesen = '{:.2%}'.format(wiesen / sample_size)
+    berg = '{:.2%}'.format(berg / sample_size)
+    kirch = '{:.2%}'.format(kirch / sample_size)
+    wald = '{:.2%}'.format(wald / sample_size)
+    ring_prefix = '{:.2%}'.format(ring_prefix / sample_size)
+    custom = '{:.2%}'.format(custom / sample_size)
+    straße = '{:.2%}'.format(straße / sample_size)
+    weg = '{:.2%}'.format(weg / sample_size)
+    allee = '{:.2%}'.format(allee / sample_size)
+    ring_suffix = '{:.2%}'.format(ring_suffix / sample_size)
+    platz = '{:.2%}'.format(platz / sample_size)
+    number_four_digits = '{:.2%}'.format(number_four_digits / sample_size)
+    number_three_digits = '{:.2%}'.format(number_three_digits / sample_size)
+    number_less_digits = '{:.2%}'.format(number_less_digits / sample_size)
+
+    # Last but not least we print the results.
+    print(doctor, "are doctors. The value should be around 1%.")
+    print(double_first, "have a double first name. The value should be around 10%.")
+    print(double_last, "have a double last name. The value should be around 15%.")
+    print(male, "are male. The value should be around 50%.")
+    print(female, "are female. The value should be around 50%.")
+    print(unclear, "have an unclear gender due to the name being suitable for both.")
+    print(haupt, "live in a 'Haupt*'. The value should be around 10%.")
+    print(schul, "live in a 'Schul*'. The value should be around 8%.")
+    print(garten, "live in a 'Garten*'. The value should be around 7%.")
+    print(dorf, "live in a 'Dorf*'. The value should be around 7%.")
+    print(bahnhof, "live in a 'Bahnhof*'. The value should be around 7%.")
+    print(wiesen, "live in a 'Wiesen*'. The value should be around 7%.")
+    print(berg, "live in a 'Berg*'. The value should be around 6%.")
+    print(kirch, "live in a 'Kirch*'. The value should be around 4%.")
+    print(wald, "live in a 'Wald*'. The value should be around 4%.")
+    print(ring_prefix, "live in a 'Ring*'. The value should be around 4%.")
+    print(custom, "live in something named nothing of the above. The value should be around 36%.")
+    print(straße, "live in a '*straße'. The value should be around 78%.")
+    print(weg, "live in a '*weg'. The value should be around 18%.")
+    print(allee, "live in a '*allee'. The value should be around 2%.")
+    print(ring_suffix, "live in a '*ring'. The value should be around 1%.")
+    print(platz, "live in a '*platz'. The value should be around 1%.")
+    print(number_four_digits, "have a four digit house number. The value should be around 1%.")
+    print(number_three_digits, "have a three digit house number. The value should be around 10%.")
+    print(number_less_digits, "have a one or two digit house number. The value should be around "
+                              "89%.")
+    return sample
+
+
+def test_address(residence):
+    """Testing the address on its attributes.
+    :param residence: String
+    :return: list
+    """
+    # We start by creating our result list
+    result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    # Then we split our given string so we only have the address left
+    residence = residence.split(", ")[1]
+
+    # First we check for the prefix and increase the according value
+    if "Haupt" in residence:
+        result[0] = 1
+    elif "Schul" in residence:
+        result[1] = 1
+    elif "Garten" in residence:
+        result[2] = 1
+    elif "Dorf" in residence:
+        result[3] = 1
+    elif "Bahnhof" in residence:
+        result[4] = 1
+    elif "Wiesen" in residence:
+        result[5] = 1
+    elif "Berg" in residence and residence[4] in ("s", "w", "a", "r", "p"):
+        result[6] = 1
+    elif "Kirch" in residence:
+        result[7] = 1
+    elif "Wald" in residence:
+        result[8] = 1
+    elif "Ring" == residence[0:4]:
+        result[9] = 1
+    else:
+        result[10] = 1
+
+    # Now we check the suffix
+    if "straße" in residence or "Straße" in residence:
+        result[11] = 1
+    elif "Weg" in residence or "weg" in residence:
+        result[12] = 1
+    elif "Allee" in residence or "allee" in residence:
+        result[13] = 1
+    elif "platz" in residence or "platz" in residence:
+        result[15] = 1
+    else:
+        result[14] = 1
+
+    # And now we check the number
+    number = int(residence.split()[-1])
+    if number > 999:
+        result[16] = 1
+    elif number > 99:
+        result[17] = 1
+    else:
+        result[18] = 1
+
+    return result
+
+
 # main function to test part 1 (implementation of basic name generation)
 # def main():
 #    """Running the program if run as main"""
@@ -329,11 +519,16 @@ def identity():
 #    """Running the program if run as main"""
 #    statistical_test(1000)
 
-# main function to test part 4 (full identity generation)
+# main function to test part 4_name (full identity generation)
+# def main():
+#    """Running the program if run as main"""
+#    for i in range(100):
+#        print(identity())
+
+# main function to test part 5 (final statistical research)
 def main():
     """Running the program if run as main"""
-    for i in range(100):
-        print(identity())
+    statistical_test(100000)
 
 
 if __name__ == '__main__':
