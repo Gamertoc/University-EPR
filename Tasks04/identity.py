@@ -501,12 +501,15 @@ def test_address(residence):
 # main function to test part 1 (implementation of basic name generation)
 # def main():
 #    """Running the program if run as main"""
+#    print("Männliche Vornamen:")
 #    for i in range (50):
-#       print(male_name())
+#        print(male_name())
+#    print("\nWeibliche Vornamen:")
 #    for i in range (50):
-#       print(female_name())
+#        print(female_name())
+#    print("\nNachnamen:")
 #    for i in range (50):
-#       print(last_name())
+#        print(last_name())
 
 # main function to test part 2 (generating full names)
 # def main():
