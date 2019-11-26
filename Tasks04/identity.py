@@ -3,7 +3,7 @@ address.
 """
 
 __author__ = "7146127, Theobald, 6956404, Stadler"
-__email__ = "s7223152@cs.uni-frankfurt.de"
+__email__ = "s7223152@cs.uni-frankfurt.de, s0706782@stud.uni-frankfurt.de"
 
 import random as dice
 import names
@@ -502,9 +502,9 @@ def test_address(residence):
 # def main():
 #    """Running the program if run as main"""
 #    for i in range (50):
-#       print(male_name()
+#       print(male_name())
 #    for i in range (50):
-#       print(female_name()
+#       print(female_name())
 #    for i in range (50):
 #       print(last_name())
 
@@ -517,9 +517,9 @@ def test_address(residence):
 # main function to test part 3 (statistical test)
 # def main():
 #    """Running the program if run as main"""
-#    statistical_test(1000)
+#    statistical_test_name(1000)
 
-# main function to test part 4_name (full identity generation)
+# main function to test part 4 (full identity generation)
 # def main():
 #    """Running the program if run as main"""
 #    for i in range(100):
