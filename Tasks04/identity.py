@@ -112,7 +112,7 @@ def full_name():
     gender = dice.randint(1, 100)  # Over 50 is male, under 50 is female
     double_first = dice.randint(1, 100)  # Over 10 no
     double_last = dice.randint(1, 100)  # Only between 40 and 55
-    doctor = dice.randint(1, 100)  # Only if 100
+    doctor = dice.randint(1, 1000)  # Different for men and women
     # Gender distribution is 50/50 (with only 2 genders),
     # 10% have a double first name,
     # 15 % have a double last name and
@@ -132,7 +132,9 @@ def full_name():
     else:
         name += " " + last_name()
 
-    if doctor == 100:
+    if (gender <= 50 and doctor <= 11):
+        name = "Dr. " + name
+    elif (gender > 50 and doctor <= 9):
         name = "Dr. " + name
 
     return name
@@ -501,13 +503,13 @@ def test_address(residence):
 # main function to test part 1 (implementation of basic name generation)
 # def main():
 #    """Running the program if run as main"""
-#    print("Männliche Vornamen:")
+#    print("male first names:")
 #    for i in range (50):
 #        print(male_name())
-#    print("\nWeibliche Vornamen:")
+#    print("\nfemale first names:")
 #    for i in range (50):
 #        print(female_name())
-#    print("\nNachnamen:")
+#    print("\nlast names:")
 #    for i in range (50):
 #        print(last_name())
 
@@ -520,6 +522,8 @@ def test_address(residence):
 # main function to test part 3 (statistical test)
 # def main():
 #    """Running the program if run as main"""
+#    for i in range(1000):
+#        print(full_name())
 #    statistical_test_name(1000)
 
 # main function to test part 4 (full identity generation)
