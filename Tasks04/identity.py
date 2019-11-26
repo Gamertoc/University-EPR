@@ -535,7 +535,8 @@ def test_address(residence):
 # main function to test part 5 (final statistical research)
 def main():
     """Running the program if run as main"""
-    statistical_test(100000)
+    statistical_test(1000)
+    generate_sorted(1000)
 
 
 if __name__ == '__main__':
