@@ -355,7 +355,7 @@ def statistical_test(sample_size):
 
     # Now we test if our implementations fit the requirements. Starting
     # with the names.
-    doctor, double_first, double_last, male, female, unclear = (0,) * 6
+    doctor, double_first, double_last, male, female = (0,) * 5
     for i in sample:
         result = test_name(i)
         doctor += result[0]
@@ -365,8 +365,6 @@ def statistical_test(sample_size):
             male += 1
         elif result[3] == "female":
             female += 1
-        elif result[3] == "unclear":
-            unclear += 1
 
     # And then comes the address
     haupt, schul, garten, dorf, bahnhof, wiesen, berg, kirch, wald, ring_prefix, custom, \
