@@ -118,25 +118,46 @@ def full_name():
     # 15 % have a double last name and
     # 1% are doctors.
     name = ""
+    prefix = ""
+
     if gender <= 50 and double_first <= 10:
         name = double_name("male")
+        if name.split("-")[0] in names.man and name.split("-")[1] in names.man:
+            prefix = "Herr "
     elif gender <= 50:
         name = male_name()
-    elif double_first <= 10:
+        if name in names.woman:
+            prefix = "Herr "
+    elif gender > 50 and double_first <= 10:
         name = double_name("female")
-    else:
+        if name.split("-")[0] in names.man and name.split("-")[1] in names.man:
+            prefix = "Frau "
+    elif gender > 50:
         name = female_name()
+        if name in names.man:
+            prefix = "Frau "
 
+    # Now we add a last name or even a double last name
     if 40 <= double_last < 55:
         name += " " + double_name("family")
     else:
         name += " " + last_name()
 
+    # Last but not least we check if the person is a doctor
     if (gender <= 50 and doctor <= 11):
         name = "Dr. " + name
     elif (gender > 50 and doctor <= 9):
         name = "Dr. " + name
 
+    # We use the prefix to get a clear identifier in case the name can
+    # be used for both genders
+#    if gender <= 50 and name.split()[-2] in names.woman:
+#        prefix = "Herr "
+#    elif gender > 50 and name.split()[-2] in names.man:
+#       prefix = "Frau "
+    # If the prefix isn't empty, we add it to the name
+    if prefix:
+        name = prefix + name
     return name
 
 
@@ -147,39 +168,36 @@ def test_name(name):
     """
     # We save the results in a list
     result = []
-    # To work with the name, we split it by its blanks
+    # To work with the name, we remove the address and then
+    # split it by its blanks
+    name = name.split(",")[0]
     name = name.split()
-
     # First, we check whether the fictional person is a doctor or not
     doctor = 0
-    if name[0] == "Dr.":
+    if "Dr." in name:
         doctor = 1
 
     result = [doctor]
-
     # Next we look at whether the person has a double first name
-    if "-" in name[doctor]:
+    if "-" in name[-2]:
         result.append(1)
     else:
         result.append(0)
 
     # Next we check if the person hat a double last name.
-    if "-" in name[doctor + 1]:
+    if "-" in name[-1]:
         result.append(1)
     else:
         result.append(0)
 
     # Next we check whether the person is male or female.
-    first_name = name[doctor]
+    first_name = name[-2]
     if result[1] == 1:
-        first_name = (first_name.split("-"))[0]
-    if first_name in names.woman and first_name in names.man:
-        result.append("unclear")
-    elif first_name in names.woman:
+        first_name = (first_name.split("-"))[-2]
+    if (first_name in names.woman and "Herr" not in name) or "Frau" in name:
         result.append("female")
-    elif first_name in names.man:
+    elif (first_name in names.man and "Frau" not in name) or "Herr" in name:
         result.append("male")
-
     return result
 
 
@@ -200,7 +218,6 @@ def statistical_test_name(sample_size):
     double_last = 0
     male = 0
     female = 0
-    unclear = 0
     for i in sample:
         result = test_name(i)
         doctor += result[0]
@@ -210,8 +227,6 @@ def statistical_test_name(sample_size):
             male += 1
         elif result[3] == "female":
             female += 1
-        elif result[3] == "unclear":
-            unclear += 1
 
     # Now we convert the raw numbers to percentage values by dividing it
     # by the sample size, multiplying it by 10000 to shorten the value
@@ -221,7 +236,6 @@ def statistical_test_name(sample_size):
     double_last = (((double_last / sample_size) * 10000) // 1) / 100
     male = (((male / sample_size) * 10000) // 1) / 100
     female = (((female / sample_size) * 10000) // 1) / 100
-    unclear = (((unclear / sample_size) * 10000) // 1) / 100
 
     # At the end we print each probability
     print(doctor, "% are doctors.", sep="")
@@ -229,8 +243,6 @@ def statistical_test_name(sample_size):
     print(double_last, "% have a double last name.", sep="")
     print(male, "% are male.", sep="")
     print(female, "% are female.", sep="")
-    print(unclear, "% have an unclear gender due to some names being suitable for both "
-                   "genders.", sep="")
 
 
 def address():
@@ -391,7 +403,6 @@ def statistical_test(sample_size):
     double_last = '{:.2%}'.format(double_last / sample_size)
     male = '{:.2%}'.format(male / sample_size)
     female = '{:.2%}'.format(female / sample_size)
-    unclear = '{:.2%}'.format(unclear / sample_size)
     haupt = '{:.2%}'.format(haupt / sample_size)
     schul = '{:.2%}'.format(schul / sample_size)
     garten = '{:.2%}'.format(garten / sample_size)
@@ -418,7 +429,6 @@ def statistical_test(sample_size):
     print(double_last, "have a double last name. The value should be around 15%.")
     print(male, "are male. The value should be around 50%.")
     print(female, "are female. The value should be around 50%.")
-    print(unclear, "have an unclear gender due to the name being suitable for both.")
     print(haupt, "live in a 'Haupt*'. The value should be around 10%.")
     print(schul, "live in a 'Schul*'. The value should be around 8%.")
     print(garten, "live in a 'Garten*'. The value should be around 7%.")
@@ -535,8 +545,8 @@ def test_address(residence):
 # main function to test part 5 (final statistical research)
 def main():
     """Running the program if run as main"""
-    statistical_test(1000)
-    generate_sorted(1000)
+    statistical_test(50000)
+#    generate_sorted(1000)
 
 
 if __name__ == '__main__':
