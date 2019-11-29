@@ -520,75 +520,75 @@ def user_interaction():
     try:
         for i in range(int(male_single)):
             print(male_name())
-    except ValueError as e:
+    except ValueError:
         pass
 
     female_single = input("\nDo you want to generate single female names? ")
     try:
         for i in range(int(female_single)):
             print(female_name())
-    except ValueError as e:
+    except ValueError:
         pass
 
     last_single = input("\nDo you want to generate single last names? ")
     try:
         for i in range(int(last_single)):
             print(last_name())
-    except ValueError as e:
+    except ValueError:
         pass
 
     male_double = input("\nDo you want to generate double male names? ")
     try:
         for i in range(int(male_double)):
             print(double_name("male"))
-    except ValueError as e:
+    except ValueError:
         pass
 
     female_double = input("\nDo you want to generate double female names? ")
     try:
         for i in range(int(female_double)):
             print(double_name("female"))
-    except ValueError as e:
+    except ValueError:
         pass
 
     last_double = input("\nDo you want to generate double last names? ")
     try:
         for i in range(int(last_double)):
             print(double_name("family"))
-    except ValueError as e:
+    except ValueError:
         pass
 
     full = input("\nDo you want to generate full names? ")
     try:
         for i in range(int(full)):
             print(full_name())
-    except ValueError as e:
+    except ValueError:
         pass
 
     statistic_name = input("\nDo you want to statistically test names? ")
     try:
         statistical_test_name(int(statistic_name))
-    except ValueError as e:
+    except ValueError:
         pass
 
     full_identity = input("\nDo you want to generate full identities? ")
     try:
         for i in range(int(full_identity)):
             print(identity())
-    except ValueError as e:
+    except ValueError:
         pass
 
     sorted_list = input("\nDo you want to create a sorted list? ")
     try:
         generate_sorted(int(sorted_list))
-    except ValueError as e:
+    except ValueError:
         pass
 
     statistics_full = input("\nDo you want to create a full statistic over both names and "
                             "addresses? ")
     try:
         statistical_test(int(statistics_full))
-    except ValueError as e:
+    except ValueError:
         pass
 
     print("\nThank you for using this program.\nSee you soon,\nTristan and Oliver")
@@ -636,6 +636,7 @@ def user_interaction():
 def main():
     """Running the program if run as main"""
     user_interaction()
+
 
 if __name__ == '__main__':
     main()
