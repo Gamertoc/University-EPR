@@ -120,9 +120,11 @@ def full_name():
     name = ""
     prefix = ""
 
+    # We use the prefix to get a clear identifier in case the name can
+    # be used for both genders
     if gender <= 50 and double_first <= 10:
         name = double_name("male")
-        if name.split("-")[0] in names.man and name.split("-")[1] in names.man:
+        if name.split("-")[0] in names.woman:
             prefix = "Herr "
     elif gender <= 50:
         name = male_name()
@@ -130,7 +132,7 @@ def full_name():
             prefix = "Herr "
     elif gender > 50 and double_first <= 10:
         name = double_name("female")
-        if name.split("-")[0] in names.man and name.split("-")[1] in names.man:
+        if name.split("-")[0] in names.man:
             prefix = "Frau "
     elif gender > 50:
         name = female_name()
@@ -149,12 +151,6 @@ def full_name():
     elif gender > 50 and doctor <= 9:
         name = "Dr. " + name
 
-    # We use the prefix to get a clear identifier in case the name can
-    # be used for both genders
-    #    if gender <= 50 and name.split()[-2] in names.woman:
-    #        prefix = "Herr "
-    #    elif gender > 50 and name.split()[-2] in names.man:
-    #       prefix = "Frau "
     # If the prefix isn't empty, we add it to the name
     if prefix:
         name = prefix + name
