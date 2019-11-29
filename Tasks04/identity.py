@@ -329,8 +329,8 @@ def generate_sorted(sample_size):
     # We sort our sample. To do this we sort by the first name first.
     # When we then sort by the last name, the first sorting won't
     # be entirely destroyed
-    sample = sorted(sample, key=lambda x: x.split()[0])
-    sample = sorted(sample, key=lambda x: x.split()[1])
+    sample = sorted(sample, key=lambda x: (x.split(",")[0]).split()[-2])
+    sample = sorted(sample, key=lambda x: (x.split(",")[0]).split()[-1])
     # Then we print our sample
     for i in sample:
         print(i)
@@ -593,14 +593,14 @@ def user_interaction():
 # main function to test part 1 (implementation of basic name generation)
 # def main():
 #    """Running the program if run as main"""
-#    print("male first names:")
-#    for i in range (50):
+#    print("Male first names:")
+#    for i in range(50):
 #        print(male_name())
-#    print("\nfemale first names:")
-#    for i in range (50):
+#    print("\nFemale first names:")
+#    for i in range(50):
 #        print(female_name())
-#    print("\nlast names:")
-#    for i in range (50):
+#    print("\nLast names:")
+#    for i in range(50):
 #        print(last_name())
 
 # main function to test part 2 (generating full names)
@@ -617,8 +617,8 @@ def user_interaction():
 #    statistical_test_name(1000)
 
 # main function to test part 4 (full identity generation)
-# def main():
-#    """Running the program if run as main"""
+def main():
+    """Running the program if run as main"""
 #    for i in range(100):
 #        print(identity())
 
@@ -626,12 +626,12 @@ def user_interaction():
 # def main():
 #    """Running the program if run as main"""
 #    statistical_test(1000)
-#    generate_sorted(1000)
+    generate_sorted(1000)
 
 # final main function for interaction with the user
-def main():
-    """Running the program if run as main"""
-    user_interaction()
+# def main():
+#    """Running the program if run as main"""
+#    user_interaction()
 
 
 if __name__ == '__main__':
