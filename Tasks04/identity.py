@@ -591,7 +591,7 @@ def user_interaction():
     except ValueError as e:
         pass
 
-    print("Thank you for using this program.\n\nSee you soon,\nTristan and Oliver")
+    print("\nThank you for using this program.\nSee you soon,\nTristan and Oliver")
 
 
 # main function to test part 1 (implementation of basic name generation)
