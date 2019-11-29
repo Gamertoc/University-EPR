@@ -144,17 +144,17 @@ def full_name():
         name += " " + last_name()
 
     # Last but not least we check if the person is a doctor
-    if (gender <= 50 and doctor <= 11):
+    if gender <= 50 and doctor <= 11:
         name = "Dr. " + name
-    elif (gender > 50 and doctor <= 9):
+    elif gender > 50 and doctor <= 9:
         name = "Dr. " + name
 
     # We use the prefix to get a clear identifier in case the name can
     # be used for both genders
-#    if gender <= 50 and name.split()[-2] in names.woman:
-#        prefix = "Herr "
-#    elif gender > 50 and name.split()[-2] in names.man:
-#       prefix = "Frau "
+    #    if gender <= 50 and name.split()[-2] in names.woman:
+    #        prefix = "Herr "
+    #    elif gender > 50 and name.split()[-2] in names.man:
+    #       prefix = "Frau "
     # If the prefix isn't empty, we add it to the name
     if prefix:
         name = prefix + name
@@ -166,8 +166,6 @@ def test_name(name):
     :param name: String
     :return: list
     """
-    # We save the results in a list
-    result = []
     # To work with the name, we remove the address and then
     # split it by its blanks
     name = name.split(",")[0]
@@ -177,6 +175,7 @@ def test_name(name):
     if "Dr." in name:
         doctor = 1
 
+    # We save the results in a list
     result = [doctor]
     # Next we look at whether the person has a double first name
     if "-" in name[-2]:
@@ -367,11 +366,10 @@ def statistical_test(sample_size):
             female += 1
 
     # And then comes the address
-    haupt, schul, garten, dorf, bahnhof, wiesen, berg, kirch, wald, ring_prefix, custom, \
-    straße, weg, allee, ring_suffix, platz, number_four_digits, number_three_digits, \
-    number_less_digits \
-        = \
-        (0,) * 19
+    haupt, schul, garten, dorf, bahnhof, wiesen, berg, kirch, wald, ring_prefix, custom,\
+        strasse, weg, allee, ring_suffix, platz, number_four_digits, number_three_digits,\
+        number_less_digits = (0,) * 19
+
     for i in sample:
         result = test_address(i)
         # Now we add the result to the respective variables
@@ -386,7 +384,7 @@ def statistical_test(sample_size):
         wald += result[8]
         ring_prefix += result[9]
         custom += result[10]
-        straße += result[11]
+        strasse += result[11]
         weg += result[12]
         allee += result[13]
         ring_suffix += result[14]
@@ -412,7 +410,7 @@ def statistical_test(sample_size):
     wald = '{:.2%}'.format(wald / sample_size)
     ring_prefix = '{:.2%}'.format(ring_prefix / sample_size)
     custom = '{:.2%}'.format(custom / sample_size)
-    straße = '{:.2%}'.format(straße / sample_size)
+    strasse = '{:.2%}'.format(strasse / sample_size)
     weg = '{:.2%}'.format(weg / sample_size)
     allee = '{:.2%}'.format(allee / sample_size)
     ring_suffix = '{:.2%}'.format(ring_suffix / sample_size)
@@ -438,7 +436,7 @@ def statistical_test(sample_size):
     print(wald, "live in a 'Wald*'. The value should be around 4%.")
     print(ring_prefix, "live in a 'Ring*'. The value should be around 4%.")
     print(custom, "live in something named nothing of the above. The value should be around 36%.")
-    print(straße, "live in a '*straße'. The value should be around 78%.")
+    print(strasse, "live in a '*straße'. The value should be around 78%.")
     print(weg, "live in a '*weg'. The value should be around 18%.")
     print(allee, "live in a '*allee'. The value should be around 2%.")
     print(ring_suffix, "live in a '*ring'. The value should be around 1%.")
@@ -508,6 +506,94 @@ def test_address(residence):
     return result
 
 
+def user_interaction():
+    """Manages the interaction between program and user."""
+    # Some information for the usage
+    print("For every following question: \nIf you want to do it, type the number of how many "
+          "should be generated. If you don't want to do it, type anything else.")
+    male_single = input("\nDo you want to generate single male names? ")
+
+    # This is the principle that will be used for every question. If the
+    # given input is an integer, it will run the program for how often
+    # it was told. If it wasn't an integer, the conversion will fail and
+    # we will just move on to the next one.
+    try:
+        for i in range(int(male_single)):
+            print(male_name())
+    except ValueError as e:
+        pass
+
+    female_single = input("\nDo you want to generate single female names? ")
+    try:
+        for i in range(int(female_single)):
+            print(female_name())
+    except ValueError as e:
+        pass
+
+    last_single = input("\nDo you want to generate single last names? ")
+    try:
+        for i in range(int(last_single)):
+            print(last_name())
+    except ValueError as e:
+        pass
+
+    male_double = input("\nDo you want to generate double male names? ")
+    try:
+        for i in range(int(male_double)):
+            print(double_name("male"))
+    except ValueError as e:
+        pass
+
+    female_double = input("\nDo you want to generate double female names? ")
+    try:
+        for i in range(int(female_double)):
+            print(double_name("female"))
+    except ValueError as e:
+        pass
+
+    last_double = input("\nDo you want to generate double last names? ")
+    try:
+        for i in range(int(last_double)):
+            print(double_name("family"))
+    except ValueError as e:
+        pass
+
+    full = input("\nDo you want to generate full names? ")
+    try:
+        for i in range(int(full)):
+            print(full_name())
+    except ValueError as e:
+        pass
+
+    statistic_name = input("\nDo you want to statistically test names? ")
+    try:
+        statistical_test_name(int(statistic_name))
+    except ValueError as e:
+        pass
+
+    full_identity = input("\nDo you want to generate full identities? ")
+    try:
+        for i in range(int(full_identity)):
+            print(identity())
+    except ValueError as e:
+        pass
+
+    sorted_list = input("\nDo you want to create a sorted list? ")
+    try:
+        generate_sorted(int(sorted_list))
+    except ValueError as e:
+        pass
+
+    statistics_full = input("\nDo you want to create a full statistic over both names and "
+                            "addresses? ")
+    try:
+        statistical_test(int(statistics_full))
+    except ValueError as e:
+        pass
+
+    print("Thank you for using this program.\n\nSee you soon,\nTristan and Oliver")
+
+
 # main function to test part 1 (implementation of basic name generation)
 # def main():
 #    """Running the program if run as main"""
@@ -541,11 +627,15 @@ def test_address(residence):
 #        print(identity())
 
 # main function to test part 5 (final statistical research)
-def main():
-    """Running the program if run as main"""
-    statistical_test(50000)
+# def main():
+#    """Running the program if run as main"""
+#    statistical_test(1000)
 #    generate_sorted(1000)
 
+# final main function for interaction with the user
+def main():
+    """Running the program if run as main"""
+    user_interaction()
 
 if __name__ == '__main__':
     main()
