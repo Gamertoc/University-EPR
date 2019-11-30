@@ -223,21 +223,19 @@ def statistical_test_name(sample_size):
         elif result[3] == "female":
             female += 1
 
-    # Now we convert the raw numbers to percentage values by dividing it
-    # by the sample size, multiplying it by 10000 to shorten the value
-    # to two digits and then dividing by 100
-    doctor = (((doctor / sample_size) * 10000) // 1) / 100
-    double_first = (((double_first / sample_size) * 10000) // 1) / 100
-    double_last = (((double_last / sample_size) * 10000) // 1) / 100
-    male = (((male / sample_size) * 10000) // 1) / 100
-    female = (((female / sample_size) * 10000) // 1) / 100
+    # Now we convert the raw numbers to percentage values with 2 digits
+    doctor = '{:.2%}'.format(doctor / sample_size)
+    double_first = '{:.2%}'.format(double_first / sample_size)
+    double_last = '{:.2%}'.format(double_last / sample_size)
+    male = '{:.2%}'.format(male / sample_size)
+    female = '{:.2%}'.format(female / sample_size)
 
     # At the end we print each probability
-    print(doctor, "% are doctors.", sep="")
-    print(double_first, "% have a double first name.", sep="")
-    print(double_last, "% have a double last name.", sep="")
-    print(male, "% are male.", sep="")
-    print(female, "% are female.", sep="")
+    print(doctor, " are doctors.", sep="")
+    print(double_first, " have a double first name.", sep="")
+    print(double_last, " have a double last name.", sep="")
+    print(male, " are male.", sep="")
+    print(female, " are female.", sep="")
 
 
 def address():
@@ -618,20 +616,20 @@ def user_interaction():
 
 # main function to test part 4 (full identity generation)
 # def main():
-#     """Running the program if run as main"""
+#    """Running the program if run as main"""
 #    for i in range(100):
 #        print(identity())
 
 # main function to test part 5 (final statistical research)
-def main():
-    """Running the program if run as main"""
-    generate_sorted(1000)
-    statistical_test(1000)
+# def main():
+#   """Running the program if run as main"""
+#    generate_sorted(1000)
+#    statistical_test(1000)
 
 # final main function for interaction with the user
-# def main():
-#    """Running the program if run as main"""
-#    user_interaction()
+def main():
+    """Running the program if run as main"""
+    user_interaction()
 
 
 if __name__ == '__main__':
