@@ -617,16 +617,16 @@ def user_interaction():
 #    statistical_test_name(1000)
 
 # main function to test part 4 (full identity generation)
-def main():
-    """Running the program if run as main"""
+# def main():
+#     """Running the program if run as main"""
 #    for i in range(100):
 #        print(identity())
 
 # main function to test part 5 (final statistical research)
-# def main():
-#    """Running the program if run as main"""
-#    statistical_test(1000)
+def main():
+    """Running the program if run as main"""
     generate_sorted(1000)
+    statistical_test(1000)
 
 # final main function for interaction with the user
 # def main():
