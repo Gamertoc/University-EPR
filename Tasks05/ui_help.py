@@ -32,7 +32,7 @@ def clear_screen(line_count):
     print("\n" * line_count)
 
 
-def input_yes_no(prompt = "Write \"yes\" or \"no\: "):
+def input_yes_no(prompt = "Write \"yes\" or \"no\": "):
     """Read only yes or no."""
     
     text = input(prompt)
