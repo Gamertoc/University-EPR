@@ -4,6 +4,8 @@ __author__ = "7146127, Theobald, 6956404, Stadler"
 __email__ = "s7223152@cs.uni-frankfurt.de, s0706782@rz.uni-frankfurt.de"
 
 import random as dice
+import sys
+import time
 import ui_help
 
 
@@ -12,7 +14,7 @@ def roll_dices():
 
     number_1 = dice.randint(1, 6)
     number_2 = dice.randint(1, 6)
-    
+
     return max(number_1, number_2) * 10 + min(number_1, number_2)
 
 
@@ -27,94 +29,45 @@ def new_better_than_old(new_number, old_number):
 
     # Streching the numbers so we can easyly compare them.
     if new_number == 42:
-        new_number *= 1000
+        new_number *= 100
     elif new_number == 21:
         new_number *= 100
-    elif new_number % 10 == new_number // 10:
+    elif new_number / 11 == new_number // 11:
         new_number *= 10
 
     if old_number == 42:
-        old_number *= 1000
+        old_number *= 100
     elif old_number == 21:
         old_number *= 100
-    elif old_number % 10 == old_number // 10:
+    elif old_number / 11 == old_number // 11:
         old_number *= 10
 
     return new_number > old_number
-    
+
 
 def points_worth(number):
     """Calculate the points to subtract from the players account."""
-    if (number == 42):
+    if number == 42:
         return 3
-    elif (number == 21):
+    elif number == 21:
         return 2
-
-    return 1
-
-
-
-
-def main():
-    """The main entry point of the game."""
-
-#             TEST
-#         Remove later
-#    for i in range(10):
-#        n1 = roll_dices() #old
-#        n2 = roll_dices() #new
-#        print(n2, "better than", n1, "is", new_better_than_old(n2, n1))
-
-
-    # +++++++++++INITIALIZE++++++++++++
-
-
-    # Check the size of the user console.
-    for i in range(150):
-        print(150 - i)
-
-    # The line_count is used to clear the screen.
-    line_count = 2 + ui_help.input_number(\
-        "What is the largest number you see without scrolling?: ")
-
-    # Check, wheather the line count makes sense.
-    if (line_count < 5):
-        print("The game has not even started and you are already lieing...")
-        return
-    
-
-    
-    player_count = ui_help.input_number("How many players want to play? ")
-
-    # Check, wheather the player count is valid. Is has to be 2 or larger
-    if (player_count <= 0):
-        print("Ok, you do not have to...")
-        return
-    elif (player_count == 1):
-        print("Stop the jokes...")
-        return
     else:
-        print("Welcome to the game!")
-
-    
-    # The player list contains 2-elements-lists: [<name>, <points>].
-    players = []
-    
-    for i in range(player_count):
-        name = input("\nPlayer " + str(i + 1) + ": Please enter your name:\n")
-        players.append([name, 10])
-    
+        return 1
 
 
-    # +++++++++GAME+++++++++++
+def play(players):
+    """To play the base game.
+    :param players: list
+    """
+
     game_over = False
     last_diced_number = 0
 
     # This is the index of the player, who does the next move.
     # It is the list index, not the number.
     turn_index = 0
-    
-    while (not game_over):
+
+    while not game_over:
 
         print("It is " + players[turn_index][0] + "'s turn.")
 
@@ -122,7 +75,6 @@ def main():
         input("Press enter to show your number")
         print("You diced", diced_number)
         input("Press enter to hide your number")
-        ui_help.clear_screen(line_count)
 
         print("The number from the last turn was", last_diced_number)
 
@@ -130,9 +82,9 @@ def main():
 
         # This makes sure that a valid number is entered
         while (True):
-            typed_number = ui_help.input_valid_number(\
+            typed_number = ui_help.input_valid_number( \
                 "Please enter the number you diced. (Its allowed to lie)")
-    
+
             if (not new_better_than_old(typed_number, last_diced_number)):
                 print("Of cause the number has to be bigger than the old one.")
                 print("Read the rules and try again.")
@@ -140,9 +92,9 @@ def main():
                 break
 
         next_turn_index = (turn_index + 1) % player_count
-        
+
         believe = ui_help.input_yes_no(players[next_turn_index][0] + \
-              " now decides. Do you believe it? Write \"yes\" or \"no\": ")
+                                       " now decides. Do you believe it? Write \"yes\" or \"no\": ")
 
         # When not believing, check the numbers
         if (believe == "no"):
@@ -161,25 +113,59 @@ def main():
                 players[next_turn_index][1] -= points_worth(typed_number)
                 ui_help.print_points(players[next_turn_index])
 
-            #TO DO:
-                #Update last_diced_number
-                #Throw players with points <= 0 out of the game
-                #Add a restart of the number after not believe and 42
-                #End the game
-                #etc...
-                
-
-
-        
+            # TO DO:
+            # Update last_diced_number
+            # Throw players with points <= 0 out of the game
+            # Add a restart of the number after not believe and 42
+            # End the game
+            # etc...
 
         # Calculates the new player turn index.
         turn_index = (turn_index + 1) % player_count
 
-        
-    
+
+def initialize():
+    """This function will initialize the game, starting with the chosen
+     number of players.
+     """
+    player_count = ui_help.input_number("How many players want to play? ")
+
+    # Check whether the player count is valid. Is has to be 2 or larger (for now)
+    if player_count <= 0:
+        print("Ok, you do not have to...")
+        return
+    elif player_count == 1:
+        print("Stop the jokes...")
+    else:
+        print("Welcome to the game!")
+
+    # The player list contains 2-elements-lists: [<name>, <points>].
+    players = []
+
+    # Each player can enter his name
+    for i in range(player_count):
+        name = input("\nPlayer " + str(i + 1) + ": Please enter your name:\n")
+        players.append([name, 10])
+
+    # Now we choose whether we let humans play against each other or let
+    # a bot play against a human.
+    if player_count == 1:
+        # The function for the bot belongs here
+        pass
+    else:
+        play(players)
 
 
+def main():
+    """The main entry point of the game."""
+    #             TEST
+    #         Remove later
+    # for i in range(10):
+    #    n1 = roll_dices() #old
+    #    n2 = roll_dices() #new
+    #    print(n2, "better than", n1, "is", new_better_than_old(n2, n1))
 
+    initialize()
 
 
 # Starts the game, if run as main.

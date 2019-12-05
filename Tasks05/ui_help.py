@@ -7,11 +7,11 @@ __email__ = "s7223152@cs.uni-frankfurt.de, s0706782@rz.uni-frankfurt.de"
 def input_number(prompt="Please enter a number: "):
     """Read a number from the user."""
 
-    while (True):
+    while True:
         try:
             number = int(input(prompt))
             return number
-        except:
+        except ValueError:
             print("You have to type a valid integer and press enter.")
 
 
