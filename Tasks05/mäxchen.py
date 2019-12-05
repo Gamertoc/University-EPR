@@ -18,7 +18,8 @@ import ui_help
 # expansion 6
 # expansion 7
 # etc...
-# useful implementation of expansion 4
+# adjusting input_valid_number to modi
+# Add unicode emoji
 
 
 def roll_dices():
@@ -26,8 +27,6 @@ def roll_dices():
 
     number_1 = dice.randint(1, 6)
     number_2 = dice.randint(1, 6)
-
-    ui_help.visual_dice(number_1, number_2)
 
     return max(number_1, number_2) * 10 + min(number_1, number_2)
 
@@ -123,10 +122,12 @@ def play(players):
 
         # When not believing, check the numbers
         if believe == "no":
+            print("These were the dices:")
+            ui_help.visual_dice(tossed_number // 10, tossed_number % 10)
             print("Tossed number:", tossed_number, "Typed number:", typed_number)
             if new_better_than_old(typed_number, tossed_number):
                 print("Oops, you were caught red-handed.")
-                print("Try to lie better next time")
+                print("Try to lie better next time ;-)")
                 players[turn_index][1] -= points_worth(tossed_number)
                 ui_help.print_points(players[turn_index])
             elif typed_number == tossed_number:
@@ -198,9 +199,14 @@ def initialize():
 def settings():
     """Adjusting the settings of the game.
     :return: list"""
+    settings_all = {
+        "Mäxchen": 21,
+        "Hamburger": 42,
+        "reverse_"
+    }
     if ui_help.input_yes_no("Do you even want to change the settings? Type \"yes\" or \"no\": ") \
             == "no":
-        return [0, 0, 0, 0, 0, 0]
+
     else:
         print("OK, let's dive right into it!\n")
         adjusted_settings = []
@@ -208,13 +214,17 @@ def settings():
                 "Do you want to allow tossing normal values where the first digit is smaller "
                 "than the second? Type \"yes\" or \"no\": ") \
                 == "yes":
-            adjusted_settings += [1]
+            adjusted_settings += 1
+        else:
+            adjusted_settings += 0
 
         if ui_help.input_yes_no(
                 "Do you want to reverse the order when a \"Mäxchen\" or a \"Hamburger\" is "
                 "disclosed? Type \"yes\" or \"no\": ") \
                 == "yes":
-            adjusted_settings += [1]
+            adjusted_settings += 1
+        else:
+            adjusted_settings += 0
 
 
 def main():
