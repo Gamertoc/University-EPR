@@ -10,7 +10,6 @@ import ui_help
 
 
 # TO DO:
-# Add a restart of the number after not believe and 42
 # End the game
 # expansion 1
 # expansion 2
@@ -73,6 +72,7 @@ def points_worth(number):
 def play(players):
     """To play the base game.
     :param players: list
+    :return: None
     """
 
     game_over = False
@@ -146,12 +146,23 @@ def play(players):
                                          "time.")
                 players.remove(i)
 
+        # Check for win
+        if len(players) == 1:
+            print(players[0][0], "has won the game! Congratulations!!!")
+            return
+
         # After that we refresh the player count
         player_count = len(players)
 
         # Calculates the new player turn index.
         turn_index = (turn_index + 1) % player_count
         last_tossed_number = typed_number
+
+        # Restarting the game at 0 when the maximum value is reached.
+        if typed_number == 42:
+            print("Maximum value reached. Restarting the game...")
+            last_tossed_number = 0
+            continue
 
 
 def initialize():

@@ -69,12 +69,6 @@ def input_valid_number(prompt="Please enter a valid number: "):
             print("A valid number is bigger than 10 and smaller than 67.")
 
 
-def clear_screen(line_count):
-    """Removes the current console text."""
-
-    print("\n" * line_count)
-
-
 def input_yes_no(prompt="Write \"yes\" or \"no\": "):
     """Read only yes or no."""
 
