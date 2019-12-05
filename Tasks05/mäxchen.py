@@ -7,7 +7,21 @@ import random as dice
 import sys
 import time
 import ui_help
-import curses
+
+
+# TO DO:
+# Update last_tossed_number
+# Throw players with points <= 0 out of the game
+# Add a restart of the number after not believe and 42
+# End the game
+# expansion 1
+# expansion 2
+# expansion 3
+# expansion 5
+# expansion 6
+# expansion 7
+# etc...
+# useful implementation of expansion 4
 
 
 def roll_dices():
@@ -15,6 +29,8 @@ def roll_dices():
 
     number_1 = dice.randint(1, 6)
     number_2 = dice.randint(1, 6)
+
+    ui_help.visual_dice(number_1, number_2)
 
     return max(number_1, number_2) * 10 + min(number_1, number_2)
 
@@ -62,7 +78,8 @@ def play(players):
     """
 
     game_over = False
-    last_diced_number = 0
+    last_tossed_number = 0
+    player_count = len(players)
 
     # This is the index of the player, who does the next move.
     # It is the list index, not the number.
@@ -73,30 +90,30 @@ def play(players):
         print("It is " + players[turn_index][0] + "'s turn.")
 
         # A new number gets tossed
-        diced_number = roll_dices()
+        tossed_number = roll_dices()
 
         # This construction shows you your number for 5 seconds
-        sys.stdout.write("Press enter to show your number")
-        input()
+        # sys.stdout.write("Press enter to show your number")
+        input("Press enter to show your number")
         for i in range(6):
-            sys.stdout.write("\rYou tossed a " + str(diced_number) + " which will vanish in " +
+            sys.stdout.write("\rYou tossed a " + str(tossed_number) + " which will vanish in " +
                              str(5 - i))
             sys.stdout.flush()
             time.sleep(1)
         sys.stdout.flush()
         sys.stdout.write("\r")
 
-        print("The number from the last turn was", last_diced_number)
+        print("The number from the last turn was", last_tossed_number)
 
         typed_number = 0
 
         # This makes sure that a valid number is entered
-        while (True):
-            typed_number = ui_help.input_valid_number( \
-                "Please enter the number you diced. (Its allowed to lie)")
+        while True:
+            typed_number = ui_help.input_valid_number("Please enter the number you tossed. (It's "
+                                                      "allowed to lie) ")
 
-            if (not new_better_than_old(typed_number, last_diced_number)):
-                print("Of cause the number has to be bigger than the old one.")
+            if not new_better_than_old(typed_number, last_tossed_number):
+                print("Of course the number has to be bigger than the old one.")
                 print("Read the rules and try again.")
             else:
                 break
@@ -104,17 +121,18 @@ def play(players):
         next_turn_index = (turn_index + 1) % player_count
 
         believe = ui_help.input_yes_no(players[next_turn_index][0] + \
-                                       " now decides. Do you believe it? Write \"yes\" or \"no\": ")
+                                       " now decides. Do you believe that he tossed that? Write "
+                                       "\"yes\" or \"no\": ")
 
         # When not believing, check the numbers
-        if (believe == "no"):
-            print("Diced number:", diced_number, "Typed number:", typed_number)
-            if (new_better_than_old(typed_number, diced_number)):
+        if believe == "no":
+            print("Tossed number:", tossed_number, "Typed number:", typed_number)
+            if new_better_than_old(typed_number, tossed_number):
                 print("Oops, you were caught red-handed.")
-                print("Try to lie better next time ;)")
-                players[turn_index][1] -= points_worth(typed_number)
+                print("Try to lie better next time")
+                players[turn_index][1] -= points_worth(tossed_number)
                 ui_help.print_points(players[turn_index])
-            elif (typed_number == diced_number):
+            elif typed_number == tossed_number:
                 print("No lie, no points for", players[next_turn_index][0])
                 players[next_turn_index][1] -= points_worth(typed_number)
                 ui_help.print_points(players[next_turn_index])
@@ -122,13 +140,6 @@ def play(players):
                 print("It was a trap and you ran into it!")
                 players[next_turn_index][1] -= points_worth(typed_number)
                 ui_help.print_points(players[next_turn_index])
-
-            # TO DO:
-            # Update last_diced_number
-            # Throw players with points <= 0 out of the game
-            # Add a restart of the number after not believe and 42
-            # End the game
-            # etc...
 
         # Calculates the new player turn index.
         turn_index = (turn_index + 1) % player_count
