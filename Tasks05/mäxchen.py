@@ -7,6 +7,7 @@ import random as dice
 import sys
 import time
 import ui_help
+import curses
 
 
 def roll_dices():
@@ -71,10 +72,19 @@ def play(players):
 
         print("It is " + players[turn_index][0] + "'s turn.")
 
+        # A new number gets tossed
         diced_number = roll_dices()
-        input("Press enter to show your number")
-        print("You diced", diced_number)
-        input("Press enter to hide your number")
+
+        # This construction shows you your number for 5 seconds
+        sys.stdout.write("Press enter to show your number")
+        input()
+        for i in range(6):
+            sys.stdout.write("\rYou tossed a " + str(diced_number) + " which will vanish in " +
+                             str(5 - i))
+            sys.stdout.flush()
+            time.sleep(1)
+        sys.stdout.flush()
+        sys.stdout.write("\r")
 
         print("The number from the last turn was", last_diced_number)
 
