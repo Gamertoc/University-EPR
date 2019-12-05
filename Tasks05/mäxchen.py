@@ -10,6 +10,7 @@ import ui_help
 
 
 # TO DO:
+# connecting the settings to the actual game
 # expansion 1
 # expansion 2
 # expansion 3

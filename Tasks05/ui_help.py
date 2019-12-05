@@ -63,10 +63,14 @@ def input_valid_number(prompt="Please enter a valid number: "):
         number = input_number(prompt)
 
         # Checks, whether the number is in the valid range.
-        if 11 <= number <= 66:
+        if 11 <= number <= 66 and number % 10 <= 6:
             return number
         else:
-            print("A valid number is bigger than 10 and smaller than 67.")
+            print("A valid number is something that can be achieved by using one dice for the "
+                  "first digit and one for the second digit. So quit your bullshit with numbers "
+                  "like 420 or 27 or 69, valid are only two digit numbers where each digit is "
+                  "between "
+                  "1 and 6.")
 
 
 def input_yes_no(prompt="Write \"yes\" or \"no\": "):
