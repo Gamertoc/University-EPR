@@ -1,12 +1,7 @@
 """This is the main module and entry point of the game "Mäxchen"."""
 
-
-
-
-import ui_help
 import random as dice
-
-
+import ui_help
 
 
 def roll_dices():
