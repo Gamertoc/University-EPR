@@ -10,7 +10,6 @@ import ui_help
 
 
 # TO DO:
-# End the game
 # expansion 1
 # expansion 2
 # expansion 3
@@ -38,10 +37,9 @@ def new_better_than_old(new_number, old_number):
     The number order is:
     42 > 21 > 66 > 55 > ... > 11 > others
     (others in the normal ">" order)
-
     """
 
-    # Streching the numbers so we can easyly compare them.
+    # Stretching the numbers so we can easily compare them.
     if new_number == 42:
         new_number *= 100
     elif new_number == 21:
@@ -72,7 +70,7 @@ def points_worth(number):
 def play(players):
     """To play the base game.
     :param players: list
-    :return: None
+    :return: String
     """
 
     game_over = False
@@ -148,8 +146,7 @@ def play(players):
 
         # Check for win
         if len(players) == 1:
-            print(players[0][0], "has won the game! Congratulations!!!")
-            return
+            return players[0]
 
         # After that we refresh the player count
         player_count = len(players)
@@ -194,7 +191,29 @@ def initialize():
         # The function for the bot belongs here
         pass
     else:
-        play(players)
+        return play(players)
+
+
+def settings():
+    """Adjusting the settings of the game.
+    :return: list"""
+    if ui_help.input_yes_no("Do you even want to change the settings? Type \"yes\" or \"no\": ") \
+            == "no":
+        return [0, 0, 0, 0, 0, 0]
+    else:
+        print("OK, let's dive right into it!\n")
+        adjusted_settings = []
+        if ui_help.input_yes_no(
+                "Do you want to allow tossing normal values where the first digit is smaller "
+                "than the second? Type \"yes\" or \"no\": ") \
+                == "yes":
+            adjusted_settings += [1]
+
+        if ui_help.input_yes_no(
+                "Do you want to reverse the order when a \"Mäxchen\" or a \"Hamburger\" is "
+                "disclosed? Type \"yes\" or \"no\": ") \
+                == "yes":
+            adjusted_settings += [1]
 
 
 def main():
@@ -205,8 +224,9 @@ def main():
     #    n1 = roll_dices() #old
     #    n2 = roll_dices() #new
     #    print(n2, "better than", n1, "is", new_better_than_old(n2, n1))
-
-    initialize()
+    setting = settings()
+    winner = initialize()
+    print(winner, "won the game. Congratulations!")
 
 
 # Starts the game, if run as main.
