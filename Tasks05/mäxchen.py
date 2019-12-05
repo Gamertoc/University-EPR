@@ -10,7 +10,6 @@ import ui_help
 
 
 # TO DO:
-# Throw players with points <= 0 out of the game
 # Add a restart of the number after not believe and 42
 # End the game
 # expansion 1
@@ -139,6 +138,16 @@ def play(players):
                 print("It was a trap and you ran into it!")
                 players[next_turn_index][1] -= points_worth(typed_number)
                 ui_help.print_points(players[next_turn_index])
+
+        # Checking if any player has less than 1 point
+        for i in players:
+            if i[1] <= 0:
+                print(i[0], "has", i[1], "and is therefore out of the game! Better luck next "
+                                         "time.")
+                players.remove(i)
+
+        # After that we refresh the player count
+        player_count = len(players)
 
         # Calculates the new player turn index.
         turn_index = (turn_index + 1) % player_count
