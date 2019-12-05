@@ -1,5 +1,8 @@
 """This is the main module and entry point of the game "Mäxchen"."""
 
+__author__ = "7146127, Theobald, 6956404, Stadler"
+__email__ = "s7223152@cs.uni-frankfurt.de, s0706782@rz.uni-frankfurt.de"
+
 import random as dice
 import ui_help
 

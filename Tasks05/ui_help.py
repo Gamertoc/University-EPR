@@ -1,10 +1,12 @@
 """This module contains helper fuctions for the user interface."""
 
+__author__ = "7146127, Theobald, 6956404, Stadler"
+__email__ = "s7223152@cs.uni-frankfurt.de, s0706782@rz.uni-frankfurt.de"
 
 
-def input_number(prompt = "Please enter a number: "):
+def input_number(prompt="Please enter a number: "):
     """Read a number from the user."""
-    
+
     while (True):
         try:
             number = int(input(prompt))
