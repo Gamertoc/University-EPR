@@ -10,7 +10,6 @@ import ui_help
 
 
 # TO DO:
-# Update last_tossed_number
 # Throw players with points <= 0 out of the game
 # Add a restart of the number after not believe and 42
 # End the game
@@ -143,6 +142,7 @@ def play(players):
 
         # Calculates the new player turn index.
         turn_index = (turn_index + 1) % player_count
+        last_tossed_number = typed_number
 
 
 def initialize():

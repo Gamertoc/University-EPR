@@ -15,7 +15,7 @@ def visual_dice(first_dice, second_dice):
     third_line = ""
     for i in first_dice, second_dice:
         if i == 1:
-            first_line += "    "
+            first_line += "     "
             second_line += "  O  "
             third_line += "     "
         elif i == 2:
