@@ -16,28 +16,28 @@ def visual_dice(first_dice, second_dice):
     for i in first_dice, second_dice:
         if i == 1:
             first_line += "    "
-            second_line += "  0  "
+            second_line += "  O  "
             third_line += "     "
         elif i == 2:
-            first_line += "    0"
+            first_line += "    O"
             second_line += "     "
-            third_line += "0    "
+            third_line += "O    "
         elif i == 3:
-            first_line += "    0"
-            second_line += "  0  "
-            third_line += "0    "
+            first_line += "    O"
+            second_line += "  O  "
+            third_line += "O    "
         elif i == 4:
-            first_line += "0   0"
+            first_line += "O   O"
             second_line += "     "
-            third_line += "0   0"
+            third_line += "O   O"
         elif i == 5:
-            first_line += "0   0"
-            second_line += "  0  "
-            third_line += "0   0"
+            first_line += "O   O"
+            second_line += "  O  "
+            third_line += "O   O"
         else:
-            first_line += "0 0 0"
+            first_line += "O O O"
             second_line += "     "
-            third_line += "0 0 0"
+            third_line += "O O O"
         first_line += "        "
         second_line += "        "
         third_line += "        "
