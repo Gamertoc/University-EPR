@@ -56,15 +56,22 @@ def input_number(prompt="Please enter a number: "):
             print("You have to type a valid integer and press enter.")
 
 
-def input_valid_number(prompt="Please enter a valid number: "):
+def input_valid_number(prompt="Please enter a valid number: ", order_numbers = True):
     """Read a valid number from the user."""
 
     while True:
         number = input_number(prompt)
 
         # Checks, whether the number is in the valid range.
+        
         if 11 <= number <= 66 and number % 10 <= 6:
-            return number
+            if (order_numbers and number // 10 >= number % 10):
+                return number
+            elif not order_numbers:
+                return number
+            else:
+                print("You are playing with the standard rules so your numbers first digit "
+                      "has not to be smaller than the second digit.")
         else:
             print("A valid number is something that can be achieved by using one dice for the "
                   "first digit and one for the second digit. So quit your bullshit with numbers "
