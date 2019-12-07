@@ -44,7 +44,7 @@ def new_better_than_old(new_number, old_number, settings_all):
         new_number *= 1000
     elif new_number == settings_all["Mäxchen"]:
         new_number *= 100
-    elif new_number % 11 == new_number // 10:
+    elif new_number % 10 == new_number // 10:
         new_number *= 10
 
     if old_number == settings_all["Hamburger"]:
