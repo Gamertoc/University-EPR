@@ -149,7 +149,7 @@ def play(players, settings_all):
                     ui_help.print_points(players[turn_index])
                 else:
                     print("Due to an internal crash, the accout of " + players[turn_index][0] \
-                          + "was locked. He/She loses no points this round.")
+                          + " was locked. He/She loses no points this round.")
             elif typed_number == tossed_number:
                 if players[next_turn_index][2] != "GK":
                     print("No lie, no points for", players[next_turn_index][0])
@@ -247,7 +247,7 @@ def settings():
     settings_all = {
         "Mäxchen": 21,
         "Hamburger": 42,
-        "numbers_in_order" : True  # If True, only use 1st digit > 2nd digit numbers.
+        "numbers_in_order" : True  # If True, only use 1st digit >= 2nd digit numbers.
     }
     if ui_help.input_yes_no("Do you even want to change the settings? Type \"yes\" or \"no\": ") \
             == "no":
