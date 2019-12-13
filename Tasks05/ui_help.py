@@ -6,9 +6,11 @@ __email__ = "s7223152@cs.uni-frankfurt.de, s0706782@rz.uni-frankfurt.de"
 
 def visual_dice(first_dice, second_dice):
     """Prints the tossed number as kind of a dice.
+
     :param first_dice: int
     :param second_dice: int
     :return: None
+    
     """
     first_line = ""
     second_line = ""
@@ -94,3 +96,18 @@ def print_points(player):
     """Print the points of the given player list."""
 
     print(player[0], "has (now) a total of", player[1], "points.")
+
+def print_tables(players):
+    """Print the tables of the players.
+
+    :param players: list
+
+    """
+
+    for i in players:
+        print("\nThe points of " + i[0] + ":")
+        for j in range(len(i[3])):
+            print("Round " + str(j + 1) + " " * (4 - len(str(j + 1))) + "|    ", i[3][j])
+            #                                    ^Assuming that nobody plays more than 9999 rounds.
+
+    
