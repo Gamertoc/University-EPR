@@ -12,7 +12,6 @@ import ui_help
 # TO DO:
 # expansion 1
 # expansion 3
-# expansion 5
 # expansion 7
 # etc...
 # Add unicode emoji (!!!!!! Idle crashes!!!!!!!!) DONT!
@@ -68,6 +67,8 @@ def points_worth(number, settings_all):
         return 1
 
 
+
+
 def play(players, settings_all):
     """To play the base game.
 
@@ -81,13 +82,15 @@ def play(players, settings_all):
     last_tossed_number = 0
     player_count = len(players)
 
+    finished_players = []
+
     # This is the index of the player, who does the next move.
     # It is the list index, not the number.
     turn_index = 0
 
     while not game_over:
 
-        print("It is " + players[turn_index][0] + "'s turn.")
+        print("\nIt is " + players[turn_index][0] + "'s turn.")
 
 
         # Cheaters have a 50% chance of their cheated number.
@@ -113,16 +116,17 @@ def play(players, settings_all):
             time.sleep(1)
         sys.stdout.flush()
         sys.stdout.write("\r")
-
-        print("The number from the last turn was", last_tossed_number)
+        
+        #                             This clears the last chars.  -->  ___
+        print("The number from the last turn was", last_tossed_number, "   ")
 
         typed_number = 0
 
         # This makes sure that a valid number is entered.
         while True:
-            typed_number = ui_help.input_valid_number("Please enter the number you tossed. (It's "
-                                                      "allowed to lie) ", \
-                                                      settings_all[numbers_in_order])
+            typed_number = ui_help.input_valid_number("Please enter the number you tossed (It's "
+                                                      "allowed to lie). ", \
+                                                      settings_all["numbers_in_order"])
 
             if not new_better_than_old(typed_number, last_tossed_number, settings_all):
                 print("Of course the number has to be bigger than the old one.")
@@ -138,9 +142,9 @@ def play(players, settings_all):
 
         # When not believing, check the numbers.
         if believe == "no":
-            print("These were the dices:")
+            print("\nThese were the dices:")
             ui_help.visual_dice(tossed_number // 10, tossed_number % 10)
-            print("Tossed number:", tossed_number, "Typed number:", typed_number)
+            print("Tossed number:", tossed_number, "Typed number:", typed_number, "\n")
             if new_better_than_old(typed_number, tossed_number, settings_all):
                 if players[turn_index][2] != "GK":
                     print("Oops, you were caught red-handed.")
@@ -167,17 +171,21 @@ def play(players, settings_all):
                     print("But no problem. Shit happens.")
             #Reset the number for the next turn
             typed_number = 0
+            for i in players:
+                i[3].append(i[1])
 
         # Checking if any player has less than 1 point
         for i in players:
             if i[1] <= 0:
-                print(i[0], "has", i[1], "and is therefore out of the game! Better luck next "
-                                         "time.")
+                print("\n" + i[0], "has", i[1], "points and is therefore out of the game! "
+                                         "Better luck next time.")
+                finished_players.append(i)
                 players.remove(i)
 
         # Check for win
         if len(players) == 1:
-            return players[0]
+            finished_players.append(players[0])
+            return finished_players
 
         # After that we refresh the player count
         player_count = len(players)
@@ -197,7 +205,7 @@ def initialize(settings_all):
     """This function will initialize the game, starting with the chosen
      number of players.
      """
-    player_count = ui_help.input_number("How many players want to play? ")
+    player_count = ui_help.input_number("How many players want to play?\n")
 
     # Check whether the player count is valid. Is has to be 2 or larger (for now)
     if player_count <= 0:
@@ -205,10 +213,11 @@ def initialize(settings_all):
         return
     elif player_count == 1:
         print("Stop the jokes...")
-    else:
-        print("Welcome to the game!")
+        return
+    print("Welcome to the game!")
+    print("Please enter your names. It is your responsibility to pick unique names.\n")
 
-    # The player list contains 3-element-lists: [<name>, <points>, <cheat>].
+    # The player list contains 4-element-lists: [<name>, <points>, <cheat>, <points_table>].
     players = []
 
     # Each player can enter his name
@@ -226,7 +235,7 @@ def initialize(settings_all):
             cheat = "GK"
             name = name[7:]
         
-        players.append([name, 10, cheat])
+        players.append([name, 10, cheat, []])
 
     # Now we choose whether we let humans play against each other or let
     # a bot play against a human.
@@ -241,7 +250,7 @@ def settings():
     """Adjusting the settings of the game.
 
     :return: dictionary
-
+    
     """
     
     settings_all = {
@@ -274,6 +283,7 @@ def settings():
 
 def main():
     """The main entry point of the game."""
+    
     #             TEST
     #         Remove later
     # for i in range(10):
@@ -281,8 +291,12 @@ def main():
     #    n2 = roll_dices() #new
     #    print(n2, "better than", n1, "is", new_better_than_old(n2, n1))
     setting = settings()
-    winner = initialize(setting)
-    print(winner, "won the game. Congratulations!")
+    player_stats = initialize(setting)
+    
+    print(player_stats[-1][0], "won the game. Congratulations!")
+
+    print("\nHere are the player statistics of all rounds:\n")
+    ui_help.print_tables(player_stats)
 
 
 # Starts the game, if run as main.
