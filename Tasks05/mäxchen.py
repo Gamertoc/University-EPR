@@ -1,5 +1,6 @@
 """This is the main module and entry point of the game "Mäxchen"."""
 
+# noinspection SpellCheckingInspection
 __author__ = "7146127, Theobald, 6956404, Stadler"
 __email__ = "s7223152@cs.uni-frankfurt.de, s0706782@rz.uni-frankfurt.de"
 
@@ -10,10 +11,13 @@ import ui_help
 
 
 # TO DO:
-# expansion 1
-# expansion 3
-# expansion 7
-# etc...
+# Implementing reverse playorder when revealing a 21 or 42
+# Allow numbers where the first dice can be smaller than the second
+# Add more settings options
+# Make the settings options affect the actual game
+# Add play history
+# Add cheats
+# Add a bot
 # Add unicode emoji (!!!!!! Idle crashes!!!!!!!!) DONT!
 
 
@@ -292,6 +296,7 @@ def main():
 
     print("\nHere are the player statistics of all rounds:\n")
     ui_help.print_tables(player_stats)
+    exit()
 
 
 # Starts the game, if run as main.

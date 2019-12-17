@@ -1,4 +1,4 @@
-"""This module contains helper fuctions for the user interface."""
+"""This module contains helper functions for the user interface."""
 
 __author__ = "7146127, Theobald, 6956404, Stadler"
 __email__ = "s7223152@cs.uni-frankfurt.de, s0706782@rz.uni-frankfurt.de"
@@ -67,7 +67,7 @@ def input_valid_number(prompt="Please enter a valid number: ", order_numbers = T
         # Checks, whether the number is in the valid range.
         
         if 11 <= number <= 66 and number % 10 <= 6:
-            if (order_numbers and number // 10 >= number % 10):
+            if order_numbers and number // 10 >= number % 10:
                 return number
             elif not order_numbers:
                 return number
@@ -97,6 +97,7 @@ def print_points(player):
 
     print(player[0], "has (now) a total of", player[1], "points.")
 
+
 def print_tables(players):
     """Print the tables of the players.
 
@@ -109,5 +110,3 @@ def print_tables(players):
         for j in range(len(i[3])):
             print("Round " + str(j + 1) + " " * (4 - len(str(j + 1))) + "|    ", i[3][j])
             #                                    ^Assuming that nobody plays more than 9999 rounds.
-
-    
