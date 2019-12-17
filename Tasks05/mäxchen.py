@@ -67,8 +67,6 @@ def points_worth(number, settings_all):
         return 1
 
 
-
-
 def play(players, settings_all):
     """To play the base game.
 
@@ -91,7 +89,6 @@ def play(players, settings_all):
     while not game_over:
 
         print("\nIt is " + players[turn_index][0] + "'s turn.")
-
 
         # Cheaters have a 50% chance of their cheated number.
         if players[turn_index][2] == "HTTB" and dice.randint(0, 1) == 1:
@@ -125,7 +122,7 @@ def play(players, settings_all):
         # This makes sure that a valid number is entered.
         while True:
             typed_number = ui_help.input_valid_number("Please enter the number you tossed (It's "
-                                                      "allowed to lie). ", \
+                                                      "allowed to lie). ",
                                                       settings_all["numbers_in_order"])
 
             if not new_better_than_old(typed_number, last_tossed_number, settings_all):
@@ -136,7 +133,7 @@ def play(players, settings_all):
 
         next_turn_index = (turn_index + 1) % player_count
 
-        believe = ui_help.input_yes_no(players[next_turn_index][0] + \
+        believe = ui_help.input_yes_no(players[next_turn_index][0] +
                                        " now decides. Do you believe that he tossed that? Write "
                                        "\"yes\" or \"no\": ")
 
@@ -152,7 +149,7 @@ def play(players, settings_all):
                     players[turn_index][1] -= points_worth(tossed_number, settings_all)
                     ui_help.print_points(players[turn_index])
                 else:
-                    print("Due to an internal crash, the accout of " + players[turn_index][0] \
+                    print("Due to an internal crash, the accout of " + players[turn_index][0]
                           + " was locked. He/She loses no points this round.")
             elif typed_number == tossed_number:
                 if players[next_turn_index][2] != "GK":
@@ -163,13 +160,13 @@ def play(players, settings_all):
                     print("ERROR, cannot remove points from such a nice player.")
                     ui_help.print_points(players[next_turn_index])
             else:
-                print("It was a trap and you ran into it, " + players[next_turn_index][0]  + "!")
+                print("It was a trap and you ran into it, " + players[next_turn_index][0] + "!")
                 if players[next_turn_index][2] != "GK":
                     players[next_turn_index][1] -= points_worth(typed_number, settings_all)
                     ui_help.print_points(players[next_turn_index])
                 else:
                     print("But no problem. Shit happens.")
-            #Reset the number for the next turn
+            # Reset the number for the next turn
             typed_number = 0
             for i in players:
                 i[3].append(i[1])
@@ -178,7 +175,7 @@ def play(players, settings_all):
         for i in players:
             if i[1] <= 0:
                 print("\n" + i[0], "has", i[1], "points and is therefore out of the game! "
-                                         "Better luck next time.")
+                                                "Better luck next time.")
                 finished_players.append(i)
                 players.remove(i)
 
@@ -256,7 +253,7 @@ def settings():
     settings_all = {
         "Mäxchen": 21,
         "Hamburger": 42,
-        "numbers_in_order" : True  # If True, only use 1st digit >= 2nd digit numbers.
+        "numbers_in_order": True  # If True, only use 1st digit >= 2nd digit numbers.
     }
     if ui_help.input_yes_no("Do you even want to change the settings? Type \"yes\" or \"no\": ") \
             == "no":
@@ -276,9 +273,7 @@ def settings():
             settings_all["Mäxchen"] = 42
             settings_all["Hamburger"] = 21
 
-
     return settings_all
-            
 
 
 def main():
