@@ -10,9 +10,8 @@ import ui_help
 
 
 # TO DO:
-# Implementing reverse playorder when revealing a 21 or 42
+# Implementing reverse playorder when revealing a 21 or 42 --> settings
 # Allow numbers where the first dice can be smaller than the second
-# Add more settings options
 # Make the settings options affect the actual game
 # Add play history
 # Document cheats
