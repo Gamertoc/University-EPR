@@ -1,11 +1,10 @@
 """This is the main module and entry point of the game "Mäxchen"."""
-
+# -*- coding: utf-8 -*-
 # noinspection SpellCheckingInspection
 __author__ = "7146127, Theobald, 6956404, Stadler"
 __email__ = "s7223152@cs.uni-frankfurt.de, s0706782@rz.uni-frankfurt.de"
 
 import random as dice
-import sys
 import time
 import ui_help
 
@@ -103,15 +102,11 @@ def play(players, settings_all):
             order_numbers = settings_all["numbers_in_order"]
             tossed_number = roll_dices(order_numbers)
 
-        # This construction shows you your number for 5 seconds.
-        # sys.stdout.write("Press enter to show your number")
-        # 
-        # !!!!! Does not work with the python shell !!!!!
-        # 
+        # This construction shows you your number for 5 seconds after pressing enter.
         input("Press enter to show your number")
         for i in range(6):
             print("\rYou tossed a " + str(tossed_number) + " which will vanish in " + str(5 - i),
-                  flush=True, file=sys.stdout, sep="", end="")
+                  flush=True, sep="", end="")
             time.sleep(1)
 
         print("\rThe number from the last turn was", last_tossed_number, "   ")
@@ -125,8 +120,8 @@ def play(players, settings_all):
                                                       settings_all["numbers_in_order"])
 
             if not new_better_than_old(typed_number, last_tossed_number, settings_all):
-                print("Of course the number has to be bigger than the old one.")
-                print("Read the rules and try again.")
+                print("Of course the number has to be bigger than the old one.\nRead the rules "
+                      "and try again.")
             else:
                 break
 
@@ -245,33 +240,128 @@ def initialize(settings_all):
 
 def settings():
     """Adjusting the settings of the game.
-
     :return: dictionary
-    
     """
-    
+
+    # This dictionary stores all the settings
     settings_all = {
         "Mäxchen": 21,
         "Hamburger": 42,
-        "numbers_in_order": True  # If True, only use 1st digit >= 2nd digit numbers.
+        "numbers_in_order": True,  # If True, only use 1st digit >= 2nd digit numbers.
+        "play_order": 1,
+        "points_to_start": 10,
+        "point_loss_normal": 1,
+        "point_loss_mäxchen": 2,
+        "point_loss_hamburger": 3,
+        "reverse_mäxchen": True,
+        "reverse_hamburger": True,
     }
-    if ui_help.input_yes_no("Do you even want to change the settings? Type \"yes\" or \"no\": ") \
-            == "no":
-        return settings_all
-    else:
-        print("OK, let's dive right into it!\n")
-        if ui_help.input_yes_no(
-                "Do you want to allow tossing normal values where the first digit is smaller "
-                "than the second? Type \"yes\" or \"no\": ") \
-                == "yes":
-            settings_all["numbers_in_order"] = False
 
-        if ui_help.input_yes_no(
-                "Do you want to reverse the definitions of \"Mäxchen\" and \"Hamburger\"? "
-                "Type \"yes\" or \"no\": ") \
-                == "yes":
-            settings_all["Mäxchen"] = 42
-            settings_all["Hamburger"] = 21
+    # This dictionary references each setting by a number
+    reference = {
+        1: settings_all["Mäxchen"],
+        2: settings_all["Hamburger"],
+        3: settings_all["numbers_in_order"],
+        4: settings_all["play_order"],
+        5: settings_all["points_to_start"],
+        6: settings_all["point_loss_normal"],
+        7: settings_all["point_loss_mäxchen"],
+        8: settings_all["point_loss_hamburger"],
+        9: settings_all["reverse_mäxchen"],
+        10: settings_all["reverse_hamburger"],
+    }
+
+    # This dictionary stores the explanation of each setting.
+    help_game = {
+        -1: "What do you need help with?\n0: What do I even do here?\n1 to 8: What that "
+            "setting does.\nlist: List all settings.\nq to go back to the settings.",
+        0: "To change a setting, simply type a number from 1 to 8 to change the according "
+           "setting.\nType help to get an explanation of which number belongs to which "
+           "setting.\nTo go directly to the game, type q.",
+        1: "This is the value of Mäxchen. Standard: 21",
+        2: "This is the value of the Hamburger. Standard: 42",
+        3: "This sets whether the numbers of the dices are ordered or not (meaning that the "
+           "larger digit will always be the first one). Standard: True",
+        4: "This is the order of playing. 1 means normal, -1 means reversed. Standard: 1",
+        5: "This is the number of points each player gets at the start. Standard: 10",
+        6: "This is the number of points you lose on normal numbers. Standard: 1",
+        7: "This is the number of points you lose on a Mäxchen. Standard: 2",
+        8: "This is the number of points you lose on a Hamburger. Standard: 3",
+        9: "This sets whether the playing order is reversed when a Mäxchen is revealed. "
+           "Standard: True",
+        10: "This sets whether the playing order is reversed when a Hamburger is revealed. "
+            "Standard: True",
+    }
+    print(help_game[0])
+
+    print("\033[91m{}\033[00m".format("Please remember that you can seriously fuck up the "
+                                      "settings to the point of making the game unplayable.\n"
+                                      "This is entirely your responsibility and we recommend "
+                                      "that you think about the impact on the game before "
+                                      "changing any setting." + u"\U0001f621"))
+
+    # The user can decide whether he wants to change some game settings or not.
+    while True:
+        choice = input("\nWhat do you want to do? ")
+        if choice == "q":
+            break
+
+        # If you ask for help, you will receive help
+        elif choice == "help":
+            print(help_game[-1])
+            while True:
+                choice = input("\nNow what do you need help with? ")
+                if choice == "q":
+                    print("Going back to the settings.")
+                    break
+                elif choice == "list":
+                    for i in range(len(settings_all) - 2):
+                        print(i, ": ", help_game[i + 1], sep="")
+                else:
+                    try:
+                        choice = int(choice)
+                        if choice in help_game:
+                            print(help_game[choice])
+                        else:
+                            print("The setting you asked help for doesn't exist. Please choose "
+                                  "something else.")
+                    except ValueError:
+                        print(help_game[-1])
+
+        # If you don't need help, you can just start changing settings.
+        else:
+            try:
+                choice = int(choice)
+                if choice not in reference:
+                    print("We don't have such a setting. Please choose something that we cover.")
+                    continue
+                else:
+                    setting = reference[choice]
+                    print(help_game[choice], "\nThe current value is", setting)
+
+                    # Now that you see the setting, you can decide whether you still wanna
+                    # change it.
+                    if input("Type y if you want to change this. ") == "y":
+
+                        # If the setting is a boolean, we just flip the value.
+                        if type(setting) is bool:
+                            reference[choice] = not reference[choice]
+                            print("The new value is", reference[choice])
+
+                        # If the setting is a number, we need to get a new number as input.
+                        elif type(setting) is int:
+                            while True:
+                                try:
+                                    reference[choice] = int(input("Please enter the new value of "
+                                                                  "this setting. "))
+                                    print("The new value is", reference[choice])
+                                    break
+                                except ValueError:
+                                    print("That's not a number. Try again.")
+
+            except ValueError:
+                print("Please enter something valid.")
+                continue
 
     return settings_all
 
