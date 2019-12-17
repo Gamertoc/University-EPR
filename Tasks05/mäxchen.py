@@ -16,7 +16,7 @@ import ui_help
 # Add more settings options
 # Make the settings options affect the actual game
 # Add play history
-# Add cheats
+# Document cheats
 # Add a bot
 # Add unicode emoji (!!!!!! Idle crashes!!!!!!!!) DONT!
 
@@ -77,7 +77,6 @@ def play(players, settings_all):
     :param players: list
     :param settings_all: dictionary
     :return: String
-    
     """
 
     game_over = False
@@ -111,15 +110,11 @@ def play(players, settings_all):
         # 
         input("Press enter to show your number")
         for i in range(6):
-            sys.stdout.write("\rYou tossed a " + str(tossed_number) + " which will vanish in " +
-                             str(5 - i))
-            sys.stdout.flush()
+            print("\rYou tossed a " + str(tossed_number) + " which will vanish in " + str(5 - i),
+                  flush=True, file=sys.stdout, sep="", end="")
             time.sleep(1)
-        sys.stdout.flush()
-        sys.stdout.write("\r")
-        
-        #                             This clears the last chars.  -->  ___
-        print("The number from the last turn was", last_tossed_number, "   ")
+
+        print("\rThe number from the last turn was", last_tossed_number, "   ")
 
         typed_number = 0
 
@@ -226,6 +221,7 @@ def initialize(settings_all):
         name = input("\nPlayer " + str(i + 1) + ": Please enter your name:\n")
         cheat = ""
 
+        # By entering specific phrases in front of the name, one can activate cheat codes
         if name[:14] == "HamToTheBurger":
             cheat = "HTTB"
             name = name[14:]
