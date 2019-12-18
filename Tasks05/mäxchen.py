@@ -76,7 +76,6 @@ def play(players, settings_all):
     :param settings_all: dictionary
     :return: String
     """
-
     game_over = False
     last_tossed_number = 0
     player_count = len(players)
@@ -124,7 +123,7 @@ def play(players, settings_all):
             else:
                 break
 
-        next_turn_index = (turn_index + 1) % player_count
+        next_turn_index = (player_count + turn_index + settings_all["play_order"]) % player_count
 
         believe = ui_help.input_yes_no(players[next_turn_index][0] +
                                        " now decides. Do you believe that he tossed that? Write "
@@ -142,7 +141,7 @@ def play(players, settings_all):
                     players[turn_index][1] -= points_worth(tossed_number, settings_all)
                     ui_help.print_points(players[turn_index])
                 else:
-                    print("Due to an internal crash, the accout of " + players[turn_index][0]
+                    print("Due to an internal crash, the profile of " + players[turn_index][0]
                           + " was locked. He/She loses no points this round.")
             elif typed_number == tossed_number:
                 if players[next_turn_index][2] != "GK":
@@ -234,6 +233,7 @@ def initialize(settings_all):
         # The function for the bot belongs here
         pass
     else:
+        print(settings_all)
         return play(players, settings_all)
 
 
@@ -258,16 +258,16 @@ def settings():
 
     # This dictionary references each setting by a number
     reference = {
-        1: settings_all["Mäxchen"],
-        2: settings_all["Hamburger"],
-        3: settings_all["numbers_in_order"],
-        4: settings_all["play_order"],
-        5: settings_all["points_to_start"],
-        6: settings_all["point_loss_normal"],
-        7: settings_all["point_loss_mäxchen"],
-        8: settings_all["point_loss_hamburger"],
-        9: settings_all["reverse_mäxchen"],
-        10: settings_all["reverse_hamburger"],
+        1: "Mäxchen",
+        2: "Hamburger",
+        3: "numbers_in_order",
+        4: "play_order",
+        5: "points_to_start",
+        6: "point_loss_normal",
+        7: "point_loss_mäxchen",
+        8: "point_loss_hamburger",
+        9: "reverse_mäxchen",
+        10: "reverse_hamburger",
     }
 
     # This dictionary stores the explanation of each setting.
@@ -335,7 +335,7 @@ def settings():
                     print("We don't have such a setting. Please choose something that we cover.")
                     continue
                 else:
-                    setting = reference[choice]
+                    setting = settings_all[reference[choice]]
                     print(help_game[choice], "\nThe current value is", setting)
 
                     # Now that you see the setting, you can decide whether you still wanna
@@ -344,16 +344,17 @@ def settings():
 
                         # If the setting is a boolean, we just flip the value.
                         if type(setting) is bool:
-                            reference[choice] = not reference[choice]
-                            print("The new value is", reference[choice])
+                            settings_all[reference[choice]] = not settings_all[reference[choice]]
+                            print("The new value is", settings_all[reference[choice]])
 
                         # If the setting is a number, we need to get a new number as input.
                         elif type(setting) is int:
                             while True:
                                 try:
-                                    reference[choice] = int(input("Please enter the new value of "
-                                                                  "this setting. "))
-                                    print("The new value is", reference[choice])
+                                    settings_all[reference[choice]] = int(input("Please enter "
+                                                                                "the new value of "
+                                                                                "this setting. "))
+                                    print("The new value is", settings_all[reference[choice]])
                                     break
                                 except ValueError:
                                     print("That's not a number. Try again.")
@@ -361,7 +362,6 @@ def settings():
             except ValueError:
                 print("Please enter something valid.")
                 continue
-
     return settings_all
 
 
