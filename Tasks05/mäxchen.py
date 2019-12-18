@@ -10,7 +10,6 @@ import ui_help
 
 
 # TO DO:
-# Implementing reverse playorder when revealing a 21 or 42 --> settings
 # Allow numbers where the first dice can be smaller than the second
 # Make the settings options affect the actual game
 # Add play history
@@ -158,6 +157,13 @@ def play(players, settings_all):
                     ui_help.print_points(players[next_turn_index])
                 else:
                     print("But no problem. Shit happens.")
+
+            # Reversing the play order when those options are activated and the specific number
+            # is hit
+            if (settings_all["reverse_mäxchen"] and tossed_number == 21) or (settings_all[
+                                                                                 "reverse_hamburger"] and tossed_number == 42):
+                settings_all["play_order"] *= -1
+
             # Reset the number for the next turn
             typed_number = 0
             for i in players:
@@ -180,7 +186,7 @@ def play(players, settings_all):
         player_count = len(players)
 
         # Calculates the new player turn index.
-        turn_index = (turn_index + 1) % player_count
+        turn_index = (player_count + turn_index + settings_all["play_order"]) % player_count
         last_tossed_number = typed_number
 
         # Restarting the game at 0 when the maximum value is reached.
@@ -233,7 +239,6 @@ def initialize(settings_all):
         # The function for the bot belongs here
         pass
     else:
-        print(settings_all)
         return play(players, settings_all)
 
 
