@@ -31,13 +31,13 @@ import ui_help
 def roll_dices(order_numbers):
     """Create a random valid number."""
 
-    number_1 = dice.randint(1, 6)
-    number_2 = dice.randint(1, 6)
+    first_digit = dice.randint(1, 6)
+    second_digit = dice.randint(1, 6)
 
     if order_numbers:
-        return max(number_1, number_2) * 10 + min(number_1, number_2)
+        return max(first_digit, second_digit) * 10 + min(first_digit, second_digit)
     else:
-        return number_1 * 10 + number_2
+        return first_digit * 10 + second_digit
 
 
 def new_better_than_old(new_number, old_number, settings_all):
@@ -104,7 +104,7 @@ def play(players, settings_all):
             tossed_number = settings_all["Mäxchen"]
         else:
             # A new number gets tossed.
-            order_numbers = settings_all["numbers_in_order"]
+            order_numbers = settings_all["order_digits"]
             tossed_number = roll_dices(order_numbers)
 
         # This construction shows you your number for 5 seconds after pressing enter.
@@ -122,7 +122,7 @@ def play(players, settings_all):
         while True:
             typed_number = ui_help.input_valid_number("Please enter the number you tossed (It's "
                                                       "allowed to lie). ",
-                                                      settings_all["numbers_in_order"])
+                                                      settings_all["order_digits"])
 
             if not new_better_than_old(typed_number, last_tossed_number, settings_all):
                 print("Of course the number has to be bigger than the old one.\nRead the rules "
@@ -259,7 +259,7 @@ def settings():
     settings_all = {
         "Mäxchen": 21,
         "Hamburger": 42,
-        "numbers_in_order": True,  # If True, only use 1st digit >= 2nd digit numbers.
+        "order_digits": True,  # If True, the larger digit will be the 1st digit every time
         "play_order": 1,
         "points_to_start": 10,
         "point_loss_normal": 1,
@@ -273,7 +273,7 @@ def settings():
     reference = {
         1: "Mäxchen",
         2: "Hamburger",
-        3: "numbers_in_order",
+        3: "order_digits",
         4: "play_order",
         5: "points_to_start",
         6: "point_loss_normal",
