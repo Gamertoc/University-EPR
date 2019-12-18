@@ -118,8 +118,7 @@ def play(players, settings_all):
 
         # This makes sure that a valid number is entered.
         if players[turn_index][4]:
-            # Bot_turn
-            pass
+            typed_number = bot_lie(settings_all, tossed_number)
         else:
             while True:
                 typed_number = ui_help.input_valid_number(
@@ -259,8 +258,9 @@ def initialize(settings_all):
     return play(players, settings_all)
 
 
-def turn_bot(players, settings_all):
-    """This function lets you play against a bot."""
+def bot_lie(settings_all, tossed_number):
+    "This function decides which number the bot enters and therefore if he lies or not."
+    return None
 
 
 def settings():
