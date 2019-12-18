@@ -272,9 +272,9 @@ def settings():
 
     # This dictionary stores the explanation of each setting.
     help_game = {
-        -1: "What do you need help with?\n0: What do I even do here?\n1 to 8: What that "
+        -1: "What do you need help with?\n0: What do I even do here?\n1 to 10: What that "
             "setting does.\nlist: List all settings.\nq to go back to the settings.",
-        0: "To change a setting, simply type a number from 1 to 8 to change the according "
+        0: "To change a setting, simply type a number from 1 to 10 to change the according "
            "setting.\nType help to get an explanation of which number belongs to which "
            "setting.\nTo go directly to the game, type q.",
         1: "This is the value of Mäxchen. Standard: 21",
@@ -314,8 +314,9 @@ def settings():
                     print("Going back to the settings.")
                     break
                 elif choice == "list":
-                    for i in range(len(settings_all) - 2):
-                        print(i, ": ", help_game[i + 1], sep="")
+                    for i in help_game:
+                        if not i <= 0:
+                            print(i, ": ", help_game[i], sep="")
                 else:
                     try:
                         choice = int(choice)
