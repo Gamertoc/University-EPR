@@ -72,8 +72,8 @@ def input_valid_number(prompt="Please enter a valid number: ", order_numbers = T
             elif not order_numbers:
                 return number
             else:
-                print("You are playing with the standard rules so your numbers first digit "
-                      "has not to be smaller than the second digit.")
+                print("You are playing with the standard rules, therefore your first digit can "
+                      "not be smaller than the second one.")
         else:
             print("A valid number is something that can be achieved by using one dice for the "
                   "first digit and one for the second digit. So quit your bullshit with numbers "

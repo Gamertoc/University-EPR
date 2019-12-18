@@ -10,7 +10,6 @@ import ui_help
 
 
 # TO DO:
-# Allow numbers where the first dice can be smaller than the second
 # Document cheats
 # Add a bot
 
