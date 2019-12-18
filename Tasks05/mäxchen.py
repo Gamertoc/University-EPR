@@ -114,12 +114,11 @@ def play(players, settings_all):
 
         print("\rThe number from the last turn was", last_tossed_number, "   ")
 
-        typed_number = 0
-
-        # This makes sure that a valid number is entered.
+        # If the player is a bot, it'll generate a number based on the given strategy.
         if players[turn_index][4]:
-            typed_number = bot_lie(settings_all, tossed_number)
+            typed_number = bot_lie(settings_all, tossed_number, last_tossed_number)
         else:
+            # This makes sure that a valid number is entered.
             while True:
                 typed_number = ui_help.input_valid_number(
                     "Please enter the number you tossed (It's "
@@ -136,7 +135,7 @@ def play(players, settings_all):
         next_turn_index = (player_count + turn_index + settings_all["play_order"]) % player_count
 
         if players[next_turn_index][4]:
-            # Bot believing
+            believe = bot_believe(settings_all, typed_number)
             pass
         else:
             believe = ui_help.input_yes_no(players[next_turn_index][0] +
@@ -175,8 +174,9 @@ def play(players, settings_all):
 
             # Reversing the play order when those options are activated and the specific number
             # is hit
-            if (settings_all["reverse_mäxchen"] and tossed_number == settings_all["Mäxchen"]) \
-                or (settings_all["reverse_hamburger"] and tossed_number == settings_all["Hamburger"]):
+            if (settings_all["reverse_mäxchen"] and tossed_number == settings_all["Mäxchen"]) or \
+                    (settings_all["reverse_hamburger"] and tossed_number == settings_all[
+                        "Hamburger"]):
                 settings_all["play_order"] *= -1
 
             # Reset the number for the next turn
@@ -258,9 +258,216 @@ def initialize(settings_all):
     return play(players, settings_all)
 
 
-def bot_lie(settings_all, tossed_number):
-    "This function decides which number the bot enters and therefore if he lies or not."
-    return None
+def bot_lie(settings_all, tossed_number, last_tossed_number):
+    """This function decides which number the bot enters and therefore if he lies or not. The
+    bot has 3 strategies to choose from: Safe, aggressive and normal. The bot settings can be
+    set by changing the settings.
+    :param settings_all: dictionary
+    :param tossed_number: int
+    :param last_tossed_number: int
+    :return: int
+    """
+    strategy = dice.randint(1, 100)
+
+    # If the bot is set to safe, it will choose that strat with 80%, 15% will be normal and 5%
+    # will be aggressive.
+    # If it is set to normal, it will be 80% normal, 10% safe and 10% aggressive.
+    # If it is set to aggressive, it will be 80% aggressive and 20% normal.
+    if (settings_all["bot_lie"] == "safe" and strategy <= 80) or (settings_all["bot_lie"] ==
+                                                                  "normal" and strategy <= 10):
+        return safe_tell(settings_all, tossed_number, last_tossed_number)
+    elif (settings_all["bot_lie"] == "safe" and 80 < strategy <= 95) or (settings_all[
+                                                                             "bot_lie"] ==
+                                                                         "normal" and 10 < strategy <=
+                                                                         90) or (
+            settings_all["bot_lie"] == "aggressive" and strategy <= 20):
+        return normal_tell(settings_all, last_tossed_number)
+    else:
+        return aggressive_tell(settings_all, tossed_number, last_tossed_number)
+
+
+def safe_tell(settings_all, tossed_number, last_tossed_number):
+    """Generating a number based on the safe strat. This means that that 90% of the time the
+    number will be equal or lower to the tossed number.
+    :param settings_all: dictionary
+    :param tossed_number: int
+    :param last_tossed_number: int
+    :return: int
+    """
+    strat = str(time.time()).split(",")[-1]
+    digit = dice.randint(1, len(strat))
+    strat = int(strat[-digit])
+    if not strat == 0:
+        safe = True
+    else:
+        safe = False
+    while True:
+        new_number = roll_dices(settings_all["order_numbers"])
+        if new_better_than_old(new_number, last_tossed_number, settings_all):
+            if (safe and new_number <= tossed_number) or (not safe and new_number >=
+                                                          tossed_number):
+                return new_number
+
+
+def normal_tell(settings_all, last_tossed_number):
+    """Generating a number based on the normal strat. This means that a random valid number is
+    used by the bot.
+    :param settings_all: dictionary
+    :param last_tossed_number: int
+    :return: int
+    """
+    # The only point of this construction is to make sure that the number can be used in game,
+    # e.g. it is a number a human could have entered.
+    while True:
+        new_number = roll_dices(settings_all["order_numbers"])
+        if new_better_than_old(new_number, last_tossed_number, settings_all):
+            return new_number
+
+
+def aggressive_tell(settings_all, tossed_number, last_tossed_number):
+    """Generating a number based on the aggressive strat. This means that 90% of the time the
+    number is larger than the tossed one.
+    :param settings_all: dictionary
+    :param tossed_number: int
+    :param last_tossed_number: int
+    :return: int
+    """
+    strat = str(time.time()).split(",")[-1]
+    digit = dice.randint(1, len(strat))
+    strat = int(strat[-digit])
+    if not strat == 0:
+        aggressive = True
+    else:
+        aggressive = False
+    while True:
+        new_number = roll_dices(settings_all["order_numbers"])
+        if new_better_than_old(new_number, last_tossed_number, settings_all):
+            if (aggressive and new_number > tossed_number) or (not aggressive and new_number >=
+                                                               tossed_number):
+                return new_number
+
+
+def bot_believe(settings_all, typed_number):
+    """This function generates a value whether the bot believes you or not.
+    :param settings_all: dictionary
+    :param typed_number: int
+    :return: str
+    """
+    strategy = dice.randint(1, 100)
+    # A naive bot will be 90% naive and 10% normal.
+    # A normal bot will be 80% normal, 10% naive and 10% suspicious.
+    # A suspicious bot will be 85% suspicious, 10% normal and 5% naive.
+
+    if (settings_all["bot_believe"] == "naive" and strategy <= 90) or (settings_all[
+                                                                           "bot_believe"] == "normal" and strategy <= 10) or (
+            settings_all["bot_believe"] ==
+            "suspicious" and strategy <= 5):
+        believe = naive_believer(settings_all, typed_number)
+    elif (settings_all["bot_believe"] == "naive" and 90 < strategy) or (settings_all[
+                                                                            "bot_believe"] == "normal" and 10 <= strategy < 90) or (
+            settings_all["bot_believe"] ==
+            "suspicious" and 5 < strategy <=
+            15):
+        believe = normal_believer(settings_all, typed_number)
+    else:
+        believe = suspicious_believer(settings_all, typed_number)
+    if believe:
+        return "yes"
+    else:
+        return "no"
+
+
+def naive_believer(settings_all, typed_number):
+    """This function simulates a naive bot. Naive means that he will only get suspicious on very
+    high numbers. If the number is below a certain point, he won't get suspicious at all
+    :param settings_all: dictionary
+    :param typed_number: int
+    :return: bool"""
+    while True:
+        pivot = dice.randint(11, 11)
+        # This construction makes sure that our turning point isn't a doubles or a Hamburger or
+        # a Mäxchen
+        if pivot not in (settings_all["Hamburger"], settings_all["Mäxchen"]) \
+                and not pivot % 11 == pivot // 11:
+            break
+
+    believable = 0
+    # If the number is below or equal to the turning point, the bot will just believe it.
+    if typed_number <= pivot:
+        return True
+
+    # If the number isn't a Hamburger, the bot will use some statistics
+    elif not typed_number == settings_all["Hamburger"]:
+        for i in range(10000):
+            number = roll_dices(settings_all["order_numbers"])
+            if number <= pivot or new_better_than_old(number, typed_number, settings_all):
+                believable += 1
+    else:
+        # For a hamburger, we need another construction
+        for i in range(10000):
+            if roll_dices(settings_all["order_numbers"]) == settings_all["Hamburger"]:
+                believable += 1
+
+    # The score is calculated by dividing the believable counter by 10,000, adding the
+    # countervalue multiplied with the score itself, and stretching this by 10,000 to get better
+    # usability
+    score = (believable / 10000)
+    score = (score + (1 - score) * score + (1 - score) * (1 - score) * score) * 10000
+    if score >= dice.randint(1, 10000):
+        return True
+    else:
+        return False
+
+
+def normal_believer(settings_all, typed_number):
+    """The normal believer uses statistics to tell whether he believes you or not. For that he
+    generates a bunch of numbers """
+    believable = 0
+    # The normal method only works for non-Hamburger numbers because there are no numbers that
+    # are better than a hamburger.
+    if not typed_number == settings_all["Hamburger"]:
+        for i in range(10000):
+            if new_better_than_old(roll_dices(settings_all["order_numbers"]), typed_number,
+                                   settings_all):
+                believable += 1
+
+    else:
+        # For a hamburger we use this construction
+        for i in range(10000):
+            if roll_dices(settings_all["order_numbers"]) == settings_all["Hamburger"]:
+                believable += 1
+
+    score = believable
+    if dice.randint(1, 10000) >= score:
+        return True
+    else:
+        return False
+
+
+def suspicious_believer(settings_all, typed_number):
+    """The normal believer uses statistics to tell whether he believes you or not. For that he
+    generates a bunch of numbers """
+    believable = 0
+    # The normal method only works for non-Hamburger numbers because there are no numbers that
+    # are better than a hamburger.
+    if not typed_number == settings_all["Hamburger"]:
+        for i in range(10000):
+            if new_better_than_old(roll_dices(settings_all["order_numbers"]), typed_number,
+                                   settings_all):
+                believable += 1
+
+    else:
+        # For a hamburger we use this construction
+        for i in range(10000):
+            if roll_dices(settings_all["order_numbers"]) == settings_all["Hamburger"]:
+                believable += 1
+
+    score = believable / 10000
+    score = (score / 3) * 10000
+    if dice.randint(1, 10000) >= score:
+        return True
+    else:
+        return False
 
 
 def settings():
@@ -280,6 +487,8 @@ def settings():
         "point_loss_hamburger": 3,
         "reverse_mäxchen": True,
         "reverse_hamburger": True,
+        "bot_lie": "aggressive",
+        "bot_believe": "normal",
     }
 
     # This dictionary references each setting by a number
@@ -294,6 +503,8 @@ def settings():
         8: "point_loss_hamburger",
         9: "reverse_mäxchen",
         10: "reverse_hamburger",
+        11: "bot_lie",
+        12: "bot_believe"
     }
 
     # This dictionary stores the explanation of each setting.
@@ -316,6 +527,11 @@ def settings():
            "Standard: True",
         10: "This sets whether the playing order is reversed when a Hamburger is revealed. "
             "Standard: True",
+        11: "This sets the favorite strat of the bot regarding what it tells you what it rolled. "
+            "There is a \"safe\"a \"normal\" and an \"aggressive\" strategy. Standard: "
+            "aggressive",
+        12: "This sets the favorite strat of the bot regarding whether he believes you what you "
+            "rolled. There is a a \"naive\"a \"normal\" and a \"suspicious\" strategy. Standard: Normal",
     }
     print(help_game[0])
 
@@ -323,7 +539,7 @@ def settings():
                                       "settings to the point of making the game unplayable.\n"
                                       "This is entirely your responsibility and we recommend "
                                       "that you think about the impact on the game before "
-                                      "changing any setting."))# + u"\U0001f621"))
+                                      "changing any setting."))  # + u"\U0001f621"))
 
     # The user can decide whether he wants to change some game settings or not.
     while True:
@@ -386,6 +602,24 @@ def settings():
                                 except ValueError:
                                     print("That's not a number. Try again.")
 
+                        # If the setting is a string (only on setting 11), we have to take that
+                        # into account
+                        elif type(setting) is str:
+                            while True:
+                                settings_all[reference[choice]] = input("Please enter the new "
+                                                                        "value of this setting. ")
+                                if (settings_all[reference[choice]] in ("aggressive", "normal",
+                                                                        "safe") and settings_all[
+                                        reference[choice]] == "bot_lie") or (
+                                        settings_all[reference[choice]] in ("suspicious", "normal",
+                                                                            "naive") and
+                                        settings_all[
+                                            reference[choice]] == "bot_believe"):
+                                    print("The new value is", settings_all[reference[choice]])
+                                    break
+                                else:
+                                    print("This is not a valid setting.")
+
             except ValueError:
                 print("Please enter something valid.")
                 continue
@@ -396,7 +630,7 @@ def main():
     """The main entry point of the game."""
     setting = settings()
     player_stats = initialize(setting)
-    
+
     print(player_stats[-1][0], "won the game. Congratulations!")
 
     print("\nHere are the player statistics of all rounds:\n")
