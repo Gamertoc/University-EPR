@@ -10,8 +10,7 @@ import ui_help
 
 
 # TO DO:
-# Document cheats
-# Add a bot
+# Testing the bot
 
 # Unicode still doesnt work :( -> Commented
 # The Deletion with Flush() still doesnt work in the shell. But we can say "Don't use shell"
