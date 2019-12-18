@@ -16,16 +16,6 @@ import ui_help
 # Unicode still doesnt work :( -> Commented
 # The Deletion with Flush() still doesnt work in the shell. But we can say "Dont use shell"
 
-# Settings that need updates (all can be changed within the settings ui, some of them just
-# aren't implemented in the game itself yet):
-# 1: Not implemented
-# 2: Not implemented
-# 3: Not implemented
-# 5: Not implemented
-# 6: Not implemented
-# 7: Not implemented
-# 8: Not implemented
-
 
 def roll_dices(order_numbers):
     """Create a random valid number."""
@@ -69,11 +59,11 @@ def points_worth(number, settings_all):
     """Calculate the points to subtract from the players account."""
     
     if number == settings_all["Hamburger"]:
-        return 3
+        return settings_all["point_loss_hamburger"]
     elif number == settings_all["Mäxchen"]:
-        return 2
+        return settings_all["point_loss_mäxchen"]
     else:
-        return 1
+        return settings_all["point_loss_normal"]
 
 
 def play(players, settings_all):
@@ -217,7 +207,7 @@ def initialize(settings_all):
         print("Stop the jokes...")
         return
     print("Welcome to the game!")
-    print("Please enter your names. It is your responsibility to pick unique names.\n")
+    print("Please enter your names. It is your responsibility to pick unique names.")
 
     # The player list contains 4-element-lists: [<name>, <points>, <cheat>, <points_table>].
     players = []
@@ -237,8 +227,8 @@ def initialize(settings_all):
         elif name[:7] == "GodKing":
             cheat = "GK"
             name = name[7:]
-        
-        players.append([name, 10, cheat, []])
+
+        players.append([name, settings_all["points_to_start"], cheat, []])
 
     # Now we choose whether we let humans play against each other or let
     # a bot play against a human.
@@ -380,13 +370,6 @@ def settings():
 
 def main():
     """The main entry point of the game."""
-    
-    #             TEST
-    #         Remove later
-    # for i in range(10):
-    #    n1 = roll_dices() #old
-    #    n2 = roll_dices() #new
-    #    print(n2, "better than", n1, "is", new_better_than_old(n2, n1))
     setting = settings()
     player_stats = initialize(setting)
     
