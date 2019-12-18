@@ -167,8 +167,8 @@ def play(players, settings_all):
 
             # Reversing the play order when those options are activated and the specific number
             # is hit
-            if (settings_all["reverse_mäxchen"] and tossed_number == 21) or (settings_all[
-                                                                                 "reverse_hamburger"] and tossed_number == 42):
+            if (settings_all["reverse_mäxchen"] and tossed_number == settings_all["Mäxchen"])
+                or (settings_all["reverse_hamburger"] and tossed_number == settings_all["Hamburger"]):
                 settings_all["play_order"] *= -1
 
             # Reset the number for the next turn
