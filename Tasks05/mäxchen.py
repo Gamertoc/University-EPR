@@ -42,7 +42,7 @@ def roll_dices(order_numbers):
 
 def new_better_than_old(new_number, old_number, settings_all):
     """Value two numbers.
-    The number order is:
+    The standard number order is:
     42 > 21 > 66 > 55 > ... > 11 > others
     (others in the normal ">" order)
     
@@ -198,7 +198,7 @@ def play(players, settings_all):
         last_tossed_number = typed_number
 
         # Restarting the game at 0 when the maximum value is reached.
-        if typed_number == 42:
+        if typed_number == settings_all["Hamburger"]:
             print("Maximum value reached. Restarting the game...")
             last_tossed_number = 0
             continue
