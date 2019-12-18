@@ -11,11 +11,17 @@ import ui_help
 
 # TO DO:
 # Allow numbers where the first dice can be smaller than the second
-# Make the settings options affect the actual game
-# Add play history
 # Document cheats
 # Add a bot
-# Add unicode emoji (!!!!!! Idle crashes!!!!!!!!) DONT!
+
+# Settings that need updates:
+# 1: Not implemented
+# 2: Not implemented
+# 3: Not implemented
+# 5: Not implemented
+# 6: Not implemented
+# 7: Not implemented
+# 8: Not implemented
 
 
 def roll_dices(order_numbers):
@@ -136,7 +142,7 @@ def play(players, settings_all):
             if new_better_than_old(typed_number, tossed_number, settings_all):
                 if players[turn_index][2] != "GK":
                     print("Oops, you were caught red-handed.")
-                    print("Try to lie better next time ;-)")
+                    print("Try to lie better next time", u"\U0001F609")
                     players[turn_index][1] -= points_worth(tossed_number, settings_all)
                     ui_help.print_points(players[turn_index])
                 else:
