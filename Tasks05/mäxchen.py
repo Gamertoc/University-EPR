@@ -14,7 +14,7 @@ import ui_help
 # Add a bot
 
 # Unicode still doesnt work :( -> Commented
-# The Deletion with Flush() still doesnt work in the shell. But we can say "Dont use shell"
+# The Deletion with Flush() still doesnt work in the shell. But we can say "Don't use shell"
 
 
 def roll_dices(order_numbers):
@@ -56,8 +56,11 @@ def new_better_than_old(new_number, old_number, settings_all):
 
 
 def points_worth(number, settings_all):
-    """Calculate the points to subtract from the players account."""
-    
+    """Calculate the points to subtract from the players account.
+    :param number: int
+    :param settings_all: dictionary
+    :return: int
+    """
     if number == settings_all["Hamburger"]:
         return settings_all["point_loss_hamburger"]
     elif number == settings_all["Mäxchen"]:
@@ -96,34 +99,50 @@ def play(players, settings_all):
             order_numbers = settings_all["order_digits"]
             tossed_number = roll_dices(order_numbers)
 
-        # This construction shows you your number for 5 seconds after pressing enter.
-        input("Press enter to show your number")
-        for i in range(6):
-            print("\rYou tossed a " + str(tossed_number) + " which will vanish in " + str(5 - i),
-                  flush=True, sep="", end="")
-            time.sleep(1)
+        # A bot doesn't need to let his number appear on screen
+        if players[turn_index][4]:
+            print(players[turn_index][0], "is a bot and therefore doesn't need his number to "
+                                          "appear on screen.")
+        else:
+            # This construction shows you your number for 5 seconds after pressing enter.
+            input("Press enter to show your number")
+            for i in range(6):
+                print(
+                    "\rYou tossed a " + str(tossed_number) + " which will vanish in " + str(5 - i),
+                    flush=True, sep="", end="")
+                time.sleep(1)
 
         print("\rThe number from the last turn was", last_tossed_number, "   ")
 
         typed_number = 0
 
         # This makes sure that a valid number is entered.
-        while True:
-            typed_number = ui_help.input_valid_number("Please enter the number you tossed (It's "
-                                                      "allowed to lie). ",
-                                                      settings_all["order_digits"])
+        if players[turn_index][4]:
+            # Bot_turn
+            pass
+        else:
+            while True:
+                typed_number = ui_help.input_valid_number(
+                    "Please enter the number you tossed (It's "
+                    "allowed to lie). ",
+                    settings_all["order_digits"])
 
-            if not new_better_than_old(typed_number, last_tossed_number, settings_all):
-                print("Of course the number has to be bigger than the old one.\nRead the rules "
-                      "and try again.")
-            else:
-                break
+                if not new_better_than_old(typed_number, last_tossed_number, settings_all):
+                    print(
+                        "Of course the number has to be bigger than the old one.\nRead the rules "
+                        "and try again.")
+                else:
+                    break
 
         next_turn_index = (player_count + turn_index + settings_all["play_order"]) % player_count
 
-        believe = ui_help.input_yes_no(players[next_turn_index][0] +
-                                       " now decides. Do you believe that he tossed that? Write "
-                                       "\"yes\" or \"no\": ")
+        if players[next_turn_index][4]:
+            # Bot believing
+            pass
+        else:
+            believe = ui_help.input_yes_no(players[next_turn_index][0] +
+                                           " now decides. Do you believe that he tossed that? Write "
+                                           "\"yes\" or \"no\": ")
 
         # When not believing, check the numbers.
         if believe == "no":
@@ -133,7 +152,7 @@ def play(players, settings_all):
             if new_better_than_old(typed_number, tossed_number, settings_all):
                 if players[turn_index][2] != "GK":
                     print("Oops, you were caught red-handed.")
-                    print("Try to lie better next time") #, u"\U0001F609")
+                    print("Try to lie better next time")  # , u"\U0001F609")
                     players[turn_index][1] -= points_worth(tossed_number, settings_all)
                     ui_help.print_points(players[turn_index])
                 else:
@@ -216,6 +235,7 @@ def initialize(settings_all):
     for i in range(player_count):
         name = input("\nPlayer " + str(i + 1) + ": Please enter your name:\n")
         cheat = ""
+        bot = False
 
         # By entering specific phrases in front of the name, one can activate cheat codes
         if name[:14] == "HamToTheBurger":
@@ -228,15 +248,19 @@ def initialize(settings_all):
             cheat = "GK"
             name = name[7:]
 
-        players.append([name, settings_all["points_to_start"], cheat, []])
+        # By entering a specific phrase at the end of the name, one can make a player be
+        # controlled by a bot.
+        if name[-4:] == "#207":
+            bot = True
+            name = name[:-4]
 
-    # Now we choose whether we let humans play against each other or let
-    # a bot play against a human.
-    if player_count == 1:
-        # The function for the bot belongs here
-        pass
-    else:
-        return play(players, settings_all)
+        players.append([name, settings_all["points_to_start"], cheat, [], bot])
+
+    return play(players, settings_all)
+
+
+def turn_bot(players, settings_all):
+    """This function lets you play against a bot."""
 
 
 def settings():
