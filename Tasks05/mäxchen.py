@@ -14,7 +14,8 @@ import ui_help
 # Document cheats
 # Add a bot
 
-# Settings that need updates:
+# Settings that need updates (all can be changed within the settings ui, some of them just
+# aren't implemented in the game itself yet):
 # 1: Not implemented
 # 2: Not implemented
 # 3: Not implemented
