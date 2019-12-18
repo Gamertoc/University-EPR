@@ -14,6 +14,9 @@ import ui_help
 # Document cheats
 # Add a bot
 
+# Unicode still doesnt work :( -> Commented
+# The Deletion with Flush() still doesnt work in the shell. But we can say "Dont use shell"
+
 # Settings that need updates (all can be changed within the settings ui, some of them just
 # aren't implemented in the game itself yet):
 # 1: Not implemented
@@ -39,7 +42,6 @@ def roll_dices(order_numbers):
 
 def new_better_than_old(new_number, old_number, settings_all):
     """Value two numbers.
-
     The number order is:
     42 > 21 > 66 > 55 > ... > 11 > others
     (others in the normal ">" order)
@@ -77,7 +79,6 @@ def points_worth(number, settings_all):
 
 def play(players, settings_all):
     """To play the base game.
-
     :param players: list
     :param settings_all: dictionary
     :return: String
@@ -143,7 +144,7 @@ def play(players, settings_all):
             if new_better_than_old(typed_number, tossed_number, settings_all):
                 if players[turn_index][2] != "GK":
                     print("Oops, you were caught red-handed.")
-                    print("Try to lie better next time", u"\U0001F609")
+                    print("Try to lie better next time") #, u"\U0001F609")
                     players[turn_index][1] -= points_worth(tossed_number, settings_all)
                     ui_help.print_points(players[turn_index])
                 else:
@@ -167,7 +168,7 @@ def play(players, settings_all):
 
             # Reversing the play order when those options are activated and the specific number
             # is hit
-            if (settings_all["reverse_mäxchen"] and tossed_number == settings_all["Mäxchen"])
+            if (settings_all["reverse_mäxchen"] and tossed_number == settings_all["Mäxchen"]) \
                 or (settings_all["reverse_hamburger"] and tossed_number == settings_all["Hamburger"]):
                 settings_all["play_order"] *= -1
 
@@ -309,7 +310,7 @@ def settings():
                                       "settings to the point of making the game unplayable.\n"
                                       "This is entirely your responsibility and we recommend "
                                       "that you think about the impact on the game before "
-                                      "changing any setting." + u"\U0001f621"))
+                                      "changing any setting."))# + u"\U0001f621"))
 
     # The user can decide whether he wants to change some game settings or not.
     while True:
