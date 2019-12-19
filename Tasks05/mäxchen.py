@@ -11,6 +11,7 @@ import ui_help
 
 # TO DO:
 # Testing the bot
+#   -> bots seem to run nicely
 
 # Unicode still doesnt work :( -> Commented
 # The Deletion with Flush() still doesnt work in the shell. But we can say "Don't use shell"
@@ -116,6 +117,7 @@ def play(players, settings_all):
         # If the player is a bot, it'll generate a number based on the given strategy.
         if players[turn_index][4]:
             typed_number = bot_lie(settings_all, tossed_number, last_tossed_number)
+            print(players[turn_index][0], "typed", typed_number)
         else:
             # This makes sure that a valid number is entered.
             while True:
@@ -135,7 +137,10 @@ def play(players, settings_all):
 
         if players[next_turn_index][4]:
             believe = bot_believe(settings_all, typed_number)
-            pass
+            if believe == "yes":
+                print(players[next_turn_index][0], "believes that.")
+            else:
+                print(players[next_turn_index][0], "does not believe that.")
         else:
             believe = ui_help.input_yes_no(players[next_turn_index][0] +
                                            " now decides. Do you believe that he tossed that? Write "
@@ -222,7 +227,7 @@ def initialize(settings_all):
         return
     elif player_count == 1:
         print("Stop the jokes...")
-        return
+        exit()
     print("Welcome to the game!")
     print("Please enter your names. It is your responsibility to pick unique names.")
 
@@ -293,7 +298,7 @@ def safe_tell(settings_all, tossed_number, last_tossed_number):
     :param last_tossed_number: int
     :return: int
     """
-    strat = str(time.time()).split(",")[-1]
+    strat = str(time.time()).split(".")[-1]
     digit = dice.randint(1, len(strat))
     strat = int(strat[-digit])
     if not strat == 0:
@@ -301,10 +306,11 @@ def safe_tell(settings_all, tossed_number, last_tossed_number):
     else:
         safe = False
     while True:
-        new_number = roll_dices(settings_all["order_numbers"])
+        new_number = roll_dices(settings_all["order_digits"])
         if new_better_than_old(new_number, last_tossed_number, settings_all):
-            if (safe and new_number <= tossed_number) or (not safe and new_number >=
-                                                          tossed_number):
+            if (safe and not new_better_than_old(new_number, tossed_number, settings_all)) or \
+                (not safe and (new_better_than_old(new_number, tossed_number, settings_all) \
+                               or new_number == tossed_number)):
                 return new_number
 
 
@@ -318,7 +324,7 @@ def normal_tell(settings_all, last_tossed_number):
     # The only point of this construction is to make sure that the number can be used in game,
     # e.g. it is a number a human could have entered.
     while True:
-        new_number = roll_dices(settings_all["order_numbers"])
+        new_number = roll_dices(settings_all["order_digits"])
         if new_better_than_old(new_number, last_tossed_number, settings_all):
             return new_number
 
@@ -331,18 +337,21 @@ def aggressive_tell(settings_all, tossed_number, last_tossed_number):
     :param last_tossed_number: int
     :return: int
     """
-    strat = str(time.time()).split(",")[-1]
+    strat = str(time.time()).split(".")[-1]
     digit = dice.randint(1, len(strat))
     strat = int(strat[-digit])
     if not strat == 0:
         aggressive = True
+        if tossed_number == settings_all["Hamburger"]:
+            return tossed_number
     else:
         aggressive = False
     while True:
-        new_number = roll_dices(settings_all["order_numbers"])
+        new_number = roll_dices(settings_all["order_digits"])
         if new_better_than_old(new_number, last_tossed_number, settings_all):
-            if (aggressive and new_number > tossed_number) or (not aggressive and new_number >=
-                                                               tossed_number):
+            if (aggressive and new_better_than_old(new_number, tossed_number, settings_all)) or \
+               (not aggressive and (new_better_than_old(new_number, tossed_number, settings_all) \
+                                    or new_number == tossed_number)):
                 return new_number
 
 
@@ -398,13 +407,13 @@ def naive_believer(settings_all, typed_number):
     # If the number isn't a Hamburger, the bot will use some statistics
     elif not typed_number == settings_all["Hamburger"]:
         for i in range(10000):
-            number = roll_dices(settings_all["order_numbers"])
+            number = roll_dices(settings_all["order_digits"])
             if number <= pivot or new_better_than_old(number, typed_number, settings_all):
                 believable += 1
     else:
         # For a hamburger, we need another construction
         for i in range(10000):
-            if roll_dices(settings_all["order_numbers"]) == settings_all["Hamburger"]:
+            if roll_dices(settings_all["order_digits"]) == settings_all["Hamburger"]:
                 believable += 1
 
     # The score is calculated by dividing the believable counter by 10,000, adding the
@@ -426,14 +435,14 @@ def normal_believer(settings_all, typed_number):
     # are better than a hamburger.
     if not typed_number == settings_all["Hamburger"]:
         for i in range(10000):
-            if new_better_than_old(roll_dices(settings_all["order_numbers"]), typed_number,
+            if new_better_than_old(roll_dices(settings_all["order_digits"]), typed_number,
                                    settings_all):
                 believable += 1
 
     else:
         # For a hamburger we use this construction
         for i in range(10000):
-            if roll_dices(settings_all["order_numbers"]) == settings_all["Hamburger"]:
+            if roll_dices(settings_all["order_digits"]) == settings_all["Hamburger"]:
                 believable += 1
 
     score = believable
@@ -451,14 +460,14 @@ def suspicious_believer(settings_all, typed_number):
     # are better than a hamburger.
     if not typed_number == settings_all["Hamburger"]:
         for i in range(10000):
-            if new_better_than_old(roll_dices(settings_all["order_numbers"]), typed_number,
+            if new_better_than_old(roll_dices(settings_all["order_digits"]), typed_number,
                                    settings_all):
                 believable += 1
 
     else:
         # For a hamburger we use this construction
         for i in range(10000):
-            if roll_dices(settings_all["order_numbers"]) == settings_all["Hamburger"]:
+            if roll_dices(settings_all["order_digits"]) == settings_all["Hamburger"]:
                 believable += 1
 
     score = believable / 10000
@@ -527,10 +536,10 @@ def settings():
         10: "This sets whether the playing order is reversed when a Hamburger is revealed. "
             "Standard: True",
         11: "This sets the favorite strat of the bot regarding what it tells you what it rolled. "
-            "There is a \"safe\"a \"normal\" and an \"aggressive\" strategy. Standard: "
+            "There is a \"safe\" a \"normal\" and an \"aggressive\" strategy. Standard: "
             "aggressive",
         12: "This sets the favorite strat of the bot regarding whether he believes you what you "
-            "rolled. There is a a \"naive\"a \"normal\" and a \"suspicious\" strategy. Standard: Normal",
+            "rolled. There is a a \"naive\" a \"normal\" and a \"suspicious\" strategy. Standard: Normal",
     }
     print(help_game[0])
 
