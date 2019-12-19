@@ -314,7 +314,7 @@ def safe_tell(settings_all, tossed_number, last_tossed_number):
         new_number = roll_dices(settings_all["order_digits"])
         if new_better_than_old(new_number, last_tossed_number, settings_all):
             if (safe and not new_better_than_old(new_number, tossed_number, settings_all)) or \
-                (not safe and (new_better_than_old(new_number, tossed_number, settings_all) \
+                (not safe and (new_better_than_old(new_number, tossed_number, settings_all)
                                or new_number == tossed_number)):
                 return new_number
 
@@ -355,8 +355,9 @@ def aggressive_tell(settings_all, tossed_number, last_tossed_number):
         new_number = roll_dices(settings_all["order_digits"])
         if new_better_than_old(new_number, last_tossed_number, settings_all):
             if (aggressive and new_better_than_old(new_number, tossed_number, settings_all)) or \
-               (not aggressive and (new_better_than_old(new_number, tossed_number, settings_all) \
-                                    or new_number == tossed_number)):
+                    (not aggressive and (
+                            new_better_than_old(new_number, tossed_number, settings_all)
+                            or new_number == tossed_number)):
                 return new_number
 
 
@@ -371,17 +372,16 @@ def bot_believe(settings_all, typed_number):
     # A normal bot will be 80% normal, 10% naive and 10% suspicious.
     # A suspicious bot will be 85% suspicious, 10% normal and 5% naive.
 
-    if (settings_all["bot_believe"] == "naive" and strategy <= 90) or (settings_all[
-                                                                           "bot_believe"] == "normal" and strategy <= 10) or (
-            settings_all["bot_believe"] ==
-            "suspicious" and strategy <= 5):
+    if (settings_all["bot_believe"] == "naive" and strategy <= 90) or \
+            (settings_all["bot_believe"] == "normal" and strategy <= 10) or \
+            (settings_all["bot_believe"] == "suspicious" and strategy <= 5):
         believe = naive_believer(settings_all, typed_number)
-    elif (settings_all["bot_believe"] == "naive" and 90 < strategy) or (settings_all[
-                                                                            "bot_believe"] == "normal" and 10 <= strategy < 90) or (
-            settings_all["bot_believe"] ==
-            "suspicious" and 5 < strategy <=
-            15):
+
+    elif (settings_all["bot_believe"] == "naive" and 90 < strategy) or \
+            (settings_all["bot_believe"] == "normal" and 10 <= strategy < 90) or \
+            (settings_all["bot_believe"] == "suspicious" and 5 < strategy <= 15):
         believe = normal_believer(settings_all, typed_number)
+
     else:
         believe = suspicious_believer(settings_all, typed_number)
     if believe:
@@ -522,9 +522,9 @@ def settings():
 
     # This dictionary stores the explanation of each setting.
     help_game = {
-        -1: "What do you need help with?\n0: What do I even do here?\n1 to 10: What that "
+        -1: "What do you need help with?\n0: What do I even do here?\n1 to 12: What that "
             "setting does.\nlist: List all settings.\nq to go back to the settings.",
-        0: "To change a setting, simply type a number from 1 to 10 to change the according "
+        0: "To change a setting, simply type a number from 1 to 12 to change the according "
            "setting.\nType help to get an explanation of which number belongs to which "
            "setting.\nTo go directly to the game, type q.",
         1: "This is the value of Mäxchen. Standard: 21",
@@ -544,7 +544,8 @@ def settings():
             "There is a \"safe\" a \"normal\" and an \"aggressive\" strategy. Standard: "
             "aggressive",
         12: "This sets the favorite strat of the bot regarding whether he believes you what you "
-            "rolled. There is a a \"naive\" a \"normal\" and a \"suspicious\" strategy. Standard: Normal",
+            "rolled. There is a a \"naive\" a \"normal\" and a \"suspicious\" strategy. "
+            "Standard: normal",
     }
     print(help_game[0])
 
@@ -633,6 +634,9 @@ def settings():
                                     break
                                 else:
                                     print("This is not a valid setting.")
+
+                    else:
+                        print("Aborting change...")
 
             except ValueError:
                 print("Please enter something valid.")
