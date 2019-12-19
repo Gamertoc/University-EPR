@@ -1,5 +1,6 @@
-"""This is the main module and entry point of the game "Mäxchen"."""
 # -*- coding: utf-8 -*-
+"""This is the main module and entry point of the game "Mäxchen"."""
+
 # noinspection SpellCheckingInspection
 __author__ = "7146127, Theobald, 6956404, Stadler"
 __email__ = "s7223152@cs.uni-frankfurt.de, s0706782@rz.uni-frankfurt.de"
@@ -108,7 +109,7 @@ def play(players, settings_all):
             input("Press enter to show your number")
             for i in range(6):
                 print(
-                    "\rYou tossed a " + str(tossed_number) + " which will vanish in " + str(5 - i),
+                    "\rYou tossed a ", str(tossed_number), " which will vanish in ", str(5 - i),
                     flush=True, sep="", end="")
                 time.sleep(1)
 
@@ -154,7 +155,7 @@ def play(players, settings_all):
             if new_better_than_old(typed_number, tossed_number, settings_all):
                 if players[turn_index][2] != "GK":
                     print("Oops, you were caught red-handed.")
-                    print("Try to lie better next time")  # , u"\U0001F609")
+                    print("Try to lie better next time", u"\U0001F609")
                     players[turn_index][1] -= points_worth(tossed_number, settings_all)
                     ui_help.print_points(players[turn_index])
                 else:
@@ -554,7 +555,7 @@ def settings():
                                       "settings to the point of making the game unplayable.\n"
                                       "This is entirely your responsibility and we recommend "
                                       "that you think about the impact on the game before "
-                                      "changing any setting."))  # + u"\U0001f621"))
+                                      "changing any setting." + u"\U0001f621"))
 
     # The user can decide whether he wants to change some game settings or not.
     while True:
