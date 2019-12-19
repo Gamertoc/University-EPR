@@ -543,7 +543,8 @@ def settings():
     }
     print(help_game[0])
 
-    print("\033[91m{}\033[00m".format("Please remember that you can seriously fuck up the "
+    # Remove if not working!!!!!!!
+    print("\033[91m{}\033[00m".format("\nPlease remember that you can seriously fuck up the "
                                       "settings to the point of making the game unplayable.\n"
                                       "This is entirely your responsibility and we recommend "
                                       "that you think about the impact on the game before "
@@ -643,6 +644,9 @@ def main():
 
     print("\nHere are the player statistics of all rounds:\n")
     ui_help.print_tables(player_stats)
+
+    # The console shall not close directly to display the tables.
+    input("Press enter to exit the game...")
     exit()
 
 
