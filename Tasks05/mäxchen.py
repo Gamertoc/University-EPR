@@ -259,6 +259,11 @@ def initialize(settings_all):
 
         players.append([name, settings_all["points_to_start"], cheat, [], bot])
 
+    dice.shuffle(players)
+    print("\nThe play order is:")
+    for i in players:
+        print(i[0])
+    
     return play(players, settings_all)
 
 
