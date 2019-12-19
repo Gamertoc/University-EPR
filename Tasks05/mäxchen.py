@@ -392,7 +392,7 @@ def naive_believer(settings_all, typed_number):
 
     believable = 0
     # If the number is below or equal to the turning point, the bot will just believe it.
-    if typed_number <= pivot:
+    if new_better_than_old(pivot, typed_number, settings_all):
         return True
 
     # If the number isn't a Hamburger, the bot will use some statistics
