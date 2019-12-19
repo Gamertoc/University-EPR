@@ -383,7 +383,7 @@ def naive_believer(settings_all, typed_number):
     :param typed_number: int
     :return: bool"""
     while True:
-        pivot = dice.randint(11, 11)
+        pivot = dice.randint(11, 66)
         # This construction makes sure that our turning point isn't a doubles or a Hamburger or
         # a Mäxchen
         if pivot not in (settings_all["Hamburger"], settings_all["Mäxchen"]) \
