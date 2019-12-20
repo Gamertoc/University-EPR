@@ -158,7 +158,7 @@ def play(players, settings_all):
             if new_better_than_old(typed_number, tossed_number, settings_all):
                 if players[turn_index][2] != "GK":
                     print("Oops, you were caught red-handed.")
-                    print("Try to lie better next time", u"\U0001F609")
+                    print("Try to lie better next time ;-)")
                     players[turn_index][1] -= points_worth(tossed_number, settings_all)
                     ui_help.print_points(players[turn_index])
                 else:
@@ -312,7 +312,8 @@ def safe_tell(settings_all, tossed_number, last_tossed_number):
     strat = str(time.time()).split(".")[-1]
     digit = dice.randint(1, len(strat))
     strat = int(strat[-digit])
-    if not strat == 0:
+    # Just play safe if you do not must lie
+    if not strat == 0 and new_better_than_old(tossed_number, last_tossed_number, settings_all):
         safe = True
     else:
         safe = False
@@ -555,13 +556,19 @@ def settings():
     }
     print(help_game[0])
 
-    # Remove if not working!!!!!!!
-    print("\033[91m{}\033[00m".format("\nPlease remember that you can seriously fuck up the "
-                                      "settings to the point of making the game unplayable.\n"
-                                      "This is entirely your responsibility and we recommend "
-                                      "that you think about the impact on the game before "
-                                      "changing any setting." + u"\U0001f621"))
+    # This should display the text colored, but is not working everywhere.
+    # print("\033[91m{}\033[00m".format("\nPlease remember that you can seriously fuck up the "
+    #                                   "settings to the point of making the game unplayable.\n"
+    #                                   "This is entirely your responsibility and we recommend "
+    #                                   "that you think about the impact on the game before "
+    #                                   "changing any setting." + u"\U0001f621"))
 
+    print("\nPlease remember that you can seriously fuck up the settings to the point of making "
+          "the game unplayable.\nThis is entirely your responsibility and we recommend that you "
+          "think about the impact on the game before changing any setting.")
+
+
+    
     # The user can decide whether he wants to change some game settings or not.
     while True:
         choice = input("\nWhat do you want to do? ")
@@ -627,16 +634,13 @@ def settings():
                         # into account
                         elif type(setting) is str:
                             while True:
-                                settings_all[reference[choice]] = input("Please enter the new "
-                                                                        "value of this setting. ")
-                                if (settings_all[reference[choice]] in ("aggressive", "normal",
-                                                                        "safe") and settings_all[
-                                        reference[choice]] == "bot_lie") or (
-                                        settings_all[reference[choice]] in ("suspicious", "normal",
-                                                                            "naive") and
-                                        settings_all[
-                                            reference[choice]] == "bot_believe"):
-                                    print("The new value is", settings_all[reference[choice]])
+                                setting_new = input("Please enter the new value of this setting. ")
+                                if (setting_new in ("aggressive", "normal", "safe") and \
+                                    reference[choice] == "bot_lie") or ( \
+                                        setting_new in ("suspicious", "normal", "naive") and \
+                                        reference[choice] == "bot_believe"):
+                                    settings_all[reference[choice]] = setting_new
+                                    print("The new value is", setting_new)
                                     break
                                 else:
                                     print("This is not a valid setting.")
