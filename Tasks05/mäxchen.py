@@ -117,7 +117,10 @@ def play(players, settings_all):
 
         # If the player is a bot, it'll generate a number based on the given strategy.
         if players[turn_index][4]:
-            typed_number = bot_lie(settings_all, tossed_number, last_tossed_number)
+            while True:
+                typed_number = bot_lie(settings_all, tossed_number, last_tossed_number)
+                if new_better_than_old(typed_number, last_tossed_number, settings_all):
+                    break
             print(players[turn_index][0], "typed", typed_number)
         else:
             # This makes sure that a valid number is entered.
@@ -183,6 +186,7 @@ def play(players, settings_all):
                     (settings_all["reverse_hamburger"] and tossed_number == settings_all[
                         "Hamburger"]):
                 settings_all["play_order"] *= -1
+                print("Turn order got reversed. Be prepared!")
 
             # Reset the number for the next turn
             typed_number = 0
@@ -281,17 +285,18 @@ def bot_lie(settings_all, tossed_number, last_tossed_number):
 
     # If the bot is set to safe, it will choose that strat with 80%, 15% will be normal and 5%
     # will be aggressive.
-    # If it is set to normal, it will be 80% normal, 10% safe and 10% aggressive.
+    # If it is set to normal, it will be 75% normal, 15% safe and 10% aggressive.
     # If it is set to aggressive, it will be 80% aggressive and 20% normal.
-    if (settings_all["bot_lie"] == "safe" and strategy <= 80) or (settings_all["bot_lie"] ==
-                                                                  "normal" and strategy <= 10):
+    if (settings_all["bot_lie"] == "safe" and strategy <= 80) or \
+            (settings_all["bot_lie"] == "normal" and strategy <= 15) or \
+            (settings_all["bot_lie"] == "aggressive" and strategy <= 5):
         return safe_tell(settings_all, tossed_number, last_tossed_number)
-    elif (settings_all["bot_lie"] == "safe" and 80 < strategy <= 95) or (settings_all[
-                                                                             "bot_lie"] ==
-                                                                         "normal" and 10 < strategy <=
-                                                                         90) or (
-            settings_all["bot_lie"] == "aggressive" and strategy <= 20):
+
+    elif (settings_all["bot_lie"] == "safe" and 80 < strategy <= 95) or \
+            (settings_all["bot_lie"] == "normal" and 15 < strategy <= 90) or \
+            (settings_all["bot_lie"] == "aggressive" and strategy <= 10):
         return normal_tell(settings_all, last_tossed_number)
+
     else:
         return aggressive_tell(settings_all, tossed_number, last_tossed_number)
 
@@ -374,13 +379,12 @@ def bot_believe(settings_all, typed_number):
     # A suspicious bot will be 85% suspicious, 10% normal and 5% naive.
 
     if (settings_all["bot_believe"] == "naive" and strategy <= 90) or \
-            (settings_all["bot_believe"] == "normal" and strategy <= 10) or \
-            (settings_all["bot_believe"] == "suspicious" and strategy <= 5):
+            (settings_all["bot_believe"] == "normal" and strategy <= 10):
         believe = naive_believer(settings_all, typed_number)
 
     elif (settings_all["bot_believe"] == "naive" and 90 < strategy) or \
             (settings_all["bot_believe"] == "normal" and 10 <= strategy < 90) or \
-            (settings_all["bot_believe"] == "suspicious" and 5 < strategy <= 15):
+            (settings_all["bot_believe"] == "suspicious" and strategy <= 10):
         believe = normal_believer(settings_all, typed_number)
 
     else:
@@ -414,7 +418,8 @@ def naive_believer(settings_all, typed_number):
     elif not typed_number == settings_all["Hamburger"]:
         for i in range(10000):
             number = roll_dices(settings_all["order_digits"])
-            if number <= pivot or new_better_than_old(number, typed_number, settings_all):
+            if number <= pivot or new_better_than_old(number, typed_number, settings_all) or \
+                    number == typed_number:
                 believable += 1
     else:
         # For a hamburger, we need another construction
@@ -441,8 +446,8 @@ def normal_believer(settings_all, typed_number):
     # are better than a hamburger.
     if not typed_number == settings_all["Hamburger"]:
         for i in range(10000):
-            if new_better_than_old(roll_dices(settings_all["order_digits"]), typed_number,
-                                   settings_all):
+            number = roll_dices(settings_all["order_digits"])
+            if new_better_than_old(number, typed_number, settings_all) or number == typed_number:
                 believable += 1
 
     else:
@@ -452,7 +457,7 @@ def normal_believer(settings_all, typed_number):
                 believable += 1
 
     score = believable
-    if dice.randint(1, 10000) >= score:
+    if dice.randint(1, 10000) <= score:
         return True
     else:
         return False

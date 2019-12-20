@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 """This module contains helper functions for the user interface."""
 
+# noinspection SpellCheckingInspection
 __author__ = "7146127, Theobald, 6956404, Stadler"
 __email__ = "s7223152@cs.uni-frankfurt.de, s0706782@rz.uni-frankfurt.de"
 
