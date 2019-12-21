@@ -10,16 +10,11 @@ import time
 import ui_help
 
 
-# TO DO:
-# Testing the bot
-#   -> bots seem to run nicely
-
-# Unicode still doesnt work :( -> Commented
-# The Deletion with Flush() still doesnt work in the shell. But we can say "Don't use shell"
-
-
 def roll_dices(order_numbers):
-    """Create a random valid number."""
+    """Create a random valid number.
+    :param order_numbers: bool
+    :return: int
+    """
 
     first_digit = dice.randint(1, 6)
     second_digit = dice.randint(1, 6)
@@ -35,7 +30,10 @@ def new_better_than_old(new_number, old_number, settings_all):
     The standard number order is:
     42 > 21 > 66 > 55 > ... > 11 > others
     (others in the normal ">" order)
-    
+    :param new_number: int
+    :param old_number: int
+    :param settings_all: dictionary
+    :return: bool
     """
 
     # Stretching the numbers so we can easily compare them.
@@ -74,7 +72,7 @@ def play(players, settings_all):
     """To play the base game.
     :param players: list
     :param settings_all: dictionary
-    :return: String
+    :return: list
     """
     game_over = False
     last_tossed_number = 0
@@ -105,7 +103,8 @@ def play(players, settings_all):
             print(players[turn_index][0], "is a bot and therefore doesn't need his number to "
                                           "appear on screen.")
         else:
-            # This construction shows you your number for 5 seconds after pressing enter.
+            # This construction shows you your number for 5 seconds
+            # after pressing enter.
             input("Press enter to show your number")
             for i in range(6):
                 print(
@@ -115,7 +114,8 @@ def play(players, settings_all):
 
         print("\rThe number from the last turn was", last_tossed_number, "   ")
 
-        # If the player is a bot, it'll generate a number based on the given strategy.
+        # If the player is a bot, it'll generate a number based on the
+        # given strategy.
         if players[turn_index][4]:
             while True:
                 typed_number = bot_lie(settings_all, tossed_number, last_tossed_number)
@@ -180,8 +180,8 @@ def play(players, settings_all):
                 else:
                     print("But no problem. Shit happens.")
 
-            # Reversing the play order when those options are activated and the specific number
-            # is hit
+            # Reversing the play order when those options are activated
+            # and the specific number is hit
             if (settings_all["reverse_mäxchen"] and tossed_number == settings_all["Mäxchen"]) or \
                     (settings_all["reverse_hamburger"] and tossed_number == settings_all[
                         "Hamburger"]):
@@ -223,10 +223,13 @@ def play(players, settings_all):
 def initialize(settings_all):
     """This function will initialize the game, starting with the chosen
      number of players.
+    :param settings_all: dictionary
+    :return: list
      """
     player_count = ui_help.input_number("How many players want to play?\n")
 
-    # Check whether the player count is valid. Is has to be 2 or larger (for now)
+    # Check whether the player count is valid. Is has to be 2 or larger
+    # (for now)
     if player_count <= 0:
         print("Ok, you do not have to...")
         return
@@ -236,7 +239,8 @@ def initialize(settings_all):
     print("Welcome to the game!")
     print("Please enter your names. It is your responsibility to pick unique names.")
 
-    # The player list contains 4-element-lists: [<name>, <points>, <cheat>, <points_table>].
+    # The player list contains 5-element-lists: [<name>, <points>,
+    # <cheat>, <bot>, <points_table>].
     players = []
 
     # Each player can enter his name
@@ -245,7 +249,8 @@ def initialize(settings_all):
         cheat = ""
         bot = False
 
-        # By entering specific phrases in front of the name, one can activate cheat codes
+        # By entering specific phrases in front of the name, one can
+        # activate cheat codes
         if name[:14] == "HamToTheBurger":
             cheat = "HTTB"
             name = name[14:]
@@ -256,7 +261,8 @@ def initialize(settings_all):
             cheat = "GK"
             name = name[7:]
 
-        # By entering a specific phrase at the end of the name, one can make a player be
+        # By entering a specific phrase at the end of the name, one can
+        # make a player be
         # controlled by a bot.
         if name[-4:] == "#207":
             bot = True
@@ -273,9 +279,10 @@ def initialize(settings_all):
 
 
 def bot_lie(settings_all, tossed_number, last_tossed_number):
-    """This function decides which number the bot enters and therefore if he lies or not. The
-    bot has 3 strategies to choose from: Safe, aggressive and normal. The bot settings can be
-    set by changing the settings.
+    """This function decides which number the bot enters and therefore
+    if he lies or not. The bot has 3 strategies to choose from: Safe,
+    aggressive and normal. The bot settings can be set by changing the
+    settings.
     :param settings_all: dictionary
     :param tossed_number: int
     :param last_tossed_number: int
@@ -283,10 +290,12 @@ def bot_lie(settings_all, tossed_number, last_tossed_number):
     """
     strategy = dice.randint(1, 100)
 
-    # If the bot is set to safe, it will choose that strat with 80%, 15% will be normal and 5%
-    # will be aggressive.
-    # If it is set to normal, it will be 75% normal, 15% safe and 10% aggressive.
-    # If it is set to aggressive, it will be 80% aggressive and 20% normal.
+    # If the bot is set to safe, it will choose that strat with 80%, 15%
+    # will be normal and 5% will be aggressive.
+    # If it is set to normal, it will be 75% normal, 15% safe and 10%
+    # aggressive.
+    # If it is set to aggressive, it will be 80% aggressive and 20%
+    # normal.
     if (settings_all["bot_lie"] == "safe" and strategy <= 80) or \
             (settings_all["bot_lie"] == "normal" and strategy <= 15) or \
             (settings_all["bot_lie"] == "aggressive" and strategy <= 5):
@@ -302,8 +311,9 @@ def bot_lie(settings_all, tossed_number, last_tossed_number):
 
 
 def safe_tell(settings_all, tossed_number, last_tossed_number):
-    """Generating a number based on the safe strat. This means that that 90% of the time the
-    number will be equal or lower to the tossed number.
+    """Generating a number based on the safe strat. This means that that
+     90% of the time the number will be equal or lower to the tossed
+     number.
     :param settings_all: dictionary
     :param tossed_number: int
     :param last_tossed_number: int
@@ -327,14 +337,16 @@ def safe_tell(settings_all, tossed_number, last_tossed_number):
 
 
 def normal_tell(settings_all, last_tossed_number):
-    """Generating a number based on the normal strat. This means that a random valid number is
+    """Generating a number based on the normal strat. This means that a
+    random valid number is
     used by the bot.
     :param settings_all: dictionary
     :param last_tossed_number: int
     :return: int
     """
-    # The only point of this construction is to make sure that the number can be used in game,
-    # e.g. it is a number a human could have entered.
+    # The only point of this construction is to make sure that the
+    # number can be used in game, e.g. it is a number a human could have
+    # entered.
     while True:
         new_number = roll_dices(settings_all["order_digits"])
         if new_better_than_old(new_number, last_tossed_number, settings_all):
@@ -342,8 +354,8 @@ def normal_tell(settings_all, last_tossed_number):
 
 
 def aggressive_tell(settings_all, tossed_number, last_tossed_number):
-    """Generating a number based on the aggressive strat. This means that 90% of the time the
-    number is larger than the tossed one.
+    """Generating a number based on the aggressive strat. This means
+    that 90% of the time the number is larger than the tossed one.
     :param settings_all: dictionary
     :param tossed_number: int
     :param last_tossed_number: int
@@ -369,7 +381,8 @@ def aggressive_tell(settings_all, tossed_number, last_tossed_number):
 
 
 def bot_believe(settings_all, typed_number):
-    """This function generates a value whether the bot believes you or not.
+    """This function generates a value whether the bot believes you or
+    not.
     :param settings_all: dictionary
     :param typed_number: int
     :return: str
@@ -397,21 +410,23 @@ def bot_believe(settings_all, typed_number):
 
 
 def naive_believer(settings_all, typed_number):
-    """This function simulates a naive bot. Naive means that he will only get suspicious on very
-    high numbers. If the number is below a certain point, he won't get suspicious at all
+    """This function simulates a naive bot. Naive means that he will
+    only get suspicious on very high numbers. If the number is below a
+    certain point, he won't get suspicious at all.
     :param settings_all: dictionary
     :param typed_number: int
     :return: bool"""
     while True:
         pivot = dice.randint(11, 66)
-        # This construction makes sure that our turning point isn't a doubles or a Hamburger or
-        # a Mäxchen
+        # This construction makes sure that our turning point isn't a
+        # doubles or a Hamburger or a Mäxchen
         if pivot not in (settings_all["Hamburger"], settings_all["Mäxchen"]) \
                 and not pivot % 11 == pivot // 11:
             break
 
     believable = 0
-    # If the number is below or equal to the turning point, the bot will just believe it.
+    # If the number is below or equal to the turning point, the bot will
+    # just believe it.
     if new_better_than_old(pivot, typed_number, settings_all):
         return True
 
@@ -428,9 +443,9 @@ def naive_believer(settings_all, typed_number):
             if roll_dices(settings_all["order_digits"]) == settings_all["Hamburger"]:
                 believable += 1
 
-    # The score is calculated by dividing the believable counter by 10,000, adding the
-    # countervalue multiplied with the score itself, and stretching this by 10,000 to get better
-    # usability
+    # The score is calculated by dividing the believable counter by
+    # 10,000, adding the countervalue multiplied with the score itself,
+    # and stretching this by 10,000 to get better usability
     score = (believable / 10000)
     score = (score + (1 - score) * score + (1 - score) * (1 - score) * score) * 10000
     if score >= dice.randint(1, 10000):
@@ -440,11 +455,15 @@ def naive_believer(settings_all, typed_number):
 
 
 def normal_believer(settings_all, typed_number):
-    """The normal believer uses statistics to tell whether he believes you or not. For that he
-    generates a bunch of numbers """
+    """The normal believer uses statistics to tell whether he believes
+    you or not. For that he generates a bunch of numbers.
+    :param settings_all: dictionary
+    :param typed_number: int
+    :return: bool
+    """
     believable = 0
-    # The normal method only works for non-Hamburger numbers because there are no numbers that
-    # are better than a hamburger.
+    # The normal method only works for non-Hamburger numbers because
+    # there are no numbers that are better than a hamburger.
     if not typed_number == settings_all["Hamburger"]:
         for i in range(10000):
             number = roll_dices(settings_all["order_digits"])
@@ -465,11 +484,15 @@ def normal_believer(settings_all, typed_number):
 
 
 def suspicious_believer(settings_all, typed_number):
-    """The normal believer uses statistics to tell whether he believes you or not. For that he
-    generates a bunch of numbers """
+    """The normal believer uses statistics to tell whether he believes
+    you or not. For that he generates a bunch of numbers.
+    :param settings_all: dictionary
+    :param typed_number: int
+    :return: int
+    """
     believable = 0
-    # The normal method only works for non-Hamburger numbers because there are no numbers that
-    # are better than a hamburger.
+    # The normal method only works for non-Hamburger numbers because
+    # there are no numbers that are better than a hamburger.
     if not typed_number == settings_all["Hamburger"]:
         for i in range(10000):
             if new_better_than_old(roll_dices(settings_all["order_digits"]), typed_number,
@@ -499,7 +522,7 @@ def settings():
     settings_all = {
         "Mäxchen": 21,
         "Hamburger": 42,
-        "order_digits": True,  # If True, the larger digit will be the 1st digit every time
+        "order_digits": True,
         "play_order": 1,
         "points_to_start": 10,
         "point_loss_normal": 1,
@@ -556,7 +579,9 @@ def settings():
     }
     print(help_game[0])
 
-    # This should display the text colored, but is not working everywhere.
+    # This should display the text colored, but it is not working
+    # everywhere (for... reasons), therefore we replaced it with an
+    # uncolored text.
     # print("\033[91m{}\033[00m".format("\nPlease remember that you can seriously fuck up the "
     #                                   "settings to the point of making the game unplayable.\n"
     #                                   "This is entirely your responsibility and we recommend "
@@ -567,9 +592,8 @@ def settings():
           "the game unplayable.\nThis is entirely your responsibility and we recommend that you "
           "think about the impact on the game before changing any setting.")
 
-
-    
-    # The user can decide whether he wants to change some game settings or not.
+    # The user can decide whether he wants to change some game settings
+    # or not.
     while True:
         choice = input("\nWhat do you want to do? ")
         if choice == "q":
@@ -609,16 +633,18 @@ def settings():
                     setting = settings_all[reference[choice]]
                     print(help_game[choice], "\nThe current value is", setting)
 
-                    # Now that you see the setting, you can decide whether you still wanna
-                    # change it.
+                    # Now that you see the setting, you can decide
+                    # whether you still wanna change it.
                     if input("Type y if you want to change this. ") == "y":
 
-                        # If the setting is a boolean, we just flip the value.
+                        # If the setting is a boolean, we just flip the
+                        # value.
                         if type(setting) is bool:
                             settings_all[reference[choice]] = not settings_all[reference[choice]]
                             print("The new value is", settings_all[reference[choice]])
 
-                        # If the setting is a number, we need to get a new number as input.
+                        # If the setting is a number, we need to get a
+                        # new number as input.
                         elif type(setting) is int:
                             while True:
                                 try:
@@ -630,15 +656,15 @@ def settings():
                                 except ValueError:
                                     print("That's not a number. Try again.")
 
-                        # If the setting is a string (only on setting 11), we have to take that
-                        # into account
+                        # If the setting is a string (only on setting
+                        # 11), we have to take that into account
                         elif type(setting) is str:
                             while True:
                                 setting_new = input("Please enter the new value of this setting. ")
-                                if (setting_new in ("aggressive", "normal", "safe") and \
-                                    reference[choice] == "bot_lie") or ( \
-                                        setting_new in ("suspicious", "normal", "naive") and \
-                                        reference[choice] == "bot_believe"):
+                                if (setting_new in ("aggressive", "normal", "safe") and
+                                    reference[choice] == "bot_lie") or \
+                                        (setting_new in ("suspicious", "normal", "naive") and
+                                         reference[choice] == "bot_believe"):
                                     settings_all[reference[choice]] = setting_new
                                     print("The new value is", setting_new)
                                     break
