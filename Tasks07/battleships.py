@@ -13,55 +13,54 @@ class Game:
         """We need some things in every game. These are essentially the
         settings.
         :return: None"""
-        self.rows = 10
-        self.cols = 10
-        self.player_count = 2
-        self.spray = 15
-        self.shots_per_ship = False
-        self.players = []
-        self.random_ship_combination = True
-        self.ships = []
+        self.__rows = 10
+        self.__cols = 10
+        self.__player_count = 2
+        self.__spray = 15
+        self.__shots_per_ship = False
+        self.__players = []
+        self.__random_ship_combination = True
+        self.__ships = []
 
     def setup(self):
         """We need to set up the game, in case you want to change some
         settings.
         :return: None
         """
-        b = Board()
-        while self.rows < 1 or self.cols < 1 or self.rows * self.cols < 24:
+        while self.__rows < 1 or self.__cols < 1 or self.__rows * self.__cols < 24:
             self.adjust_value()
 
-        if self.random_ship_combination:
+        if self.__random_ship_combination:
             self.ship_combination_creator()
         else:
-            while True
-        b.create_board(self.rows, self.cols)
+            pass
+        b = Board(self.__rows, self.__cols)
 
     def change_rows(self, x):
         """This lets you change the number of rows.
         :param x: int
         :return: None
         """
-        self.rows = x
+        self.__rows = x
 
     def change_cols(self, y):
         """This lets you change the number of columns.
         :param y: int
         :return: None
         """
-        self.cols = y
+        self.__cols = y
 
     def change_player_count(self, player_count):
         """This lets you change the player count of the game.
         :return: None
         """
-        self.player_count = player_count
+        self.__player_count = player_count
 
     def change_spray(self, spray):
         """This lets you change the spray value of the shots.
         :return: None
         """
-        self.spray = spray
+        self.__spray = spray
 
     def adjust_value(self):
         """In case the board is too small, this function is called.
@@ -78,7 +77,7 @@ class Game:
         self.clear_ships()
         # A fleet can take between 10% and 25% of the board. We don't
         # want decimal numbers, only integers.
-        field_count = self.rows * self.cols
+        field_count = self.__rows * self.__cols
         fleet_max = (field_count / 4) // 1
         fleet_min = field_count / 10
         if not fleet_min == fleet_min // 1:
@@ -109,7 +108,7 @@ class Game:
             # If the fleet has a size of 6, there are 2 combinations.
             elif fleet_size == 6:
                 ship_count = rng.randint(1, 2)
-                if len(self.ships) == 0 or ship_count == 2:
+                if len(self.__ships) == 0 or ship_count == 2:
                     self.add_ship(3)
                     self.add_ship(3)
                 else:
@@ -134,16 +133,13 @@ class Game:
                 self.add_ship(ship)
                 # and reduce the fleet size.
                 fleet_size -= ship
-            print(fleet_size)
-
-        print(self.ships)
 
     def add_ship(self, size):
         """This function adds a ship to the fleet configuration.
         :param size: int
         :return: None
         """
-        self.ships.append(size)
+        self.__ships.append(size)
 
     def remove_ship(self, size):
         """This function removes a ship from the fleet configuration if
@@ -151,14 +147,15 @@ class Game:
         :param size: int
         :return: None
         """
-        if size in self.ships:
-            self.ships.remove(size)
+        if size in self.__ships:
+            self.__ships.remove(size)
 
     def clear_ships(self):
         """Clears the fleet configuration.
         :return: None
         """
-        self.ships.clear()
+        self.__ships.clear()
+
 
 class Player:
 
@@ -168,31 +165,22 @@ class Player:
 
 class Board:
 
-    def __init__(self):
-        self.board = []
-
-    def create_board(self, rows, cols):
-        """In this function the board is created. The standard size is
-        10x10, but this can be changed.
-        :param cols: int
-        :param rows: int
-        :return: None
-        """
-
+    def __init__(self, rows, cols):
+        self.__board = []
         # The board is a 2D-Array. Every element of the board is a field
         # which has the according x and y values.
         for i in range(rows):
-            self.board.append([])
+            self.__board.append([])
             for j in range(cols):
-                self.board[i].append(Field(i, j))
+                self.__board[i].append(Field(i, j))
 
 
 class Field:
 
     def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.value = "empty"
+        self.__x = x
+        self.__y = y
+        self.__value = "empty"
 
 
 if __name__ == "__main__":
