@@ -34,7 +34,7 @@ class Game:
             self.ship_combination_creator()
         else:
             pass
-        b = Board(self.__rows, self.__cols)
+        board = Board(self.__rows, self.__cols)
 
     def change_rows(self, x):
         """This lets you change the number of rows.
