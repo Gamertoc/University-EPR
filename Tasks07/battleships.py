@@ -18,6 +18,8 @@ class Game:
         :return: None
         """
         b = Board()
+        while self.rows < 1 or self.cols < 1 or self.rows * self.cols < 24:
+            self.adjust_value()
         b.create_board(self.rows, self.cols)
 
     def change_rows(self, x):
@@ -33,6 +35,12 @@ class Game:
         :return: None
         """
         self.cols = y
+
+    def adjust_value(self):
+        """In case the board is too small, this function is called.
+        :return: None
+        """
+        pass
 
 
 class Board:
