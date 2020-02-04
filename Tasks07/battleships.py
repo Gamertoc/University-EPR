@@ -156,6 +156,12 @@ class Game:
         """
         self.__ships.clear()
 
+    def get_fleet(self):
+        """Give the fleet configuration to the players.
+        :return: list
+        """
+        return self.__ships
+
 
 class Player:
 
@@ -185,9 +191,10 @@ class Field:
 
 class Ship:
 
-    def __init__(self, size, position, facing):
+    def __init__(self, size, position, facing, name=""):
         self.__size = size
         self.__position = []
+        self.__name = name
         # Dependent of where the ship is facing, we can calculate the
         # other spaces it takes.
         x = position[0]
