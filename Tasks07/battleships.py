@@ -183,6 +183,26 @@ class Field:
         self.__value = "empty"
 
 
+class Ship:
+
+    def __init__(self, size, position, facing):
+        self.__size = size
+        self.__position = []
+        # Dependent of where the ship is facing, we can calculate the
+        # other spaces it takes.
+        x = position[0]
+        y = position[1]
+        for i in range(size):
+            if facing == "north":
+                self.__position.append((x, y - i))
+            elif facing == "south":
+                self.__position.append((x, y + i))
+            elif facing == "west":
+                self.__position.append((x - i, y))
+            elif facing == "east":
+                self.__position.append((x - i, y))
+
+
 if __name__ == "__main__":
     game = Game()
     game.setup()
