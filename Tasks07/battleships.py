@@ -8,9 +8,17 @@ __email__ = "s7223152@cs.uni-frankfurt.de"
 class Game:
 
     def __init__(self):
-        """We need some things in every game."""
+        """We need some things in every game. These are essentially the
+        settings.
+        :return: None"""
         self.rows = 10
         self.cols = 10
+        self.player_count = 2
+        self.spray = 15
+        self.shots_per_ship = False
+        self.players = []
+        self.random_ships = False
+        self.ships = []
 
     def setup(self):
         """We need to set up the game, in case you want to change some
@@ -36,11 +44,32 @@ class Game:
         """
         self.cols = y
 
+    def change_player_count(self, player_count):
+        """This lets you change the player count of the game.
+        :return: None
+        """
+        self.player_count = player_count
+
+    def change_spray(self, spray):
+        """This lets you change the spray value of the shots.
+        :return: None
+        """
+        self.spray = spray
+
     def adjust_value(self):
         """In case the board is too small, this function is called.
         :return: None
         """
         pass
+
+    def random_ships(self):
+        """This """
+
+
+class Player:
+
+    def __init__(self, name):
+        self.name = name
 
 
 class Board:
