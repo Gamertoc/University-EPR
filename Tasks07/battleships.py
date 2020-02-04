@@ -19,7 +19,7 @@ class Game:
         self.spray = 15
         self.shots_per_ship = False
         self.players = []
-        self.random_ship_combination = False
+        self.random_ship_combination = True
         self.ships = []
 
     def setup(self):
@@ -30,6 +30,11 @@ class Game:
         b = Board()
         while self.rows < 1 or self.cols < 1 or self.rows * self.cols < 24:
             self.adjust_value()
+
+        if self.random_ship_combination:
+            self.ship_combination_creator()
+        else:
+            while True
         b.create_board(self.rows, self.cols)
 
     def change_rows(self, x):
@@ -64,12 +69,13 @@ class Game:
         """
         pass
 
-    def random_ship_combination(self):
+    def ship_combination_creator(self):
         """This function gives you a random combination of ships.
         :return: None
         """
         # We reset the ships in case there are any rests from previous
         # games
+        self.clear_ships()
         # A fleet can take between 10% and 25% of the board. We don't
         # want decimal numbers, only integers.
         field_count = self.rows * self.cols
@@ -93,21 +99,21 @@ class Game:
             # If the remaining fleet is smaller than 8 (except for 6),
             # we can determine the other ships and escape afterwards
             if fleet_size == 7:
-                self.ships.append(4)
-                self.ships.append(3)
+                self.add_ship(4)
+                self.add_ship(3)
                 break
             elif fleet_size < 6:
-                self.ships.append(fleet_size)
+                self.add_ship(fleet_size)
                 break
 
             # If the fleet has a size of 6, there are 2 combinations.
             elif fleet_size == 6:
                 ship_count = rng.randint(1, 2)
                 if len(self.ships) == 0 or ship_count == 2:
-                    self.ships.append(3)
-                    self.ships.append(3)
+                    self.add_ship(3)
+                    self.add_ship(3)
                 else:
-                    self.ships.append(6)
+                    self.add_ship(6)
                 break
 
             # If the fleet is bigger, we use a simple algorithm
@@ -125,12 +131,34 @@ class Game:
                 # Now we generate a ship,
                 ship = rng.randint(3, largest_possible)
                 # add it to the other ones
-                self.ships.append(ship)
+                self.add_ship(ship)
                 # and reduce the fleet size.
                 fleet_size -= ship
+            print(fleet_size)
 
         print(self.ships)
 
+    def add_ship(self, size):
+        """This function adds a ship to the fleet configuration.
+        :param size: int
+        :return: None
+        """
+        self.ships.append(size)
+
+    def remove_ship(self, size):
+        """This function removes a ship from the fleet configuration if
+        there is a ship of that size.
+        :param size: int
+        :return: None
+        """
+        if size in self.ships:
+            self.ships.remove(size)
+
+    def clear_ships(self):
+        """Clears the fleet configuration.
+        :return: None
+        """
+        self.ships.clear()
 
 class Player:
 
