@@ -27,7 +27,7 @@ class Game:
         settings.
         :return: None
         """
-        while self.__rows < 1 or self.__cols < 1 or self.__rows * self.__cols < 24:
+        while (self.rows < 1) or (self.__cols < 1) or (self.rows * self.__cols < 24):
             self.adjust_value()
 
         if self.__random_ship_combination:
@@ -36,12 +36,20 @@ class Game:
             pass
         board = Board(self.__rows, self.__cols)
 
-    def change_rows(self, x):
-        """This lets you change the number of rows.
-        :param x: int
+    @property
+    def rows(self):
+        """Get rows.
+        :return: int
+        """
+        return self.__rows
+
+    @rows.setter
+    def rows(self, value):
+        """Set the value of rows.
+        :param value: int
         :return: None
         """
-        self.__rows = x
+        self.__rows = value
 
     def change_cols(self, y):
         """This lets you change the number of columns.
