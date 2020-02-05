@@ -8,6 +8,7 @@ import random as rng
 
 
 class Game:
+    """This class contains the main game as well as its mechanics."""
 
     def __init__(self):
         """We need some things in every game. These are essentially the
@@ -81,7 +82,7 @@ class Game:
         """
         self.__player_count = value
 
-    @ @property
+    @property
     def spray(self):
         """Get the spray value.
         :return: int
@@ -210,12 +211,14 @@ class Game:
 
 
 class Player:
+    """Everything about the player goes here."""
 
     def __init__(self, name):
         self.name = name
 
 
 class Board:
+    """This is the board."""
 
     def __init__(self, rows, cols):
         self.__board = []
@@ -228,6 +231,7 @@ class Board:
 
 
 class Field:
+    """This is a single field."""
 
     def __init__(self, x, y):
         self.__x = x
@@ -236,7 +240,9 @@ class Field:
 
 
 class Ship:
+    """
 
+    """
     def __init__(self, size, position, facing, name=""):
         self.__size = size
         self.__position = []
