@@ -38,25 +38,63 @@ class Game:
 
     @property
     def rows(self):
-        """Get rows.
+        """Get number of rows.
         :return: int
         """
         return self.__rows
 
     @rows.setter
     def rows(self, value):
-        """Set the value of rows.
+        """Set the number of rows.
         :param value: int
         :return: None
         """
         self.__rows = value
 
-    def change_cols(self, y):
-        """This lets you change the number of columns.
-        :param y: int
+    @property
+    def cols(self):
+        """Get number of cols.
+        :return: int
+        """
+        return self.__cols
+
+    @cols.setter
+    def cols(self, value):
+        """Set the number of columns.
+        :param value: int
+        :return: int
+        """
+        self.__cols = value
+
+    @property
+    def player_count(self):
+        """Get the number of players.
         :return: None
         """
-        self.__cols = y
+        return self.__player_count
+
+    @player_count.setter
+    def player_count(self, value):
+        """Set the number of players.
+        :param value: int
+        :return: None
+        """
+        self.__player_count = value
+
+    @ @property
+    def spray(self):
+        """Get the spray value.
+        :return: int
+        """
+        return self.__spray
+
+    @spray.setter
+    def spray(self, value):
+        """Change the value of the spray.
+        :param value: int
+        :return: None
+        """
+        self.__spray = value
 
     def change_player_count(self, player_count):
         """This lets you change the player count of the game.
