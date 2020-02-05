@@ -21,7 +21,7 @@ class Game:
         self.__shots_per_ship = False
         self.__players = []
         self.__random_ship_combination = True
-        self.__ships = []
+        self.__fleet_config = []
 
     def setup(self):
         """We need to set up the game, in case you want to change some
@@ -35,7 +35,21 @@ class Game:
             self.ship_combination_creator()
         else:
             pass
-        board = Board(self.__rows, self.__cols)
+
+    @property
+    def players(self):
+        """Gives the list of players.
+        :return: list
+        """
+        return self.__players
+
+    @players.setter
+    def players(self, name):
+        """Adds a new player to the game.
+        :param name: str
+        :return: None
+        """
+        self.__players.append(Player(name))
 
     @property
     def rows(self):
@@ -97,18 +111,6 @@ class Game:
         """
         self.__spray = value
 
-    def change_player_count(self, player_count):
-        """This lets you change the player count of the game.
-        :return: None
-        """
-        self.__player_count = player_count
-
-    def change_spray(self, spray):
-        """This lets you change the spray value of the shots.
-        :return: None
-        """
-        self.__spray = spray
-
     def adjust_value(self):
         """In case the board is too small, this function is called.
         :return: None
@@ -155,7 +157,7 @@ class Game:
             # If the fleet has a size of 6, there are 2 combinations.
             elif fleet_size == 6:
                 ship_count = rng.randint(1, 2)
-                if len(self.__ships) == 0 or ship_count == 2:
+                if len(self.__fleet_config) == 0 or ship_count == 2:
                     self.add_ship(3)
                     self.add_ship(3)
                 else:
@@ -186,7 +188,7 @@ class Game:
         :param size: int
         :return: None
         """
-        self.__ships.append(size)
+        self.__fleet_config.append(size)
 
     def remove_ship(self, size):
         """This function removes a ship from the fleet configuration if
@@ -194,20 +196,21 @@ class Game:
         :param size: int
         :return: None
         """
-        if size in self.__ships:
-            self.__ships.remove(size)
+        if size in self.__fleet_config:
+            self.__fleet_config.remove(size)
 
     def clear_ships(self):
         """Clears the fleet configuration.
         :return: None
         """
-        self.__ships.clear()
+        self.__fleet_config.clear()
 
-    def get_fleet(self):
-        """Give the fleet configuration to the players.
+    @property
+    def fleet_config(self):
+        """Gives the fleet config.
         :return: list
         """
-        return self.__ships
+        return self.__fleet_config
 
 
 class Player:
@@ -240,9 +243,7 @@ class Field:
 
 
 class Ship:
-    """
-
-    """
+    """A battleship."""
     def __init__(self, size, position, facing, name=""):
         self.__size = size
         self.__position = []
