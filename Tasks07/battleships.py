@@ -6,7 +6,13 @@ __email__ = "s7223152@cs.uni-frankfurt.de"
 
 import random as rng
 
+"""
+This is to collect my thoughts on how the game will run and will be removed once the 
+documentation is in place.
 
+
+
+"""
 class Game:
     """This class contains the main game as well as its mechanics."""
 
@@ -14,8 +20,7 @@ class Game:
         """We need some things in every game. These are essentially the
         settings.
         :return: None"""
-        self.__rows = 10
-        self.__cols = 10
+        self.__field_size = 10
         self.__player_count = 2
         self.__spray = 15
         self.__shots_per_ship = False
@@ -28,13 +33,14 @@ class Game:
         settings.
         :return: None
         """
-        while (self.rows < 1) or (self.__cols < 1) or (self.rows * self.__cols < 24):
+        while self.__field_size:
             self.adjust_value()
 
         if self.__random_ship_combination:
             self.ship_combination_creator()
         else:
             pass
+        for i in self.players:
 
     @property
     def players(self):
@@ -52,34 +58,19 @@ class Game:
         self.__players.append(Player(name))
 
     @property
-    def rows(self):
+    def field_size(self):
         """Get number of rows.
         :return: int
         """
-        return self.__rows
+        return self.__field_size
 
-    @rows.setter
-    def rows(self, value):
+    @field_size.setter
+    def field_size(self, value):
         """Set the number of rows.
         :param value: int
         :return: None
         """
-        self.__rows = value
-
-    @property
-    def cols(self):
-        """Get number of cols.
-        :return: int
-        """
-        return self.__cols
-
-    @cols.setter
-    def cols(self, value):
-        """Set the number of columns.
-        :param value: int
-        :return: int
-        """
-        self.__cols = value
+        self.__field_size = value
 
     @property
     def player_count(self):
@@ -110,12 +101,6 @@ class Game:
         :return: None
         """
         self.__spray = value
-
-    def adjust_value(self):
-        """In case the board is too small, this function is called.
-        :return: None
-        """
-        pass
 
     def ship_combination_creator(self):
         """This function gives you a random combination of ships.
@@ -218,6 +203,15 @@ class Player:
 
     def __init__(self, name):
         self.name = name
+        self.__board = None
+
+    def board(self, rows, cols):
+        """Creates this player's board.
+        :param rows: int
+        :param cols: int
+        :return: None
+        """
+        self.__board = Board(rows, cols)
 
 
 class Board:
@@ -244,7 +238,8 @@ class Field:
 
 class Ship:
     """A battleship."""
-    def __init__(self, size, position, facing, name=""):
+
+    def __init__(self, size, position, facing, name=None):
         self.__size = size
         self.__position = []
         self.__name = name
@@ -261,6 +256,21 @@ class Ship:
                 self.__position.append((x - i, y))
             elif facing == "east":
                 self.__position.append((x - i, y))
+
+    @property
+    def position(self):
+        """Gives the position.
+        :return: list
+        """
+        return self.__position
+
+    def hit(self, shot):
+        """If the ship is hit.
+        :param shot: tuple
+        :return: None
+        """
+        if shot in self.position:
+            self.position.remove(shot)
 
 
 if __name__ == "__main__":
