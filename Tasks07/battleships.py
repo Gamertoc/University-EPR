@@ -62,7 +62,6 @@ class Game:
         self.__spray = True
         self.__spray_value = 15
         self.__shots_per_ship = False
-        self.__shots = 1
         self.__random_ship_combination = True
         self.__fleet_config = []
 
@@ -70,9 +69,25 @@ class Game:
         """Starting the game with some essentials.
         :return: None
         """
+        self.ship_combination_creator()
         for i in range(self.player_count):
             name = "Player " + str(i + 1)
             self.players.append(Player(self.field_size, name))
+        for i in self.fleet_config:
+            for j in self.players:
+                j.add_ship(i)
+
+        print(self.players[0].position_ship(self.fleet_config[0], 9, 5, "north"))
+
+    def check_ship_placement(self):
+        """This function checks whether all ships are placed or not.
+        :return: bool
+        """
+        for i in self.players:
+            for j in i.fleet:
+                if not j.position:
+                    return False
+        return True
 
     @property
     def players(self):
@@ -170,21 +185,6 @@ class Game:
         :return: None
         """
         self.__shots_per_ship = value
-
-    @property
-    def shots(self):
-        """Get the number of shots you have.
-        :return: int
-        """
-        return self.__shots
-
-    @shots.setter
-    def shots(self, value):
-        """Change the standard number of shots you have per round.
-        :param value: int
-        :return: None
-        """
-        self.__shots = value
 
     def ship_combination_creator(self):
         """This function gives you a random combination of ships.
@@ -306,6 +306,7 @@ class Player:
     def __init__(self, board_size, name=None):
         self.__name = name
         self.__board = Board(board_size)
+        self.__fleet = []
 
     @property
     def name(self):
@@ -329,13 +330,71 @@ class Player:
         """
         return self.__board
 
-    @board.setter
-    def board(self, size):
-        """Creates this player's board.
+    @property
+    def fleet(self):
+        """Get the player's fleet.
+        :return: list
+        """
+        return self.__fleet
+
+    def add_ship(self, size):
+        """Add a ship to this player's fleet.
         :param size: int
         :return: None
         """
-        self.board = Board(size)
+        self.fleet.append(Ship(size))
+
+    def position_ship(self, size, x, y, facing):
+        """Position the ships you have.
+        :param size: int
+        :param x: int
+        :param y: int
+        :param facing: str
+        :return: bool
+        """
+        position = []
+        ship = None
+
+        # First, we need to know what ship we are positioning
+        for i in self.fleet:
+            if size == i.size and i.position == []:
+                ship = i
+                break
+
+        if ship is not None:
+            try:
+                # Now we can calculate the full position of this ship
+                for i in range(size):
+                    if facing == "north":
+                        position.append(self.board.board[x][y - i])
+                    elif facing == "south":
+                        position.append(self.board.board[x][y + i])
+                    elif facing == "west":
+                        position.append(self.board.board[x - i][y])
+                    elif facing == "east":
+                        position.append(self.board.board[x + i][y])
+            except IndexError:
+                return False
+
+            # We have to check whether the ships is next to any other ship.
+            # We need to check for any connection, horizontally, vertically
+            # or diagonally
+            for i in position:
+                for j in range(-1, 2):  # horizontal check
+                    for k in range(-1, 2):  # vertical check
+                        x = i.x + j
+                        y = i.y + k
+                        try:
+                            test_field = self.board.board[x][y]
+                        except IndexError:
+                            continue
+                        if test_field in self.board.board[x] and test_field not in position:
+                            if not test_field.value == 0:
+                                return False
+                        else:
+                            continue
+            ship.set_position(position)
+            return True
 
 
 class Board:
@@ -361,41 +420,85 @@ class Board:
 class Field:
     """This is a single field."""
 
+    # WATER: 0
+    # SHIP: 1
+    # MISS: 2
+    # HIT: 3
+
     def __init__(self, x, y):
         self.__x = x
         self.__y = y
-        self.__value = "empty"
+        self.__value = 0
+
+    @property
+    def x(self):
+        """Get the x value.
+        :return: int
+        """
+        return self.__x
+
+    @property
+    def y(self):
+        """Get the x value.
+        :return: int
+        """
+        return self.__y
+
+    @property
+    def value(self):
+        """Returns the current value of this field.
+        :return: int
+        """
+        return self.__value
+
+    @value.setter
+    def value(self, value):
+        """Sets the current value of the field.
+        :param value: int
+        :return: None
+        """
+        self.__value = value
 
 
 class Ship:
-    """A battleship."""
+    """A ship of a player's fleet."""
 
-    def __init__(self, size, position, facing, name=None):
+    def __init__(self, size):
         self.__size = size
         self.__position = []
+        if size == 3:
+            name = "Destroyer"
+        elif size == 4:
+            name = "Cruiser"
+        elif size == 5:
+            name = "Battleship"
+        else:
+            name = "Carrier"
         self.__name = name
-        # Dependent of where the ship is facing, we can calculate the
-        # other spaces it takes.
-        x = position[0]
-        y = position[1]
-        for i in range(size):
-            if facing == "north":
-                self.__position.append((x, y - i))
-            elif facing == "south":
-                self.__position.append((x, y + i))
-            elif facing == "west":
-                self.__position.append((x - i, y))
-            elif facing == "east":
-                self.__position.append((x - i, y))
+
+    @property
+    def size(self):
+        """Get the size of the ship.
+        :return: int
+        """
+        return self.__size
+
+    @property
+    def position(self):
+        """Get the position of this ship.
+        :return: list
+        """
+        return self.__position
+
+    def set_position(self, position):
+        """Set the position of the ship.
+        :param position: list
+        :return: None
+        """
+        for i in range(len(position)):
+            self.__position.append(i)
 
 
-#     @property
-#     def position(self):
-#         """Gives the position.
-#         :return: list
-#         """
-#         return self.__position
-#
 #     def hit(self, shot):
 #         """If the ship is hit.
 #         :param shot: tuple
