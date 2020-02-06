@@ -400,6 +400,55 @@ class Player:
             ship.set_position(position)
             return True
 
+    def shot(self, x, y):
+        """When your board gets shot on.
+        :param x: int
+        :param y: int
+        :return: bool
+        """
+        # First, we need the field that has been shot on
+        shot_field = self.board.board[x][y]
+
+        # Now we check whether the field already fell victim to an
+        # attack or not
+        if not shot_field.value == 0:
+            return False
+
+        # If not, we check if any of our ships is placed on this field
+        else:
+            for i in self.fleet:
+                for j in range(i.position):
+                    if shot_field in i.position:
+                        shot_field.value = 2
+                        i.position.remove(shot_field)
+
+                        # When a ship is hit, we have to check if it
+                        # sinks
+                        if not i.position:
+                            self.sink(i)
+
+        # If there was no ship, it is a miss
+        if not shot_field.value == 2:
+            shot_field.value = 1
+
+        return True
+
+    def sink(self, ship):
+        """When a ship was hit on every field, it sinks.
+        :param ship: Ship
+        :return: None
+        """
+        self.fleet.remove(ship)
+
+        # When a ship sinks, we have to check if we just lost the game
+        if not self.fleet:
+            self.lost()
+
+    def lost(self):
+        """We just lost the game, unfortunately.
+        :return: None
+        """
+        pass
 
 class Board:
     """This is the board."""
@@ -425,9 +474,8 @@ class Field:
     """This is a single field."""
 
     # WATER: 0
-    # SHIP: 1
-    # MISS: 2
-    # HIT: 3
+    # MISS: 1
+    # HIT: 2
 
     def __init__(self, x, y):
         self.__x = x
