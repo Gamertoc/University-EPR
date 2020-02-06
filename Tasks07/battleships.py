@@ -66,10 +66,13 @@ class Game:
         self.__random_ship_combination = True
         self.__fleet_config = []
 
-    def setup(self):
-        """
+    def start_game(self):
+        """Starting the game with some essentials.
         :return: None
         """
+        for i in range(self.player_count):
+            name = "Player " + str(i + 1)
+            self.players.append(Player(self.field_size, name))
 
     @property
     def players(self):
@@ -300,18 +303,39 @@ class Game:
 class Player:
     """Everything about the player goes here."""
 
-    def __init__(self, name):
-        self.name = name
-        self.__board = None
+    def __init__(self, board_size, name=None):
+        self.__name = name
+        self.__board = Board(board_size)
 
+    @property
+    def name(self):
+        """Get the player's name.
+        :return: String
+        """
+        return self.__name
 
-#    def board(self, rows, cols):
-#         """Creates this player's board.
-#         :param rows: int
-#         :param cols: int
-#         :return: None
-#         """
-#         self.__board = Board(rows, cols)
+    @name.setter
+    def name(self, value):
+        """Set this player's name.
+        :param value: String
+        :return: None
+        """
+        self.name = value
+
+    @property
+    def board(self):
+        """Get the board of the player.
+        :return: Board
+        """
+        return self.__board
+
+    @board.setter
+    def board(self, size):
+        """Creates this player's board.
+        :param size: int
+        :return: None
+        """
+        self.board = Board(size)
 
 
 class Board:
@@ -325,6 +349,13 @@ class Board:
             self.__board.append([])
             for j in range(size):
                 self.__board[i].append(Field(i, j))
+
+    @property
+    def board(self):
+        """Get the board.
+        :return: list
+        """
+        return self.__board
 
 
 class Field:
@@ -376,4 +407,4 @@ class Ship:
 
 if __name__ == "__main__":
     game = Game()
-    game.setup()
+    game.start_game()
