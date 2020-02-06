@@ -73,11 +73,11 @@ class Game:
         for i in range(self.player_count):
             name = "Player " + str(i + 1)
             self.players.append(Player(self.field_size, name))
-        for i in self.fleet_config:
-            for j in self.players:
-                j.add_ship(i)
+        # for i in self.fleet_config:
+        #     for j in self.players:
+        #         j.add_ship(i)
 
-        print(self.players[0].position_ship(self.fleet_config[0], 9, 5, "north"))
+        self.players[0].position_ship(self.fleet_config[0], 9, 5, "north")
 
     def check_ship_placement(self):
         """This function checks whether all ships are placed or not.
@@ -393,6 +393,10 @@ class Player:
                                 return False
                         else:
                             continue
+
+            # Now we can finally place the ship and mark the fields
+            for i in position:
+                i.value = 1
             ship.set_position(position)
             return True
 
