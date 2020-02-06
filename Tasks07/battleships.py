@@ -406,8 +406,51 @@ class Player:
         :param y: int
         :return: bool
         """
-        # First, we need the field that has been shot on
-        shot_field = self.board.board[x][y]
+        # First, we need the field that has been shot on. If spray is
+        # activated, this might change.
+        spray = False
+        if Game.spray:
+            test_spray = rng.randint(1, 100)
+            if test_spray <= Game.spray:
+                spray = True
+
+        shot_field = None
+        # Spray means that the shot hits one field around the target
+        # but not the field itself.
+        if spray:
+            # We have to make sure that the field we hit actually exists
+            while True:
+                # First we calculate which field we actually hit
+                # 1: x + 1
+                # 2: x + 1, y + 1
+                # 3: y + 1
+                # 4: y + 1, x - 1
+                # 5: x - 1
+                # 6: x - 1, y - 1
+                # 7: y - 1
+                # 8: y - 1, x + 1
+                x_affected = x
+                y_affected = y
+                affect = rng.randint(1, 8)
+                if affect in (1, 2, 8):
+                    x_affected += 1
+                if affect in (2, 3, 4):
+                    y_affected += 1
+                if affect in (3, 4, 5):
+                    x_affected -= 1
+                if affect in (6, 7, 8):
+                    y_affected += 1
+
+                # Now we try the
+                try:
+                    shot_field = self.board.board[x_affected][y_affected]
+                    break
+                except IndexError:
+                    continue
+
+        # If there is no spray, we just go with the normal field.
+        else:
+            shot_field = self.board.board[x][y]
 
         # Now we check whether the field already fell victim to an
         # attack or not
