@@ -47,10 +47,15 @@ class PlaceShipsDialog(Dialog):
 
         ships_frame = Frame(frame)
         ships_frame.grid(row=1, column=0, columnspan=2, sticky='nsew')
-        self.e2 = PlayerGrid(ships_frame, row=2, text="Place Ships",
-                             width=grid_size, height=grid_size)
+        self.e2 = ShipSelectGrid(ships_frame, row=2, text="Place Ships",
+                                 width=grid_size, height=grid_size,
+                                 on_ship=self.on_ship)
 
         return self
+
+    def on_ship(self, ship):
+        print(ship)
+        return True
 
     def buttonbox(self):
         if(self.box is not None):
@@ -101,10 +106,6 @@ class PlayerGrid:
         self.row = row
         self.column = column
         self.grid = {}
-        self._selection = None
-        self._selection_buttons = []
-        self.ships = []
-
         self.frame = self.draw_grid()
 
     def draw_grid(self):
@@ -124,11 +125,41 @@ class PlayerGrid:
                 btn.grid(column=x, row=y, sticky='nsew')
                 coord = (x, y)
                 btn['command'] = lambda b=btn, c=coord: self.click(b, c)
-                btn.bind("<Enter>", lambda _, b=btn, c=coord: self.on_enter(b, c))
+                btn.bind("<Enter>", lambda _, b=btn,
+                         c=coord: self.on_hover(b, c))
                 self.grid[(x, y)] = btn
         return frame
 
     def click(self, button, coord):
+        pass
+
+    def on_hover(self, button, coord):
+        pass
+
+    def add_selection(self, coord):
+        button = self.grid[coord]
+        button['bg'] = active
+        button['activebackground'] = active
+
+    def remove_selection(self, coord):
+        button = self.grid[coord]
+        button['bg'] = default_color
+        button['activebackground'] = '#38dcf5'
+
+
+class ShipSelectGrid(PlayerGrid):
+    def __init__(self, parent, on_ship=None, **kwargs):
+        PlayerGrid.__init__(self, parent, **kwargs)
+        self._selection = None
+        self._selection_buttons = []
+        self.ships = []
+        self._ship_blocks = []
+        self.on_ship = on_ship
+
+    def click(self, button, coord):
+        if coord in self._ship_blocks:
+            return
+
         if self._selection is None:
             self._selection = coord
         elif self._selection == coord:
@@ -137,19 +168,29 @@ class PlayerGrid:
             self._selection = None
         else:
             ship = list(self._selection_buttons)
-            self.ships.append(ship)
+            result = True
+
+            if self.on_ship is not None:
+                result = self.on_ship(ship)
+
+            if result:
+                self.ships.append(ship)
+                self._ship_blocks += ship
+            else:
+                for coord in self._selection_buttons:
+                    self.remove_selection(coord)
+
             self._selection_buttons.clear()
             self._selection = None
-            print(ship)
-    
-    def on_enter(self, button, coord):
+
+    def on_hover(self, button, coord):
         if self._selection is None:
             return
 
         mx, my = coord
         sx, sy = self._selection
 
-        sign = lambda a: (a > 0) - (a < 0)
+        def sign(a): return (a > 0) - (a < 0)
         diffx = abs(mx - sx)
         signx = sign(mx - sx)
         diffy = abs(my - sy)
@@ -169,6 +210,8 @@ class PlayerGrid:
             currentx = sx + signx
             while currentx != mx + signx:
                 coord = (currentx, sy)
+                if coord in self._ship_blocks:
+                    break
                 self.add_selection(coord)
                 self._selection_buttons.append(coord)
                 currentx += signx
@@ -176,23 +219,11 @@ class PlayerGrid:
             currenty = sy + signy
             while currenty != my + signy:
                 coord = (sx, currenty)
+                if coord in self._ship_blocks:
+                    break
                 self.add_selection(coord)
                 self._selection_buttons.append(coord)
                 currenty += signy
-
-    def on_leave(self, button, coord):
-        if not self._selection:
-            return
-
-    def add_selection(self, coord):
-        button = self.grid[coord]
-        button['bg'] = active
-        button['activebackground'] = active
-
-    def remove_selection(self, coord):
-        button = self.grid[coord]
-        button['bg'] = default_color
-        button['activebackground'] = '#38dcf5'
 
 
 class GUI:
