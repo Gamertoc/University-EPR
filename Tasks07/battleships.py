@@ -6,47 +6,6 @@ __email__ = "s7223152@cs.uni-frankfurt.de"
 
 import random as rng
 
-"""
-This is to collect my thoughts on how the game will run and will be removed once the 
-documentation is in place.
-
-Menu: 
-    Start game
-    Settings
-    Close
-
-Settings:
-    Player count
-        1 - 4
-    Field size
-        5 - 25
-    Spray
-        active/inactive
-        value
-    Shots based on remaining ships
-        active/inactive
-    Fleet configuration
-        clear
-        Algorithm
-        manual
-            increase/decrease number
-            calculate if it is in range
-
-Start game:
-    Set player names
-    Placing ships
-        Manually
-        Algorithm
-    --> Play
-        Shot
-            Number
-            Spray
-            --> Hit or miss
-    
-    Win/lose
-    Revenge
-"""
-
 
 class Game:
     """This class contains the main game as well as its mechanics."""
@@ -591,15 +550,6 @@ class Ship:
         """
         for i in range(len(position)):
             self.__position.append(i)
-
-
-#     def hit(self, shot):
-#         """If the ship is hit.
-#         :param shot: tuple
-#         :return: None
-#         """
-#         if shot in self.position:
-#             self.position.remove(shot)
 
 
 if __name__ == "__main__":
