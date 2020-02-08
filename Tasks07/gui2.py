@@ -58,7 +58,7 @@ class PlaceShipsDialog(Dialog):
 
         ships_frame = Frame(frame)
         ships_frame.grid(row=1, column=0, columnspan=2, sticky='nsew')
-        self.e2 = ShipSelectGrid(ships_frame, row=2, text="Place Ships",
+        self.e2 = ShipSelectGrid(ships_frame, row=2, text="Place Ships (length 3 to 6)",
                                  width=grid_size, height=grid_size,
                                  on_ship=self.on_ship)
         self.player_ships = {}
@@ -87,6 +87,12 @@ class PlaceShipsDialog(Dialog):
         # New Game-> field size setting -> player name entry + ship placement,
         # via click, hoover and click (lenght of placed ship 1+hoover+1)
         # a list of coords creates the ship
+        # {'n': [[(0, 0), (1, 0), (2, 0), (3, 0)]],
+        # 'b': [[(1, 1), (2, 1), (3, 1), (4, 1)], [(2, 2), (2, 3), (2, 4)]]}
+
+        if len(ship) < 3 or len(ship) > 6:
+            # set length of ship to 3 to 6
+            return False
         return True
 
     def buttonbox(self):
@@ -131,6 +137,9 @@ class PlaceShipsDialog(Dialog):
         """Add ship if valid and close window."""
         if self.validate(False):
             self.player_ships[self.values[0]] = self.values[1]
+        # Example Output:
+        # {'n': [[(0, 0), (1, 0), (2, 0), (3, 0)]],
+        # 'b': [[(1, 1), (2, 1), (3, 1), (4, 1)], [(2, 2), (2, 3), (2, 4)]]}
         print(self.player_ships)
         self.cancel()
 
