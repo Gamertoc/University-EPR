@@ -61,6 +61,7 @@ class PlaceShipsDialog(Dialog):
         self.e2 = ShipSelectGrid(ships_frame, row=2, text="Place Ships",
                                  width=grid_size, height=grid_size,
                                  on_ship=self.on_ship)
+        self.player_ships = {}
 
         return self
 
@@ -81,8 +82,11 @@ class PlaceShipsDialog(Dialog):
         # By calling check_ship_placement() from the Player class you can check whether all
         # ships are placed or not (returning True if all are placed, returning False if one or
         # more are still missing a position).
-
-        print(ship)
+        # Apparently this is a commuication error on both sides:
+        # This is how the ship placement works via the now built GUI:
+        # New Game-> field size setting -> player name entry + ship placement,
+        # via click, hoover and click (lenght of placed ship 1+hoover+1)
+        # a list of coords creates the ship
         return True
 
     def buttonbox(self):
@@ -97,9 +101,9 @@ class PlaceShipsDialog(Dialog):
         ok_btn.pack(side=LEFT, padx=5, pady=5)
 
         finish_btn = Button(self.box, text="Ready",
-                            state=DISABLED, width=10, default=ACTIVE)
+                            state=DISABLED, width=10, command=self.finish_command, default=ACTIVE)
         # ensures a minimum of 2 players
-        if self.num_players >= self.min_players - 1:
+        if self.num_players >= self.min_players:
             finish_btn.config(state="normal")
         finish_btn.pack(side=LEFT, padx=5, pady=5)
 
@@ -113,14 +117,47 @@ class PlaceShipsDialog(Dialog):
 
     def next_cmd(self):
         """Clearing inputs for next player."""
+        if not self.validate():
+            self.initial_focus.focus_set()
+            return
+        self.player_ships[self.values[0]] = self.values[1]
         self.num_players += 1
         self.e1.delete(0, END)
         self.buttonbox()
         self.e1.focus_set()
         self.e2.reset()
 
-    def validate(self):
+    def finish_command(self):
+        """Add ship if valid and close window."""
+        if self.validate(False):
+            self.player_ships[self.values[0]] = self.values[1]
+        print(self.player_ships)
+        self.cancel()
+
+    def validate(self, show_warnings=True):
         """Validates."""
+        self.values.clear()
+        self.values.append(self.e1.get())
+        if self.values[0] == "":
+            # check name not empty and show warning if show_warnings enabled
+            show_warnings and messagebox.showwarning(
+                "Bad input",
+                "Please enter a valid Name.")
+            return False
+        elif self.values[0] in self.player_ships.keys():
+            # check if name exists and show warning if show_warnings enabled
+            show_warnings and messagebox.showwarning(
+                "Bad input",
+                "Player already exists! Please pick another name.")
+            return False
+        self.values.append(list(self.e2.ships))
+        if len(self.values[1]) == 0:
+            # check at least one ship placed and show warning if show_warnings
+            # enabled
+            show_warnings and messagebox.showwarning(
+                "Bad input",
+                "Please place at least one ship!")
+            return False
         return True
 
     def apply(self):
