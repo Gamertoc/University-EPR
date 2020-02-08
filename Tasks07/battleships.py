@@ -77,17 +77,6 @@ class Game:
         #     for j in self.players:
         #         j.add_ship(i)
 
-        self.players[0].position_ship(self.fleet_config[0], 9, 5, "north")
-
-    def check_ship_placement(self):
-        """This function checks whether all ships are placed or not.
-        :return: bool
-        """
-        for i in self.players:
-            for j in i.fleet:
-                if not j.position:
-                    return False
-        return True
 
     @property
     def players(self):
@@ -400,6 +389,15 @@ class Player:
             ship.set_position(position)
             return True
 
+    def check_ship_placement(self):
+        """This function checks whether all ships are placed or not.
+        :return: bool
+        """
+        for j in self.fleet:
+            if not j.position:
+                return False
+        return True
+
     def shot(self, x, y):
         """When your board gets shot on.
         :param x: int
@@ -492,6 +490,7 @@ class Player:
         :return: None
         """
         pass
+
 
 class Board:
     """This is the board."""

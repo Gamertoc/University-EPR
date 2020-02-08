@@ -56,6 +56,21 @@ class PlaceShipsDialog(Dialog):
 
     def on_ship(self, ship):
         # TODO: add ship to game
+        # The game has a set combination of ships which is created when choosing the field size
+        # (by battleships.ship_combination_creator()).
+        # After that you need to create the player and add every ship from the combination (
+        # without position) to his fleet. Done by add_ship(size) in the player class,
+        # just cycle through the fleet_config of the Game class.
+        # Then you need a button to determine the facing of the ship (north, west, east, south) and
+        # something that shows which ship you are placing (either go through the array yourself
+        # or by choosing the size per button).
+        # Then the player needs to call position_ship(size, x, y, facing). If the ship cannot be
+        # placed there (either because it conflicts with another ship or goes over the edge of
+        # the board) the function will return a False, if it works it'll return True.
+        # By calling check_ship_placement() from the Player class you can check whether all
+        # ships are placed or not (returning True if all are placed, returning False if one or
+        # more are still missing a position).
+
         print(ship)
         return True
 
