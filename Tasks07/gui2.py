@@ -1,3 +1,9 @@
+"""The Battleship GUI. This is now the main file :)"""
+
+__author__ = "7146127, Theobald, 7040759, Schott"
+__credits__ = "Water"
+__email__ = "s7223152@cs.uni-frankfurt.de, s7296105@cs.uni-frankfurt.de"
+
 from tkinter import *
 from dialog import Dialog, messagebox
 import tkinter as tk
@@ -10,6 +16,7 @@ default_color = '#4787d6'
 
 class CreateGameDialog(Dialog):
     def initialize(self, frame):
+        """Initializes main dialog frame."""
         self.grid_size = 5
 
         Label(frame, text="Grid Size:").grid(row=0)
@@ -20,23 +27,26 @@ class CreateGameDialog(Dialog):
         return self.e1
 
     def validate(self):
+        """Checks if input is int."""
         try:
             self.values.clear()
             self.values.append(int(self.e1.get()))
         except ValueError:
             messagebox.showwarning(
                 "Bad input",
-                "Illegal values, please try again")
+                "Illegal values, please try again.")
             return False
 
         return True
 
     def apply(self):
+        """Sets grid_size to valid value."""
         self.grid_size = self.values[0]
 
 
 class PlaceShipsDialog(Dialog):
     def initialize(self, frame, game=None, grid_size=10, min_players=2):
+        """Dialog for ship placement."""
         self.game = game
         self.num_players = 0
         self.min_players = 2
@@ -55,11 +65,13 @@ class PlaceShipsDialog(Dialog):
         return self
 
     def on_ship(self, ship):
+        """Adds ship to game from GUI."""
         # TODO: add ship to game
         print(ship)
         return True
 
     def buttonbox(self):
+        """Dinamicly updates buttons, depending on numbers of players added"""
         if(self.box is not None):
             self.box.destroy()
 
@@ -71,6 +83,7 @@ class PlaceShipsDialog(Dialog):
 
         finish_btn = Button(self.box, text="Ready",
                             state=DISABLED, width=10, default=ACTIVE)
+        # ensures a minimum of 2 players
         if self.num_players >= self.min_players - 1:
             finish_btn.config(state="normal")
         finish_btn.pack(side=LEFT, padx=5, pady=5)
@@ -84,6 +97,7 @@ class PlaceShipsDialog(Dialog):
         self.box.pack()
 
     def next_cmd(self):
+        """Clearing inputs for next player."""
         self.num_players += 1
         self.e1.delete(0, END)
         self.buttonbox()
@@ -91,15 +105,18 @@ class PlaceShipsDialog(Dialog):
         self.e2.reset()
 
     def validate(self):
+        """Validates."""
         return True
 
     def apply(self):
+        """Currently not needed"""
         pass
 
 
 class PlayerGrid:
     def __init__(self, parent, column=0, row=0,
                  text='', color='blue', width=10, height=10):
+        """Sets gameboard."""
         self.parent = parent
         self.width = width
         self.height = height
@@ -112,6 +129,7 @@ class PlayerGrid:
         self.frame = self.draw_grid()
 
     def draw_grid(self):
+        """Draws game field."""
         frame = Frame(self.parent, padx=10, pady=10, bg=self.color)
         frame.grid(row=self.row, column=self.column, sticky='nsew')
         grid = Frame(frame)
@@ -120,8 +138,10 @@ class PlayerGrid:
         label.grid(row=self.row + 1, column=self.column)
 
         for x in range(self.width):
+        # creates the buttons in range = width
             Grid.columnconfigure(frame, x, weight=1)
             for y in range(self.height):
+                # fills up in y direction
                 Grid.rowconfigure(frame, y, weight=1)
                 btn = Button(frame, bg=default_color,
                              activebackground='#38dcf5')
@@ -140,11 +160,13 @@ class PlayerGrid:
         pass
 
     def add_selection(self, coord):
+        """Activates the selected button."""
         button = self.grid[coord]
         button['bg'] = active
         button['activebackground'] = active
 
     def remove_selection(self, coord):
+        """Deactivates the selected button."""
         button = self.grid[coord]
         button['bg'] = default_color
         button['activebackground'] = '#38dcf5'
@@ -152,6 +174,7 @@ class PlayerGrid:
 
 class ShipSelectGrid(PlayerGrid):
     def __init__(self, parent, on_ship=None, **kwargs):
+        """Set ships on grid."""
         PlayerGrid.__init__(self, parent, **kwargs)
         self.on_ship = on_ship
         self._selection_buttons = []
@@ -161,10 +184,13 @@ class ShipSelectGrid(PlayerGrid):
         self.reset()
 
     def click(self, button, coord):
+        """Ships can't cross each other."""
         if coord in self._ship_blocks:
+        # selection doesn't work, if grid is blocked
             return
 
         if self._selection is None:
+        # selection works, if not selected before
             self._selection = coord
         elif self._selection == coord:
             for coord in self._selection_buttons:
@@ -188,19 +214,24 @@ class ShipSelectGrid(PlayerGrid):
             self._selection = None
 
     def on_hover(self, button, coord):
+        """Reads x,y values."""
         if self._selection is None:
             return
 
         mx, my = coord
         sx, sy = self._selection
 
-        def sign(a): return (a > 0) - (a < 0)
+        def sign(a):
+            """Gives the sign of an integer value."""
+            return (a > 0) - (a < 0)
+        
         diffx = abs(mx - sx)
         signx = sign(mx - sx)
         diffy = abs(my - sy)
         signy = sign(my - sy)
 
         for coord in self._selection_buttons:
+            # reset selection
             self.remove_selection(coord)
 
         self._selection_buttons.clear()
@@ -208,29 +239,36 @@ class ShipSelectGrid(PlayerGrid):
         self._selection_buttons.append(self._selection)
 
         if diffx > 0 and diffy > 0:
+            # ignore diagonals
             return
 
         if diffx > 0:
+            # on change in x direction, add to selection
             currentx = sx + signx
             while currentx != mx + signx:
                 coord = (currentx, sy)
                 if coord in self._ship_blocks:
+                    # don't cross ships
                     break
                 self.add_selection(coord)
                 self._selection_buttons.append(coord)
                 currentx += signx
         elif diffy > 0:
+            # on change in y direction, add to selection
             currenty = sy + signy
             while currenty != my + signy:
                 coord = (sx, currenty)
                 if coord in self._ship_blocks:
+                    # don't cross ships
                     break
                 self.add_selection(coord)
                 self._selection_buttons.append(coord)
                 currenty += signy
 
     def reset(self):
+        """Resets values."""
         for coord in self.grid.keys():
+            # reset all blocks to no selection
             self.remove_selection(coord)
         self._selection_buttons.clear()
         self._selection = None
@@ -240,6 +278,7 @@ class ShipSelectGrid(PlayerGrid):
 
 class GUI:
     def __init__(self):
+        """Main interface."""
         root = Tk()
         self.root = root
         self.game = Game()
@@ -256,9 +295,11 @@ class GUI:
         self.create_player_grid()
 
     def loop(self):
+        """GUI Loop"""
         tk.mainloop()
 
     def _create_menu(self):
+        """Creates all dropdown menus."""
         menubar = Menu(self.root)
         # Game dropdown menu
         gamemenu = Menu(menubar, tearoff=0)
@@ -271,18 +312,19 @@ class GUI:
         # Options dropdown menu
         optionmenu = Menu(menubar, tearoff=0)
         optionmenu.add_command(label='Scattershot', command=self.game.spray)
-        optionmenu.add_command(label='All Ships Attack', command=nothereyet)
+        optionmenu.add_command(label='All Ships Attack', command=None)
         menubar.add_cascade(label='Options', menu=optionmenu)
 
         # Help dropdown menu
         helpmenu = Menu(menubar, tearoff=0)
-        helpmenu.add_command(label='Help Index', command=nothereyet)
-        helpmenu.add_command(label='About...', command=nothereyet)
+        helpmenu.add_command(label='Help Index', command=None)
+        helpmenu.add_command(label='About...', command=None)
         menubar.add_cascade(label='Help', menu=helpmenu)
 
         self.root.config(menu=menubar)
 
     def _create_intro(self):
+        """Displays intro."""
         var = StringVar()
         var.set("""
 Intro :
@@ -295,12 +337,14 @@ Start the game through the menu.
         intro.grid(row=2, column=0, sticky='nsew')
 
     def new_game(self):
+        """Creates Dialog for new game."""
         dialog = CreateGameDialog(self.root, "New Game")
         self.create_player_grid(dialog.grid_size)
         players_dialog = PlaceShipsDialog(
             self.root, title="Add Player", game=self.game, grid_size=dialog.grid_size)
 
     def create_player_grid(self, grid_size=10):
+        """Display player grid."""
         if self.player_grid_frame is not None:
             self.player_grid_frame.destroy()
         self.player_grid_frame = Frame(self.root)
@@ -316,108 +360,13 @@ Start the game through the menu.
                                       height=grid_size)
 
 def main():
+    """Main funciton."""
     g = GUI()
     g.loop()
-    # menu settings frame, display options in extra window
-    # settings_frame = Frame(root, pady=20)
-    # settings_frame.title = 'Settings'
-    # settings_frame.grid(row=2, column=0, columnspan=5, sticky='nsew')
-
-    # intro
-
-    # # game options
-    # options_label = Label(settings_frame, text='Options')
-    # options_label.grid(row=2, column=0)
-
-    # # radio button for scatter shot
-    # var1 = IntVar()
-    # option1 = Checkbutton(settings_frame, text='scattershot', variable=var1)
-    # option1.grid(row=3, column=0)
-
-    # # radio button for all ships shoot
-    # var2 = IntVar()
-    # option2 = Checkbutton(settings_frame, text='all ships attack', variable=var2)
-    # option2.grid(row=4, column=0)
-
-    # # scale for gamefieldsize
-    # gfs = Scale(settings_frame, from_=5, to=25, orient=HORIZONTAL)
-    # gfs.grid(row=3, column=1)
-    # btn_1 = Button(settings_frame, text='Confirm fieldsize',
-    #                command=lambda: print(gfs.get()))
-    # btn_1.grid(row=2, column=1)
-
-    # # scale for numberofplayers
-    # nop = Scale(settings_frame, from_=2, to=4, orient=HORIZONTAL)
-    # nop.grid(row=3, column=2)
-    # btn_1 = Button(settings_frame, text='Confirm number of players',
-    #                command=lambda: print(nop.get()))
-    # btn_1.grid(row=2, column=2)
-
-    # # name entry
-    # e_player = Entry(root)
-    # e_player.grid(row=3, column=0)
-    # # ready next player
-    # ready_button = Button(root, text='enter player name')
-    # ready_button.grid(row=3, column=1)
-
-    # current player ships
-    # player_frame = Frame(root, padx=10, pady=10, bg='blue')
-    # player_frame.grid(row=0, column=0, sticky='nsew')
-    # player_grid = Frame(player_frame)
-    # player_grid.grid(sticky='nsew', column=0, columnspan=2)
-    # player_label = Label(root, text='Current Player')
-    # player_label.grid(row=1, column=0)
-
-    # for x in range(width):
-    #     Grid.columnconfigure(player_frame, x, weight=1)
-
-    #     for y in range(height):
-    #         Grid.rowconfigure(player_frame, y, weight=1)
-    #         btn = Button(player_frame, bg=default_color,
-    #                      activebackground='#38dcf5')
-    #         btn.grid(column=x, row=y, sticky='nsew')
-    #         btn['command'] = lambda x=btn: click(x)
-
-    # # next turn / player
-    # turn_button = Button(root, text='switch field', command=switchfield)
-    # turn_button.grid(row=0, column=2)
-
-    # # enemy field, shoot here
-    # enemy_frame = Frame(root, padx=10, pady=10, bg='red')
-    # enemy_frame.grid(row=0, column=3, sticky='nsew')
-    # enemy_grid = Frame(enemy_frame)
-    # enemy_grid.grid(sticky='nsew', column=3, columnspan=2)
-    # enemy_label = Label(root, text='Enemy Player')
-    # enemy_label.grid(row=1, column=3)
-
-    # for x in range(width):
-    #     Grid.columnconfigure(enemy_frame, x, weight=1)
-
-    #     for y in range(height):
-    #         Grid.rowconfigure(enemy_frame, y, weight=1)
-    #         btn = Button(enemy_frame, bg=default_color,
-    #                      activebackground='#38dcf5')
-    #         btn.grid(column=x, row=y, sticky='nsew')
-    #         btn['command'] = lambda x=btn: click(x)
 
 
 def show_help():
-    pass
-
-
-def open_settings():
-    pass
-
-
-def var_states():
-    print(var1.get(), var2.get())
-
-
-def switchfield():
-    pass
-
-
-def nothereyet():
+    """Not implemented, not asked for"""
     pass
 
 

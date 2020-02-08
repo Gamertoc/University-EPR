@@ -1,8 +1,8 @@
-"""A game of battleships. This is the main file."""
+"""A game of battleships. This is the main file. (not anymore)"""
 
-__author__ = "7146127, Theobald"
+__author__ = "7146127, Theobald, 7040759, Schott"
 __credits__ = "Water"
-__email__ = "s7223152@cs.uni-frankfurt.de"
+__email__ = "s7223152@cs.uni-frankfurt.de, s7296105@cs.uni-frankfurt.de"
 
 import random as rng
 
