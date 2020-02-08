@@ -36,7 +36,8 @@ class CreateGameDialog(Dialog):
 
 
 class PlaceShipsDialog(Dialog):
-    def initialize(self, frame, grid_size=10, min_players=2):
+    def initialize(self, frame, game=None, grid_size=10, min_players=2):
+        self.game = game
         self.num_players = 0
         self.min_players = 2
         self.result = ""
@@ -54,6 +55,7 @@ class PlaceShipsDialog(Dialog):
         return self
 
     def on_ship(self, ship):
+        # TODO: add ship to game
         print(ship)
         return True
 
@@ -249,11 +251,9 @@ class GUI:
         self._create_menu()
         self._create_intro()
 
-        self.player_grid = PlayerGrid(self.root,
-                                      column=0,
-                                      row=0,
-                                      text="",
-                                      color="blue")
+        self.player_grid_frame = None
+        self.player_grid = None
+        self.create_player_grid()
 
     def loop(self):
         tk.mainloop()
@@ -296,9 +296,24 @@ Start the game through the menu.
 
     def new_game(self):
         dialog = CreateGameDialog(self.root, "New Game")
+        self.create_player_grid(dialog.grid_size)
         players_dialog = PlaceShipsDialog(
-            self.root, title="Add Player", grid_size=dialog.grid_size)
+            self.root, title="Add Player", game=self.game, grid_size=dialog.grid_size)
 
+    def create_player_grid(self, grid_size=10):
+        if self.player_grid_frame is not None:
+            self.player_grid_frame.destroy()
+        self.player_grid_frame = Frame(self.root)
+        self.player_grid_frame.grid_columnconfigure(0, weight=1)
+        self.player_grid_frame.grid_rowconfigure(0, weight=1)
+        self.player_grid_frame.grid(row=0, column=0, sticky='nsew')
+        self.player_grid = PlayerGrid(self.player_grid_frame,
+                                      column=0,
+                                      row=0,
+                                      text="",
+                                      color="blue",
+                                      width=grid_size,
+                                      height=grid_size)
 
 def main():
     g = GUI()
