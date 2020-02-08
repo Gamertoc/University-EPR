@@ -86,6 +86,7 @@ class PlaceShipsDialog(Dialog):
         self.e1.delete(0, END)
         self.buttonbox()
         self.e1.focus_set()
+        self.e2.reset()
 
     def validate(self):
         return True
@@ -150,11 +151,12 @@ class PlayerGrid:
 class ShipSelectGrid(PlayerGrid):
     def __init__(self, parent, on_ship=None, **kwargs):
         PlayerGrid.__init__(self, parent, **kwargs)
-        self._selection = None
+        self.on_ship = on_ship
         self._selection_buttons = []
+        self._selection = None
         self.ships = []
         self._ship_blocks = []
-        self.on_ship = on_ship
+        self.reset()
 
     def click(self, button, coord):
         if coord in self._ship_blocks:
@@ -225,6 +227,14 @@ class ShipSelectGrid(PlayerGrid):
                 self._selection_buttons.append(coord)
                 currenty += signy
 
+    def reset(self):
+        for coord in self.grid.keys():
+            self.remove_selection(coord)
+        self._selection_buttons.clear()
+        self._selection = None
+        self.ships.clear()
+        self._ship_blocks.clear()
+
 
 class GUI:
     def __init__(self):
@@ -287,7 +297,7 @@ Start the game through the menu.
     def new_game(self):
         dialog = CreateGameDialog(self.root, "New Game")
         players_dialog = PlaceShipsDialog(
-            self.root, grid_size=dialog.grid_size)
+            self.root, title="Add Player", grid_size=dialog.grid_size)
 
 
 def main():
